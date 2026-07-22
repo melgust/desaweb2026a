@@ -279,6 +279,12 @@ form {
     margin-bottom: 0.3rem;
 }
 
+.requerido {
+    color: #dc2626;
+    font-weight: bold;
+    margin-left: 3px;
+}
+
 .campo input, .campo textarea {
     padding: 0.7rem;
     border: 1px solid var(--color-borde);
