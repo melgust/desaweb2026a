@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Perfil Profesional — mcalic1</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="site-header">
+    <div class="header-left">
+        <img class="avatar" src="img/1728438294561.jpg" alt="Foto de perfil">
+        <div>
+            <h1>Christopher Herrera</h1>
+            <p class="sub">Ingeniería en Sistemas — Universidad Mariano Gálvez</p>
+            <p class="tagline">Como desarrollador backend me especializo en microservicios, APIs y soluciones en la nube.</p>
+            <p class="certs">AWS Certified (3x) · Go · Spring Boot · Node.js · NestJS · Java · JavaScript · TypeScript · .NET · QA</p>
+        </div>
+    </div>
+
+    <div class="header-right">
+        <div id="datetime" class="datetime">--</div>
+        <div id="visits" class="visits">Visitas: 0</div>
+        <button id="themeToggle" class="btn">Modo oscuro</button>
+    </div>
+</header>
+
+<main class="container">
+
+    <section id="about" class="card">
+        <h2>Sobre mí</h2>
+        <p>Como desarrollador backend, me especializo en desarrollar y mantener microservicios y APIs utilizando Node.js, Golang, AWS Lambda y Spring Boot. Aplico estándares de desarrollo como Clean Code, DRY y S.O.L.I.D., así como patrones de diseño en proyectos locales y para clientes como Tigo Guatemala.</p>
+        <p>Tengo experiencia en pruebas de concepto e instalación de software en Kubernetes y/o Docker, creación de pipelines en Jenkins y uso del ELK stack para extracción y visualización de logs en Kibana. Además, me mantengo en constante aprendizaje y he completado varias certificaciones que respaldan mis conocimientos.</p>
+        <p><strong>Intereses:</strong> programación, jugar, dormir. <strong>Objetivo profesional:</strong> ser un gran profesional conocedor.</p>
+    </section>
+
+    <section id="skills" class="card">
+        <h2>Habilidades</h2>
+        <ul class="skills-list">
+            <li><span>Node.js / NestJS</span><progress value="92" max="100"></progress></li>
+            <li><span>Golang</span><progress value="80" max="100"></progress></li>
+            <li><span>Spring Boot / Java</span><progress value="75" max="100"></progress></li>
+            <li><span>AWS (Lambda, EC2, S3)</span><progress value="85" max="100"></progress></li>
+            <li><span>Docker / Kubernetes</span><progress value="72" max="100"></progress></li>
+            <li><span>Testing / QA</span><progress value="70" max="100"></progress></li>
+            <li><span>CI/CD (Jenkins)</span><progress value="68" max="100"></progress></li>
+            <li><span>ELK Stack (Elasticsearch / Logstash / Kibana)</span><progress value="70" max="100"></progress></li>
+        </ul>
+    </section>
+
+    <section id="projects" class="card">
+        <h2>Proyectos</h2>
+        <div class="projects-grid">
+            <article class="proj">
+                <h3>CRUD-NESTJS</h3>
+                <p>API REST de ejemplo construida con NestJS y TypeScript. Implementa operaciones CRUD y ejemplo de persistencia.</p>
+                <button class="more" data-title="CRUD-NESTJS" data-desc="API REST con NestJS/TypeScript. Incluye controladores, servicios y ejemplo de integración con base de datos." data-url="https://github.com/cherreragt/CRUD-NESTJS">Ver más</button>
+            </article>
+
+            <article class="proj">
+                <h3>dynamodb-data-migrator</h3>
+                <p>Utilidades y scripts para migrar/insertar datos en DynamoDB (importación y transformaciones).</p>
+                <button class="more" data-title="dynamodb-data-migrator" data-desc="Scripts y utilidades para migración de datos hacia DynamoDB. Útil para cargas batch y pruebas." data-url="https://github.com/cherreragt/dynamodb-data-migrator">Ver más</button>
+            </article>
+
+            <article class="proj">
+                <h3>prueba-banco-inmobiliario</h3>
+                <p>Proyecto en Java con lógica relacionada a simulación de operaciones bancarias/inmobiliarias.</p>
+                <button class="more" data-title="prueba-banco-inmobiliario" data-desc="Proyecto Java con casos de uso para lógica de negocio bancaria e inmobiliaria; incluye modelos y pruebas." data-url="https://github.com/cherreragt/prueba-banco-inmobiliario">Ver más</button>
+            </article>
+        </div>
+    </section>
+
+    <section id="contact" class="card">
+        <h2>Contacto</h2>
+        <form id="contactForm" novalidate>
+            <label>Nombre *</label>
+            <input type="text" id="name" required>
+
+            <label>Correo *</label>
+            <input type="email" id="email" required>
+
+            <label>Mensaje *</label>
+            <textarea id="message" rows="4" required></textarea>
+
+            <div class="form-feedback" id="formFeedback" aria-live="polite"></div>
+
+            <button type="submit" class="submit">Enviar</button>
+        </form>
+    </section>
+
+</main>
+
+<!-- Simple modal for project details -->
+<div id="modal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+        <button id="modalClose" class="modal-close">×</button>
+        <h3 id="modalTitle"></h3>
+        <p id="modalBody"></p>
+    </div>
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>
