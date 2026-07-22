@@ -106,17 +106,17 @@
         <h2>Contacto</h2>
         <form id="form-contacto" novalidate>
             <div class="campo">
-                <label for="nombre">Nombre</label>
+                <label for="nombre">Nombre<span class="requerido">*</span></label>
                 <input type="text" id="nombre" name="nombre">
                 <span class="error" id="error-nombre"></span>
             </div>
             <div class="campo">
-                <label for="correo">Correo electrónico</label>
+                <label for="correo">Correo electrónico<span class="requerido">*</span></label>
                 <input type="email" id="correo" name="correo">
                 <span class="error" id="error-correo"></span>
             </div>
             <div class="campo">
-                <label for="mensaje">Mensaje</label>
+                <label for="mensaje">Mensaje<span class="requerido">*</span></label>
                 <textarea id="mensaje" name="mensaje" rows="4"></textarea>
                 <span class="error" id="error-mensaje"></span>
             </div>
