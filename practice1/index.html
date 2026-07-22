@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Portafolio personal de desarrollo web">
+	<title>Portafolio | Desarrollo Web</title>
+	<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+	<header class="site-header">
+		<a class="brand" href="#inicio" aria-label="Ir al inicio">NM<span>.</span></a>
+		<nav class="main-nav" aria-label="Navegación principal">
+			<a href="#sobre-mi">Sobre mí</a>
+			<a href="#habilidades">Habilidades</a>
+			<a href="#proyectos">Proyectos</a>
+			<a class="nav-contact" href="#contacto">Hablemos</a>
+		</nav>
+	</header>
+
+	<main>
+		<section class="hero section-shell" id="inicio">
+			<div class="hero-copy">
+				<p class="eyebrow">Portafolio personal / 2026</p>
+				<h1>Ideas que se convierten en experiencias <em>digitales.</em></h1>
+				<p class="hero-intro">Soy una persona curiosa que disfruta transformar problemas cotidianos en interfaces claras, útiles y con personalidad.</p>
+				<div class="hero-actions">
+					<a class="button button-dark" href="#proyectos">Explorar proyectos <span aria-hidden="true">↗</span></a>
+					<a class="text-link" href="#contacto">Ponerse en contacto <span aria-hidden="true">↓</span></a>
+				</div>
+			</div>
+			<div class="profile-wrap">
+				<div class="profile-stamp">Disponible para<br>nuevos retos</div>
+				<div class="profile-frame">
+					<img src="img/gatoPrueba.jpg" alt="Fotografía de perfil">
+				</div>
+				<p class="profile-caption">Diseño + código<br>con intención.</p>
+			</div>
+		</section>
+
+		<section class="about section-shell" id="sobre-mi">
+			<div class="section-label"><span>01</span> Sobre mí</div>
+			<div class="about-content">
+				<h2>Aprender, crear y dejar las cosas un poco mejor.</h2>
+				<div class="about-text">
+					<p>Me interesan el desarrollo web, el diseño de interfaces y la forma en que la tecnología puede hacer más sencillas las tareas de todos los días. Disfruto investigar, hacer preguntas y convertir una idea inicial en una solución que las personas puedan usar sin esfuerzo.</p>
+					<p>Mis objetivos profesionales son crecer como desarrollador frontend, participar en equipos colaborativos y construir productos digitales accesibles, funcionales y memorables.</p>
+				</div>
+			</div>
+			<div class="identity-list">
+				<div><span>Nombre completo</span><strong>Tu Nombre Completo</strong></div>
+				<div><span>Carrera</span><strong>Desarrollo de Software</strong></div>
+				<div><span>Universidad</span><strong>Tu Universidad</strong></div>
+			</div>
+		</section>
+
+		<section class="skills section-shell" id="habilidades">
+			<div class="section-heading">
+				<div class="section-label"><span>02</span> Habilidades</div>
+				<p>Herramientas y capacidades que uso para dar forma a cada proyecto.</p>
+			</div>
+			<div class="skills-grid">
+				<article class="skill-card skill-featured"><span class="skill-number">01</span><h3>HTML &amp; CSS</h3><p>Interfaces semánticas, responsive y cuidadas hasta el último detalle.</p><div class="skill-bar"><span style="--level: 92%"></span></div><small>92%</small></article>
+				<article class="skill-card"><span class="skill-number">02</span><h3>JavaScript</h3><p>Interacciones que hacen que una experiencia se sienta viva.</p><div class="skill-bar"><span style="--level: 78%"></span></div><small>78%</small></article>
+				<article class="skill-card"><span class="skill-number">03</span><h3>Diseño UI</h3><p>Jerarquía visual, sistemas consistentes y decisiones con propósito.</p><div class="skill-bar"><span style="--level: 84%"></span></div><small>84%</small></article>
+				<article class="skill-card"><span class="skill-number">04</span><h3>Git &amp; GitHub</h3><p>Versionado, documentación y trabajo ordenado en equipo.</p><div class="skill-bar"><span style="--level: 75%"></span></div><small>75%</small></article>
+				<article class="skill-card"><span class="skill-number">05</span><h3>Resolución de problemas</h3><p>Analizar, probar y encontrar la solución más simple.</p><div class="skill-bar"><span style="--level: 88%"></span></div><small>88%</small></article>
+			</div>
+		</section>
+
+		<section class="projects section-shell" id="proyectos">
+			<div class="section-heading projects-heading">
+				<div class="section-label"><span>03</span> Proyectos</div>
+				<h2>Pequeñas ideas,<br><em>grandes aprendizajes.</em></h2>
+			</div>
+			<div class="projects-grid">
+				<article class="project-card project-yellow">
+					<div class="project-top"><span>01 / WEB</span><span aria-hidden="true">↗</span></div>
+					<div><h3>Agenda Clara</h3><p>Una agenda digital simple para ordenar tareas y prioridades.</p></div>
+					<button class="project-button" type="button" data-project="agenda">Ver más <span aria-hidden="true">→</span></button>
+				</article>
+				<article class="project-card project-blue">
+					<div class="project-top"><span>02 / UI</span><span aria-hidden="true">↗</span></div>
+					<div><h3>Ruta Local</h3><p>Explorador visual de lugares interesantes para descubrir en la ciudad.</p></div>
+					<button class="project-button" type="button" data-project="ruta">Ver más <span aria-hidden="true">→</span></button>
+				</article>
+				<article class="project-card project-coral">
+					<div class="project-top"><span>03 / BRAND</span><span aria-hidden="true">↗</span></div>
+					<div><h3>Casa Nativa</h3><p>Identidad y catálogo digital para un emprendimiento local.</p></div>
+					<button class="project-button" type="button" data-project="casa">Ver más <span aria-hidden="true">→</span></button>
+				</article>
+			</div>
+			<div class="project-details" id="project-details" aria-live="polite" hidden>
+				<div><p class="eyebrow">Detalle del proyecto</p><h3 id="details-title"></h3></div>
+				<p id="details-description"></p>
+				<button class="close-details" type="button" aria-label="Cerrar detalle">×</button>
+			</div>
+		</section>
+
+		<section class="contact section-shell" id="contacto">
+			<div class="contact-intro">
+				<div class="section-label"><span>04</span> Contacto</div>
+				<h2>¿Tienes una idea?<br><em>Hagámosla realidad.</em></h2>
+				<p>Escríbeme y conversemos sobre el próximo proyecto.</p>
+			</div>
+			<form class="contact-form" id="contact-form">
+				<label for="name">Nombre</label>
+				<input id="name" name="name" type="text" placeholder="Tu nombre" required>
+				<label for="email">Correo electrónico</label>
+				<input id="email" name="email" type="email" placeholder="tu@correo.com" required>
+				<label for="message">Mensaje</label>
+				<textarea id="message" name="message" rows="4" placeholder="Cuéntame sobre tu idea..." required></textarea>
+				<button class="button button-dark" type="submit">Enviar mensaje <span aria-hidden="true">↗</span></button>
+				<p class="form-status" id="form-status" role="status"></p>
+			</form>
+		</section>
+	</main>
+
+	<footer class="site-footer section-shell"><span>NM. / Portafolio personal</span><span>Hecho con curiosidad y código.</span></footer>
+	<script src="js/script.js"></script>
+</body>
+</html>
