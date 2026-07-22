@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil Profesional</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <!-- Botón de cambio de tema -->
+    <button id="btn-tema" class="btn-tema" title="Cambiar tema">🌙</button>
+
+    <!-- Encabezado -->
+    <header class="encabezado">
+        <div class="contenedor-encabezado">
+            <img src="img/perfil.jpg" alt="Foto de perfil" class="foto-perfil">
+            <div class="info-encabezado">
+                <h1>Cinthia Yadira Robles Sotoj </h1>
+                <p class="carrera">Ingeniería en Sistemas</p>
+                <p class="universidad">Universidad Mariano Galvez de Guatemala</p>
+                <p class="frase">"De las aguas mansas librame señor."</p>
+                <p class="fecha-hora" id="fecha-hora">Cargando fecha y hora...</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contador de visitas -->
+    <section class="contador-visitas">
+        <p>👁️ Visitas en este navegador: <span id="contador">0</span></p>
+    </section>
+
+    <!-- Sobre mí -->
+    <section class="seccion">
+        <h2>Sobre mí</h2>
+        <p>
+            Soy una persona sociable y extrovertida, me gusta aprender cosas nuevas.
+            Me estoy forjando como QA con el objetivo de poder adentrarme en el area 
+            dentro del ambito laboral
+        </p>
+    </section>
+
+    <!-- Habilidades -->
+    <section class="seccion">
+        <h2>Habilidades</h2>
+        <div class="habilidades">
+            <div class="habilidad">
+                <span>HTML5 y CSS3</span>
+                <div class="barra"><div class="progreso" style="width: 90%;">90%</div></div>
+            </div>
+            <div class="habilidad">
+                <span>JavaScript</span>
+                <div class="barra"><div class="progreso" style="width: 80%;">80%</div></div>
+            </div>
+            <div class="habilidad">
+                <span>Python</span>
+                <div class="barra"><div class="progreso" style="width: 75%;">75%</div></div>
+            </div>
+            <div class="habilidad">
+                <span>Git y GitHub</span>
+                <div class="barra"><div class="progreso" style="width: 85%;">85%</div></div>
+            </div>
+            <div class="habilidad">
+                <span>Bases de datos SQL</span>
+                <div class="barra"><div class="progreso" style="width: 70%;">70%</div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Proyectos -->
+    <section class="seccion">
+        <h2>Proyectos</h2>
+        <div class="proyectos">
+            <div class="tarjeta-proyecto">
+                <h3>App de Tareas</h3>
+                <p>Aplicación web para gestionar tareas diarias con persistencia local.</p>
+                <button class="btn-ver-mas" data-proyecto="1">Ver más</button>
+            </div>
+            <div class="tarjeta-proyecto">
+                <h3>Calculadora Científica</h3>
+                <p>Calculadora con funciones trigonométricas y logarítmicas.</p>
+                <button class="btn-ver-mas" data-proyecto="2">Ver más</button>
+            </div>
+            <div class="tarjeta-proyecto">
+                <h3>Portafolio Web</h3>
+                <p>Sitio personal responsive con modo oscuro y animaciones.</p>
+                <button class="btn-ver-mas" data-proyecto="3">Ver más</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal para proyectos -->
+    <div id="modal" class="modal oculto">
+        <div class="modal-contenido">
+            <span class="cerrar-modal" id="cerrar-modal">&times;</span>
+            <h3 id="modal-titulo"></h3>
+            <p id="modal-descripcion"></p>
+        </div>
+    </div>
+
+    <!-- Contacto -->
+    <section class="seccion">
+        <h2>Contacto</h2>
+        <form id="form-contacto" novalidate>
+            <div class="campo">
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" name="nombre">
+                <span class="error" id="error-nombre"></span>
+            </div>
+            <div class="campo">
+                <label for="correo">Correo electrónico</label>
+                <input type="email" id="correo" name="correo">
+                <span class="error" id="error-correo"></span>
+            </div>
+            <div class="campo">
+                <label for="mensaje">Mensaje</label>
+                <textarea id="mensaje" name="mensaje" rows="4"></textarea>
+                <span class="error" id="error-mensaje"></span>
+            </div>
+            <button type="submit" class="btn-enviar">Enviar mensaje</button>
+            <p id="mensaje-exito" class="exito oculto">¡Mensaje enviado correctamente!</p>
+        </form>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 - Mi Perfil Profesional</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

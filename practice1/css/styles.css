@@ -1,0 +1,344 @@
+/* ====== Variables y reset ====== */
+:root {
+    --color-fondo: #f4f6f9;
+    --color-texto: #222;
+    --color-primario: #2563eb;
+    --color-primario-hover: #1d4ed8;
+    --color-tarjeta: #ffffff;
+    --color-borde: #e5e7eb;
+    --sombra: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --radio: 14px;
+    --transicion: all 0.3s ease;
+}
+
+body.tema-oscuro {
+    --color-fondo: #0f172a;
+    --color-texto: #f1f5f9;
+    --color-primario: #60a5fa;
+    --color-primario-hover: #3b82f6;
+    --color-tarjeta: #1e293b;
+    --color-borde: #334155;
+    --sombra: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+    line-height: 1.6;
+    transition: var(--transicion);
+}
+
+/* ====== Botón de tema ====== */
+.btn-tema {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--color-primario);
+    color: white;
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: var(--sombra);
+    transition: var(--transicion);
+    z-index: 100;
+}
+
+.btn-tema:hover {
+    transform: scale(1.1) rotate(20deg);
+    background: var(--color-primario-hover);
+}
+
+/* ====== Encabezado ====== */
+.encabezado {
+    background: linear-gradient(135deg, var(--color-primario), var(--color-primario-hover));
+    color: white;
+    padding: 3rem 1rem;
+    text-align: center;
+}
+
+.contenedor-encabezado {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.foto-perfil {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid white;
+    box-shadow: var(--sombra);
+}
+
+.info-encabezado h1 {
+    font-size: 2rem;
+    margin-bottom: 0.3rem;
+}
+
+.carrera, .universidad {
+    font-size: 1rem;
+    opacity: 0.95;
+}
+
+.frase {
+    font-style: italic;
+    margin-top: 0.5rem;
+    opacity: 0.9;
+}
+
+.fecha-hora {
+    margin-top: 0.8rem;
+    font-size: 0.95rem;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    display: inline-block;
+}
+
+/* ====== Contador de visitas ====== */
+.contador-visitas {
+    text-align: center;
+    padding: 1rem;
+    background: var(--color-tarjeta);
+    border-bottom: 1px solid var(--color-borde);
+    font-weight: bold;
+    color: var(--color-primario);
+}
+
+/* ====== Secciones ====== */
+.seccion {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: var(--color-tarjeta);
+    border-radius: var(--radio);
+    box-shadow: var(--sombra);
+    transition: var(--transicion);
+}
+
+.seccion h2 {
+    margin-bottom: 1rem;
+    color: var(--color-primario);
+    border-bottom: 2px solid var(--color-borde);
+    padding-bottom: 0.5rem;
+}
+
+/* ====== Habilidades ====== */
+.habilidades {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.habilidad span {
+    display: block;
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+}
+
+.barra {
+    background: var(--color-borde);
+    border-radius: 10px;
+    height: 22px;
+    overflow: hidden;
+}
+
+.progreso {
+    background: linear-gradient(90deg, var(--color-primario), var(--color-primario-hover));
+    color: white;
+    text-align: right;
+    padding-right: 8px;
+    font-size: 0.8rem;
+    line-height: 22px;
+    border-radius: 10px;
+    transition: width 1s ease;
+}
+
+/* ====== Proyectos ====== */
+.proyectos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.tarjeta-proyecto {
+    background: var(--color-fondo);
+    padding: 1.5rem;
+    border-radius: var(--radio);
+    box-shadow: var(--sombra);
+    transition: var(--transicion);
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.tarjeta-proyecto:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.tarjeta-proyecto h3 {
+    color: var(--color-primario);
+}
+
+/* ====== Botones ====== */
+.btn-ver-mas, .btn-enviar {
+    background: var(--color-primario);
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: var(--transicion);
+    align-self: flex-start;
+}
+
+.btn-ver-mas:hover, .btn-enviar:hover {
+    background: var(--color-primario-hover);
+    transform: translateY(-2px);
+}
+
+/* ====== Modal ====== */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 200;
+    transition: opacity 0.3s ease;
+}
+
+.modal.oculto {
+    display: none;
+}
+
+.modal-contenido {
+    background: var(--color-tarjeta);
+    color: var(--color-texto);
+    padding: 2rem;
+    border-radius: var(--radio);
+    max-width: 500px;
+    width: 90%;
+    position: relative;
+    box-shadow: var(--sombra);
+    animation: aparecer 0.3s ease;
+}
+
+@keyframes aparecer {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.cerrar-modal {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--color-texto);
+}
+
+.cerrar-modal:hover {
+    color: var(--color-primario);
+}
+
+/* ====== Formulario ====== */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+}
+
+.campo label {
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+}
+
+.campo input, .campo textarea {
+    padding: 0.7rem;
+    border: 1px solid var(--color-borde);
+    border-radius: 8px;
+    background: var(--color-fondo);
+    color: var(--color-texto);
+    font-size: 1rem;
+    transition: var(--transicion);
+}
+
+.campo input:focus, .campo textarea:focus {
+    outline: none;
+    border-color: var(--color-primario);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+.error {
+    color: #dc2626;
+    font-size: 0.85rem;
+    min-height: 1rem;
+    margin-top: 0.2rem;
+}
+
+.exito {
+    color: #16a34a;
+    font-weight: bold;
+    text-align: center;
+}
+
+.exito.oculto, .oculto {
+    display: none;
+}
+
+/* ====== Footer ====== */
+footer {
+    text-align: center;
+    padding: 1.5rem;
+    background: var(--color-tarjeta);
+    border-top: 1px solid var(--color-borde);
+    margin-top: 2rem;
+}
+
+/* ====== Responsive ====== */
+@media (min-width: 768px) {
+    .contenedor-encabezado {
+        flex-direction: row;
+        text-align: left;
+    }
+    .info-encabezado h1 {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .seccion {
+        margin: 1rem;
+        padding: 1.2rem;
+    }
+    .foto-perfil {
+        width: 120px;
+        height: 120px;
+    }
+}
