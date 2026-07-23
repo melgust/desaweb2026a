@@ -90,41 +90,43 @@ function validarEmail(email) {
     return regex.test(email);
 }
 
-
 // 5. Información adicional de proyectos
 const infoProyectos = {
     1: {
-        titulo: "E-commerce App",
-        descripcion: "Aplicación completa de comercio electrónico con:",
+        titulo: "Banco CCI - Automatización Cypress",
+        descripcion: "Proyecto de automatización para el cotizador de productos financieros del Banco CCI (Honduras)",
         detalles: [
-            "Carrito de compras funcional",
-            "Sistema de pago simulado",
-            "Catálogo de productos",
-            "Filtros de búsqueda"
+            "Automatización end-to-end con Cypress",
+            "Validación de cotizaciones de préstamos",
+            "Pruebas de tasas de interés y plazos",
+            "Reportes automatizados de ejecución",
+            "Integración continua con GitHub Actions"
         ],
-        tecnologias: ["React", "Node.js", "MongoDB"]
+        tecnologias: ["Cypress", "JavaScript", "Node.js", "GitHub Actions"]
     },
     2: {
-        titulo: "Portfolio Personal",
-        descripcion: "Sitio web personal con:",
+        titulo: "JTeller by Byte - Pruebas Integrales",
+        descripcion: "Sistema de gestión bancaria JTeller con enfoque en calidad de software",
         detalles: [
-            "Diseño responsivo",
-            "Animaciones CSS",
-            "Modo oscuro/claro",
-            "Sección de proyectos"
+            "Pruebas de APIs con Postman y automatización",
+            "Pruebas manuales funcionales y de regresión",
+            "Automatización con Selenium WebDriver + Mocha",
+            "Validación de historias de usuario por cliente bancario",
+            "Pruebas de base de datos (SQL queries)"
         ],
-        tecnologias: ["HTML5", "CSS3", "JavaScript"]
+        tecnologias: ["Selenium", "Mocha", "Postman", "JavaScript", "SQL"]
     },
     3: {
-        titulo: "Task Manager",
-        descripcion: "Aplicación de gestión de tareas con:",
+        titulo: "Banco Agrícola - Pruebas de Sistema",
+        descripcion: "Pruebas integrales para el sistema bancario del Banco Agrícola",
         detalles: [
-            "CRUD de tareas",
-            "Filtros por estado",
-            "Persistencia en localStorage",
-            "Interfaz intuitiva"
+            "Pruebas funcionales de módulos bancarios",
+            "Validación de APIs de servicios financieros",
+            "Pruebas de base de datos y consultas SQL",
+            "Pruebas de regresión post-implementación",
+            "Documentación de casos de prueba y reportes"
         ],
-        tecnologias: ["JavaScript", "CSS3", "HTML5"]
+        tecnologias: ["Postman", "SQL", "Manual Testing", "API Testing", "Base de Datos"]
     }
 };
 
@@ -160,9 +162,10 @@ function mostrarModal(proyecto) {
             <span class="close-modal">&times;</span>
             <h2>${proyecto.titulo}</h2>
             <p>${proyecto.descripcion}</p>
+            <h3>Detalles del proyecto:</h3>
             <ul>${detallesHTML}</ul>
             <div class="tecnologias">
-                <strong>Tecnologías:</strong> ${tecnologiasHTML}
+                <strong>Tecnologías utilizadas:</strong> ${tecnologiasHTML}
             </div>
         </div>
     `;
@@ -217,14 +220,21 @@ modalStyles.textContent = `
         margin-bottom: 15px;
     }
     
+    .modal-content h3 {
+        color: #333;
+        margin: 15px 0 10px 0;
+        font-size: 1.1rem;
+    }
+    
     .modal-content ul {
-        margin: 15px 0;
+        margin: 10px 0;
         padding-left: 20px;
     }
     
     .modal-content ul li {
         margin: 8px 0;
         color: #555;
+        line-height: 1.5;
     }
     
     .close-modal {
@@ -251,6 +261,12 @@ modalStyles.textContent = `
         font-size: 0.9rem;
     }
     
+    .tecnologias {
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid #eee;
+    }
+    
     body.dark-mode .modal-content {
         background-color: #1a1a2e;
         color: #eee;
@@ -260,12 +276,20 @@ modalStyles.textContent = `
         color: #ccc;
     }
     
+    body.dark-mode .modal-content h3 {
+        color: #eee;
+    }
+    
     body.dark-mode .close-modal {
         color: #ccc;
     }
     
     body.dark-mode .close-modal:hover {
         color: #fff;
+    }
+    
+    body.dark-mode .tecnologias {
+        border-top-color: #333;
     }
     
     @keyframes fadeIn {
