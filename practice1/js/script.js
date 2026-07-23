@@ -63,3 +63,30 @@ function actualizarHora() {
 }
 setInterval(actualizarHora, 1000);
 actualizarHora();
+
+/*
+boton para cambio de tema (claro/oscuro)
+*/
+
+const boton = document.getElementById("theme-toggle");
+
+// Cargar el tema guardado
+if(localStorage.getItem("tema") === "oscuro"){
+    document.body.classList.add("dark-mode");
+    boton.textContent = "☀️";
+}
+
+// Cambiar tema
+boton.addEventListener("click", ()=>{
+
+    document.body.classList.toggle("dark-mode");
+
+    if(document.body.classList.contains("dark-mode")){
+        localStorage.setItem("tema","oscuro");
+        boton.textContent = "☀️";
+    }else{
+        localStorage.setItem("tema","claro");
+        boton.textContent = "🌙";
+    }
+
+});
