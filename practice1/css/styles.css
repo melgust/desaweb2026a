@@ -131,7 +131,7 @@ h3 {
   display: flex;
   justify-content: space-between;
   margin: 0 auto;
-  max-width: 1240px;
+  max-width: none;
   padding: 24px 32px;
   /* Header Fijo al desplazar */
   position: sticky;
@@ -180,84 +180,17 @@ em {
   width: 70px;       /* Ancho deseado */
   height: auto;      /* Alto deseado */
 }
-
-/* ==========================================================================
-   4. SECCIÓN HERO
-   ========================================================================== */
-
-.hero {
-  align-items: center;
-  display: grid;
-  gap: 90px;
-  grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
-  min-height: 650px;
-  padding-bottom: 110px;
-  padding-top: 105px;
-}
-
-.hero-intro {
-  font-size: 1.08rem;
-  line-height: 1.6;
-  max-width: 520px;
-}
-
-.hero-actions {
-  align-items: center;
-  display: flex;
-  gap: 26px;
-  margin-top: 36px;
-}
-
-/* Foto y Tarjeta de Perfil */
-.profile-wrap {
-  justify-self: center;
-  position: relative;
-}
-
-.profile-frame {
-  background: var(--yellow);
-  border: 1px solid var(--ink);
-  height: 330px;
-  padding: 18px;
-  width: 275px;
-}
-
-.profile-frame img {
-  filter: grayscale(15%);
-  height: 100%;
-  object-fit: cover;
-  width: 100%;
-}
-
-.profile-stamp {
-  background: var(--ink);
-  color: var(--paper);
-  font-family: var(--mono);
-  font-size: 0.65rem;
-  left: -52px;
-  line-height: 1.4;
-  padding: 13px;
-  position: absolute;
-  text-transform: uppercase;
-  top: 5px;
-  transform: rotate(-9deg);
-  z-index: 1;
-}
-
-.profile-caption {
-  font-family: var(--mono);
-  font-size: 0.66rem;
-  line-height: 1.45;
-  margin: 32px 0 0 40px;
-  text-transform: uppercase;
-}
-
 /* ==========================================================================
    5. SECCIÓN ABOUT (SOBRE MÍ)
    ========================================================================== */
 
 .about {
   border-top: 2px solid var(--line  );
+}
+
+.about-alt {
+  background-color: var(--line);
+  border-top: 2px solid var(--paper);
 }
 
 .section-label {
