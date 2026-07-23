@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil Profesional - Teddy</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Encabezado -->
+        <header id="header">
+            <div class="profile-header">
+                <img src="https://via.placeholder.com/150" alt="Foto de perfil" class="profile-img" id="profileImg">
+                <div class="header-info">
+                    <h1 id="nombre">Teddy González</h1>
+                    <p id="carrera">Ingeniería en Sistemas</p>
+                    <p id="universidad">Universidad Mariano Gálvez</p>
+                    <p id="frase">"Innovación y tecnología para construir el futuro"</p>
+                    <div id="fechaHora"></div>
+                </div>
+            </div>
+            <button id="temaBtn">🌙 Modo Oscuro</button>
+        </header>
+
+        <!-- Sobre Mí -->
+        <section id="sobreMi">
+            <h2>Sobre Mí</h2>
+            <p>Apasionado por la tecnología y el desarrollo web. Me encanta crear soluciones innovadoras que mejoren la vida de las personas. Actualmente, me especializo en desarrollo frontend y busco constantemente nuevos desafíos que me permitan crecer profesionalmente.</p>
+        </section>
+
+        <!-- Habilidades -->
+        <section id="habilidades">
+            <h2>Habilidades</h2>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <h3>HTML5</h3>
+                    <div class="progress-bar"><div class="progress" style="width: 90%"></div></div>
+                </div>
+                <div class="skill-card">
+                    <h3>CSS3</h3>
+                    <div class="progress-bar"><div class="progress" style="width: 85%"></div></div>
+                </div>
+                <div class="skill-card">
+                    <h3>JavaScript</h3>
+                    <div class="progress-bar"><div class="progress" style="width: 75%"></div></div>
+                </div>
+                <div class="skill-card">
+                    <h3>React</h3>
+                    <div class="progress-bar"><div class="progress" style="width: 60%"></div></div>
+                </div>
+                <div class="skill-card">
+                    <h3>Git</h3>
+                    <div class="progress-bar"><div class="progress" style="width: 80%"></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Proyectos -->
+        <section id="proyectos">
+            <h2>Proyectos</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <h3>E-commerce App</h3>
+                    <p>Aplicación web de comercio electrónico con carrito de compras</p>
+                    <button class="btn-ver-mas" data-project="1">Ver más</button>
+                </div>
+                <div class="project-card">
+                    <h3>Portfolio Personal</h3>
+                    <p>Sitio web personal con diseño responsivo y animaciones</p>
+                    <button class="btn-ver-mas" data-project="2">Ver más</button>
+                </div>
+                <div class="project-card">
+                    <h3>Task Manager</h3>
+                    <p>Aplicación de gestión de tareas con localStorage</p>
+                    <button class="btn-ver-mas" data-project="3">Ver más</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contacto -->
+        <section id="contacto">
+            <h2>Contacto</h2>
+            <form id="contactForm">
+                <div class="form-group">
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" id="nombre" name="nombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Correo:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="mensaje">Mensaje:</label>
+                    <textarea id="mensaje" name="mensaje" required></textarea>
+                </div>
+                <button type="submit">Enviar</button>
+            </form>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
