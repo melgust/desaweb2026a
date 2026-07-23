@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil Profesional</title>
+
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header>
+
+    <button id="tema">Cambiar tema</button>
+
+    <div class="perfil">
+
+        <img src="img/Fotografia.jpg" alt="Foto">
+
+        <div>
+
+            <h1>Erwin Alberto Ramirez Racancoj</h1>
+
+            <h3>Ingeniería en Sistemas</h3>
+
+            <p>Universidad Mariano Gálvez</p>
+
+            <p>Carnet: 7690-23-2387</p>
+
+            <p>"El Mismo Martillo Que Rompe El Cristal Forja El Acero"</p>
+
+            <h4 id="fecha"></h4>
+
+            <h4 id="visitas"></h4>
+
+        </div>
+
+    </div>
+
+</header>
+
+<section>
+
+<h2>Sobre mí</h2>
+
+<p>
+
+Soy estudiante de Ingeniería en Sistemas con interés en desarrollo web,
+QA Testing y desarrollo Backend. Tengo como meta aprender nuevas tecnologías,
+resolver problemas y poder obtener un mejor futuro.
+
+</p>
+
+</section>
+
+<section>
+
+<h2>Habilidades</h2>
+
+<div class="Habilidades">
+
+<div class="card">HTML</div>
+<div class="card">CSS</div>
+<div class="card">JavaScript</div>
+<div class="card">Java</div>
+<div class="card">QA Testing</div>
+<div class="card">SQL</div>
+
+</div>
+
+</section>
+
+<section>
+
+<h2>Proyectos Previamente Realizados</h2>
+
+<div class="proyectos">
+
+<div class="proyecto">
+
+<h3>Sistema de Facturación</h3>
+
+<p>Sistema para venta de productos.</p>
+
+<button onclick="mostrar(1)">Ver más</button>
+
+<p id="info1" class="oculto">
+
+Permite registrar ventas, clientes, inventario y generar facturas.
+
+</p>
+
+</div>
+
+<div class="proyecto">
+
+<h3>Cronómetro Web</h3>
+
+<p>Aplicación desarrollada en JavaScript.</p>
+
+<button onclick="mostrar(2)">Ver más</button>
+
+<p id="info2" class="oculto">
+
+Incluye iniciar, detener y reiniciar tiempo.
+
+</p>
+
+</div>
+
+<div class="proyecto">
+
+<h3>Control de Inventario</h3>
+
+<p>Aplicación para administrar productos.</p>
+
+<button onclick="mostrar(3)">Ver más</button>
+
+<p id="info3" class="oculto">
+
+Permite agregar, editar y eliminar productos.
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<section>
+
+<h2>Contacto</h2>
+
+<form id="formulario">
+
+<input type="text" id="nombre" placeholder="Nombre">
+
+<input type="email" id="correo" placeholder="Correo">
+
+<textarea id="mensaje" placeholder="Mensaje"></textarea>
+
+<button type="submit">Enviar</button>
+
+<p id="error"></p>
+
+</form>
+
+</section>
+
+<script src="js/script.js"></script>
+
+</body>
+</html>

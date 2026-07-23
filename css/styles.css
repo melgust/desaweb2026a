@@ -1,0 +1,127 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#f2f2f2;
+    color:#333;
+}
+
+header{
+    background:#4d09de;
+    color:white;
+    padding:20px;
+}
+
+.perfil{
+    display:flex;
+    align-items:center;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+.perfil img{
+    width:150px;
+    height:150px;
+    border-radius:50%;
+}
+
+section{
+    padding:20px;
+}
+
+h2{
+    margin-bottom:15px;
+}
+
+.Habilidades,
+.proyectos{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.card,
+.proyecto{
+    background:white;
+    padding:15px;
+    border-radius:10px;
+    box-shadow:0 0 8px gray;
+    width:220px;
+}
+
+button{
+    background:#4d09de;
+    color:white;
+    border:none;
+    padding:10px;
+    border-radius:5px;
+    cursor:pointer;
+    margin-top:10px;
+}
+
+button:hover{
+    background:#c1bfc5;
+}
+
+input,
+textarea{
+    width:100%;
+    padding:10px;
+    margin:8px 0;
+    border:1px solid #999;
+    border-radius:5px;
+}
+
+textarea{
+    resize:vertical;
+    height:120px;
+}
+
+.oculto{
+    display:none;
+    margin-top:10px;
+}
+
+.dark{
+    background:#222;
+    color:white;
+}
+
+.dark .card,
+.dark .proyecto{
+    background:#444;
+}
+
+.dark input,
+.dark textarea{
+    background:#555;
+    color:white;
+}
+
+#error{
+    color:red;
+    margin-top:10px;
+}
+
+@media(max-width:768px){
+
+    .perfil{
+        flex-direction:column;
+        text-align:center;
+    }
+
+    .habilidades,
+    .proyectos{
+        flex-direction:column;
+    }
+
+    .card,
+    .proyecto{
+        width:100%;
+    }
+
+}
