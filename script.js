@@ -89,3 +89,193 @@ function validarEmail(email) {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(email);
 }
+
+
+// 5. Información adicional de proyectos
+const infoProyectos = {
+    1: {
+        titulo: "E-commerce App",
+        descripcion: "Aplicación completa de comercio electrónico con:",
+        detalles: [
+            "Carrito de compras funcional",
+            "Sistema de pago simulado",
+            "Catálogo de productos",
+            "Filtros de búsqueda"
+        ],
+        tecnologias: ["React", "Node.js", "MongoDB"]
+    },
+    2: {
+        titulo: "Portfolio Personal",
+        descripcion: "Sitio web personal con:",
+        detalles: [
+            "Diseño responsivo",
+            "Animaciones CSS",
+            "Modo oscuro/claro",
+            "Sección de proyectos"
+        ],
+        tecnologias: ["HTML5", "CSS3", "JavaScript"]
+    },
+    3: {
+        titulo: "Task Manager",
+        descripcion: "Aplicación de gestión de tareas con:",
+        detalles: [
+            "CRUD de tareas",
+            "Filtros por estado",
+            "Persistencia en localStorage",
+            "Interfaz intuitiva"
+        ],
+        tecnologias: ["JavaScript", "CSS3", "HTML5"]
+    }
+};
+
+// Crear modales para cada proyecto
+document.querySelectorAll('.btn-ver-mas').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const projectId = this.getAttribute('data-project');
+        const proyecto = infoProyectos[projectId];
+        
+        if (proyecto) {
+            mostrarModal(proyecto);
+        }
+    });
+});
+
+function mostrarModal(proyecto) {
+    // Eliminar modal existente si hay
+    const modalExistente = document.querySelector('.modal');
+    if (modalExistente) {
+        modalExistente.remove();
+    }
+    
+    // Crear modal
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    
+    // Crear contenido del modal
+    let detallesHTML = proyecto.detalles.map(detalle => `<li>${detalle}</li>`).join('');
+    let tecnologiasHTML = proyecto.tecnologias.map(tech => `<span class="tag">${tech}</span>`).join('');
+    
+    modal.innerHTML = `
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>${proyecto.titulo}</h2>
+            <p>${proyecto.descripcion}</p>
+            <ul>${detallesHTML}</ul>
+            <div class="tecnologias">
+                <strong>Tecnologías:</strong> ${tecnologiasHTML}
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Cerrar modal
+    modal.querySelector('.close-modal').addEventListener('click', function() {
+        modal.remove();
+    });
+    
+    // Cerrar modal al hacer clic fuera
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            modal.remove();
+        }
+    });
+}
+
+// Agregar estilos CSS para el modal
+const modalStyles = document.createElement('style');
+modalStyles.textContent = `
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        animation: fadeIn 0.3s;
+    }
+    
+    .modal-content {
+        background-color: white;
+        padding: 30px;
+        border-radius: 15px;
+        max-width: 500px;
+        width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+        position: relative;
+        animation: slideDown 0.3s;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    
+    .modal-content h2 {
+        color: #007bff;
+        margin-bottom: 15px;
+    }
+    
+    .modal-content ul {
+        margin: 15px 0;
+        padding-left: 20px;
+    }
+    
+    .modal-content ul li {
+        margin: 8px 0;
+        color: #555;
+    }
+    
+    .close-modal {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        font-size: 2rem;
+        cursor: pointer;
+        color: #999;
+        transition: color 0.3s;
+    }
+    
+    .close-modal:hover {
+        color: #333;
+    }
+    
+    .tag {
+        display: inline-block;
+        background-color: #007bff;
+        color: white;
+        padding: 5px 12px;
+        border-radius: 20px;
+        margin: 5px 5px 0 0;
+        font-size: 0.9rem;
+    }
+    
+    body.dark-mode .modal-content {
+        background-color: #1a1a2e;
+        color: #eee;
+    }
+    
+    body.dark-mode .modal-content ul li {
+        color: #ccc;
+    }
+    
+    body.dark-mode .close-modal {
+        color: #ccc;
+    }
+    
+    body.dark-mode .close-modal:hover {
+        color: #fff;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    @keyframes slideDown {
+        from { transform: translateY(-50px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+`;
+document.head.appendChild(modalStyles);
