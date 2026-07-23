@@ -36,3 +36,30 @@ document.querySelector('#contact-form').addEventListener('submit', (event) => {
 	document.querySelector('#form-status').textContent = 'Gracias por escribir. Tu mensaje está listo para ser enviado.';
 	event.currentTarget.reset();
 });
+
+
+/*
+Contador de visitas
+*/ 	
+let visitas = localStorage.getItem("visitas");
+
+if (visitas === null) {
+    visitas = 1;
+} else {
+    visitas = parseInt(visitas) + 1;
+}
+
+localStorage.setItem("visitas", visitas);
+document.getElementById("contador").textContent = visitas;
+
+
+/*
+hora en tiempo real
+*/	
+function actualizarHora() {
+	const fechaActual = new Date();
+	const hora = fechaActual.toLocaleTimeString();
+	document.getElementById("hora").textContent = hora;
+}
+setInterval(actualizarHora, 1000);
+actualizarHora();
