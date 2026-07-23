@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil Profesional - Teddy</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="umg-logo.png">
+</head>
+<body>
+    <div class="container">
+        <!-- Encabezado -->
+        <header id="header">
+            <div class="profile-header">
+                <img src="Fotografia Tedi.png" alt="Foto de perfil" class="profile-img" id="profileImg">
+                <div class="header-info">
+                    <h1 id="nombre">Tedi Adolfo Castellanos</h1>
+                    <p id="carrera">Ingeniería en Sistemas y Ciencias de la Computación</p>
+                    <p id="universidad">Universidad Mariano Gálvez</p>
+                    <p id="frase">"Para llegar a ser alguien en la vida debes de sacrificar parte de la misma ;)"</p>
+                    <div id="fechaHora"></div>
+                </div>
+            </div>
+            <button id="temaBtn">🌙 Modo Oscuro</button>
+        </header>
+
+        <!-- Sobre Mí -->
+        <section id="sobreMi">
+            <h2>Sobre Mí</h2>
+            <p>Apasionado por la tecnología con enfoque en el area de la calidad de software, me gusta ser alguien proactivo, ser alguien quien puede apoyar a los demas, conocer nuevas tecnologias, actualemente me desarrollo como ingeniero de automatización de pruebas y busco nuevos desafios en este caso aprendiendo frontend</p>
+        </section>
+
+        <!-- Habilidades -->
+        <section id="habilidades">
+            <h2>Habilidades</h2>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <h3>Pruebas QA manuales</h3>
+                    <div class="progress-bar"><div class="progress" style="width: 90%"></div></div>
+                </div>
+                <div class="skill-card">
+                    <h3>Cypress</h3>
+                    <div class="progress-bar"><div class="progress" style="width: 85%"></div></div>
+                </div>
+                <div class="skill-card">
+                    <h3>JavaScript</h3>
+                    <div class="progress-bar"><div class="progress" style="width: 60%"></div></div>
+                </div>
+                <div class="skill-card">
+                    <h3>Node js</h3>
+                    <div class="progress-bar"><div class="progress" style="width: 60%"></div></div>
+                </div>
+                <div class="skill-card">
+                    <h3>Selenium</h3>
+                    <div class="progress-bar"><div class="progress" style="width: 80%"></div></div>
+                </div>
+            </div>
+        </section>
+
+ <!-- Proyectos -->
+<section id="proyectos">
+    <h2>Proyectos</h2>
+    <div class="projects-grid">
+        <div class="project-card">
+            <h3>Bancocci - Automatización Cypress</h3>
+            <p>Automatización de pruebas end-to-end para el cotizador de productos financieros</p>
+            <button class="btn-ver-mas" data-project="1">Ver más</button>
+        </div>
+        <div class="project-card">
+            <h3>JTeller by Byte - Pruebas Integrales</h3>
+            <p>Pruebas de API, manuales y automatización con Selenium + Mocha para sistema bancario</p>
+            <button class="btn-ver-mas" data-project="2">Ver más</button>
+        </div>
+        <div class="project-card">
+            <h3>Banco Agrícola - Pruebas de Sistema</h3>
+            <p>Pruebas funcionales, base de datos y validación de APIs para el sistema bancario</p>
+            <button class="btn-ver-mas" data-project="3">Ver más</button>
+        </div>
+    </div>
+</section>
+
+        <!-- Contacto -->
+        <section id="contacto">
+            <h2>Contacto</h2>
+            <form id="contactForm">
+                <div class="form-group">
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" id="nombre" name="nombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Correo:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="mensaje">Mensaje:</label>
+                    <textarea id="mensaje" name="mensaje" required></textarea>
+                </div>
+                <button type="submit">Enviar</button>
+            </form>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
