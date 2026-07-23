@@ -1,15 +1,15 @@
 const projectDetails = {
-	agenda: {
-		title: 'Agenda Clara',
-		description: 'Proyecto enfocado en organizar pendientes mediante categorías, prioridades y una vista de avance. La propuesta prioriza una lectura rápida y una interacción sin distracciones.'
+	GEC: {
+		title: 'Gestion electronica de la carga',
+		description: 'Aplicacion aduanera para la modificacion de documentos de transporte para la importacion y la exportacion aduanera reduciendo el tiempo de procesamiento de 24 horas a 30 minutos y ayudando a reducir el consumo de papel, impulsando la transparencia gracias a la utilizacion bolsones generales.'
 	},
-	ruta: {
-		title: 'Ruta Local',
-		description: 'Concepto de explorador urbano que reúne cafeterías, parques y espacios culturales. El reto principal fue presentar mucha información sin perder la sensación de descubrimiento.'
+ Isnpec: {
+		title: 'Inspecciones conjuntas',
+		description: 'Sistema para la coordinación de inspecciones aduaneras entre diferentes autoridades y facilitando la cooperacion entre instituciones.'
 	},
-	casa: {
-		title: 'Casa Nativa',
-		description: 'Catálogo para un emprendimiento de productos artesanales. El diseño busca comunicar cercanía y confianza, con una navegación sencilla desde la historia de la marca hasta el contacto.'
+	Carga: {
+		title: 'Despacho aduanero',
+		description: 'Simplificación del proceso de despacho aduanero para mejorar la eficiencia en el tratamiento de mercancías impusando el comercio interno y externo.'
 	}
 };
 
