@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil Profesional Interactivo</title>
+
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+    <!--ENCABEZADO-->
+
+    <header>
+
+        <div class="perfil">
+
+            <img src="img/Foto_Esau.jpeg" alt="Foto de perfil" class="foto">
+
+            <div class="informacion">
+
+                <h1>Esau Contreras</h1>
+
+                <h2>Ingeniería en Sistemas</h2>
+
+                <h3>Universidad Mariano Gálvez de Guatemala</h3>
+
+                <p class="frase">
+                    "Cada línea de código es una oportunidad para aprender algo nuevo."
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="header-extra">
+
+            <button id="btnTema">
+                🌙 Cambiar Tema
+            </button>
+
+            <p id="fechaHora"></p>
+
+            <p id="contadorVisitas"></p>
+
+        </div>
+
+    </header>
+
+    <!--SOBRE MI-->
+
+    <main>
+
+        <section id="sobre-mi">
+
+            <h2>Sobre mí</h2>
+
+            <p>
+                Soy estudiante de Ingeniería en Sistemas con interés en el desarrollo web,
+                programación, bases de datos y administración de redes. Me gusta aprender
+                nuevas tecnologías y desarrollar proyectos que me permitan mejorar mis
+                habilidades técnicas y profesionales.
+            </p>
+
+        </section>
+
+        <!--HABILIDADES-->
+
+        <section id="habilidades">
+
+            <h2>Habilidades</h2>
+
+            <div class="contenedor-habilidades">
+
+                <div class="habilidad">
+                    HTML5
+                </div>
+
+                <div class="habilidad">
+                    CSS3
+                </div>
+
+                <div class="habilidad">
+                    JavaScript
+                </div>
+
+                <div class="habilidad">
+                    Git y GitHub
+                </div>
+
+                <div class="habilidad">
+                    SQL
+                </div>
+
+                <div class="habilidad">
+                    Docker
+                </div>
+
+                <div class="habilidad">
+                    Python
+                </div>
+
+                <div class="habilidad">
+                    Redes
+                </div>
+
+            </div>
+
+        </section>
+
+        <!--PROYECTOS -->
+
+        <section id="proyectos">
+
+            <h2>Proyectos</h2>
+
+            <div class="contenedor-proyectos">
+
+                <div class="tarjeta">
+
+                    <h3>Sistema de Parqueos</h3>
+
+                    <p>
+                        Aplicación desarrollada en Java para administrar parqueos privados.
+                    </p>
+
+                    <button onclick="mostrarProyecto(1)">
+                        Ver más
+                    </button>
+
+                </div>
+
+                <div class="tarjeta">
+
+                    <h3>Aplicación de Grafos</h3>
+
+                    <p>
+                        Proyecto en Python para representar municipios de Guatemala.
+                    </p>
+
+                    <button onclick="mostrarProyecto(2)">
+                        Ver más
+                    </button>
+
+                </div>
+
+                <div class="tarjeta">
+
+                    <h3>Control de Asistencia</h3>
+
+                    <p>
+                        Sistema para administración de marcajes biométricos.
+                    </p>
+
+                    <button onclick="mostrarProyecto(3)">
+                        Ver más
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ================= CONTACTO ================= -->
+
+        <section id="contacto">
+
+            <h2>Contacto</h2>
+
+            <form id="formulario">
+
+                <label>Nombre</label>
+
+                <input type="text" id="nombre">
+
+                <label>Correo Electrónico</label>
+
+                <input type="email" id="correo">
+
+                <label>Mensaje</label>
+
+                <textarea id="mensaje" rows="5"></textarea>
+
+                <button type="submit">
+                    Enviar
+                </button>
+
+            </form>
+
+        </section>
+
+    </main>
+    
+
+    <script src="js/script.js"></script>
+
+</body>
+
+</html>
