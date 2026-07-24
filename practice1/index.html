@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frederick Montiel Tórtola | Perfil Profesional</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <header class="header">
+    <button id="theme-toggle" class="theme-toggle" aria-label="Cambiar tema">🌙</button>
+    <img src="img/foto.jpg" alt="Foto de Frederick Montiel Tórtola" class="profile-photo">
+    <h1>Frederick Eduardo Montiel Tórtola</h1>
+    <h2>Ingeniería en Sistemas</h2>
+    <p class="university">Universidad Mariano Gálvez</p>
+    <p class="statement">Estudiante de Ingeniería en Sistemas enfocado en construir software claro, funcional y bien estructurado, con ganas de seguir aprendiendo cada día.</p>
+    <p id="datetime" class="datetime"></p>
+  </header>
+
+  <main>
+
+    <section id="about" class="section">
+      <h2>Sobre mí</h2>
+      <p>Me interesa el desarrollo web y de software en general, resolver problemas con lógica y código limpio. Mi meta profesional es convertirme en un desarrollador full-stack capaz de crear soluciones completas, desde el diseño hasta el despliegue, aportando valor real a los proyectos en los que participe.</p>
+    </section>
+
+    <section id="skills" class="section">
+      <h2>Habilidades</h2>
+      <div class="skills-grid">
+        <div class="skill-card">
+          <h3>HTML5</h3>
+          <div class="progress-bar"><div class="progress" style="width: 85%;"></div></div>
+        </div>
+        <div class="skill-card">
+          <h3>CSS3</h3>
+          <div class="progress-bar"><div class="progress" style="width: 80%;"></div></div>
+        </div>
+        <div class="skill-card">
+          <h3>JavaScript</h3>
+          <div class="progress-bar"><div class="progress" style="width: 70%;"></div></div>
+        </div>
+        <div class="skill-card">
+          <h3>Java</h3>
+          <div class="progress-bar"><div class="progress" style="width: 65%;"></div></div>
+        </div>
+        <div class="skill-card">
+          <h3>MySQL</h3>
+          <div class="progress-bar"><div class="progress" style="width: 70%;"></div></div>
+        </div>
+        <div class="skill-card">
+          <h3>Git &amp; GitHub</h3>
+          <div class="progress-bar"><div class="progress" style="width: 75%;"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects" class="section">
+      <h2>Proyectos</h2>
+      <div class="projects-grid">
+
+        <article class="project-card">
+          <h3>Sistema de Inventario</h3>
+          <p class="project-summary">Aplicación de escritorio para control de entradas y salidas de productos.</p>
+          <button class="expand-btn">Ver más</button>
+          <div class="project-details">
+            <p>Sistema desarrollado en Java para gestionar inventario de una pequeña empresa, con registro de productos, control de stock y reportes básicos. Conexión a base de datos MySQL para persistencia de la información.</p>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <h3>Lista de Tareas (To-Do List)</h3>
+          <p class="project-summary">Web app para organizar tareas diarias con JavaScript puro.</p>
+          <button class="expand-btn">Ver más</button>
+          <div class="project-details">
+            <p>Aplicación construida con HTML, CSS y JavaScript que permite agregar, marcar como completadas y eliminar tareas, guardando el progreso en el almacenamiento local del navegador para que persista entre sesiones.</p>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <h3>Calculadora de Notas</h3>
+          <p class="project-summary">Herramienta para calcular promedios y estado de aprobación de cursos.</p>
+          <button class="expand-btn">Ver más</button>
+          <div class="project-details">
+            <p>Proyecto que calcula el promedio final de un curso a partir de zonas y examen final, indicando si el estudiante aprueba o no según el criterio ingresado. Incluye validación de datos de entrada.</p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <section id="contact" class="section">
+      <h2>Contacto</h2>
+      <form id="contact-form" novalidate>
+        <div class="form-group">
+          <label for="name">Nombre</label>
+          <input type="text" id="name" name="name">
+          <span class="error-message" id="name-error"></span>
+        </div>
+        <div class="form-group">
+          <label for="email">Correo electrónico</label>
+          <input type="text" id="email" name="email">
+          <span class="error-message" id="email-error"></span>
+        </div>
+        <div class="form-group">
+          <label for="message">Mensaje</label>
+          <textarea id="message" name="message" rows="5"></textarea>
+          <span class="error-message" id="message-error"></span>
+        </div>
+        <button type="submit" class="submit-btn">Enviar</button>
+        <p id="form-success" class="form-success"></p>
+      </form>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>Visitas a esta página: <span id="visit-counter">0</span></p>
+    <p>&copy; 2026 Frederick Eduardo Montiel Tórtola</p>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
