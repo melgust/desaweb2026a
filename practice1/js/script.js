@@ -26,9 +26,15 @@ function loadTheme() {
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme === "dark") {
         body.classList.add("dark-mode");
-        themeButton.textContent = "☀️ Modo claro";
+            themeButton.innerHTML = `
+            <i class="fa-solid fa-sun"></i>
+            <span>Modo claro</span>
+        `;
     } else {
-        themeButton.textContent = "🌙 Modo oscuro";
+        themeButton.innerHTML = `
+            <i class="fa-solid fa-moon"></i>
+            <span>Modo oscuro</span>
+        `;
     }
 }
 function toggleTheme() {
@@ -38,9 +44,13 @@ function toggleTheme() {
         "theme",
         darkMode ? "dark" : "light"
     );
-    themeButton.textContent = darkMode
-        ? "☀️ Modo claro"
-        : "🌙 Modo oscuro";
+    themeButton.innerHTML = darkMode ? `
+        <i class="fa-solid fa-sun"></i>
+        <span>Modo claro</span>
+    ` : `
+        <i class="fa-solid fa-moon"></i>
+        <span>Modo oscuro</span>
+    `;
 }
 themeButton.addEventListener(
     "click",
