@@ -8,44 +8,177 @@
         <meta name="author" content="Edwin Valle">
         <link rel="stylesheet" href="css/styles.css">
     </head>
-
     <body>
-        <!-- ENCABEZADO -->
-        <header id="inicio">
-
+        <!-- ===================== HEADER ===================== -->
+        <header class="hero">
+            <div class="container hero__container">
+                <div class="hero__profile">
+                    <img src="img/foto.jpg" alt="Fotografía de Edwin Valle" class="hero__image">
+                    <div class="hero__info">
+                        <h1 class="hero__name">Edwin Valle</h1>
+                        <h2 class="hero__career">Ingeniería en Sistemas</h2>
+                        <p class="hero__university">Universidad Mariano Gálvez de Guatemala</p>
+                        <p class="hero__quote">"Siempre aprendiendo, siempre construyendo."</p>
+                    </div>
+                </div>
+                <div class="hero__utilities">
+                    <button class="button" id="theme-toggle">
+                        🌙 Modo oscuro
+                    </button>
+                    <div class="hero__datetime">
+                        <p>
+                            <strong>Fecha:</strong>
+                            <span id="current-date"></span>
+                        </p>
+                        <p>
+                            <strong>Hora:</strong>
+                            <span id="current-time"></span>
+                        </p>
+                    </div>
+                    <div class="hero__visits">
+                        <strong>Visitas:</strong>
+                        <span id="visit-counter">0</span>
+                    </div>
+                </div>
+            </div>
         </header>
-
-        <!-- CONTENIDO PRINCIPAL -->
+        <!-- ===================== MAIN ===================== -->
         <main>
-
-            <!-- Sobre mí -->
-            <section id="sobre-mi">
-
+            <!-- SOBRE MI -->
+            <section class="section" id="about">
+                <div class="container">
+                    <h2 class="section__title">Sobre mí</h2>
+                    <p class="section__text">
+                        Soy estudiante de Ingeniería en Sistemas apasionado por el desarrollo de software,
+                        el diseño de aplicaciones web, las bases de datos y la automatización de procesos.
+                        Me interesa desarrollar soluciones que sean funcionales, escalables y fáciles de
+                        mantener, mientras continúo fortaleciendo mis habilidades técnicas y profesionales.
+                    </p>
+                </div>
             </section>
-
-            <!-- Habilidades -->
-            <section id="habilidades">
-
+            <!-- HABILIDADES -->
+            <section class="section" id="skills">
+                <div class="container">
+                    <h2 class="section__title">Habilidades</h2>
+                    <div class="skills">
+                        <div class="skill-card card">
+                            <div class="skill-card__header">
+                                <h3>HTML5</h3>
+                                <span>90%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress__bar" style="--progress:90%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-card card">
+                            <div class="skill-card__header">
+                                <h3>CSS3</h3>
+                                <span>85%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress__bar" style="--progress:85%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-card card">
+                            <div class="skill-card__header">
+                                <h3>JavaScript</h3>
+                                <span>80%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress__bar" style="--progress:80%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-card card">
+                            <div class="skill-card__header">
+                                <h3>PHP</h3>
+                                <span>90%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress__bar" style="--progress:90%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-card card">
+                            <div class="skill-card__header">
+                                <h3>PostgreSQL</h3>
+                                <span>85%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress__bar" style="--progress:85%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
-
-            <!-- Proyectos -->
-            <section id="proyectos">
-
+            <!-- PROYECTOS -->
+            <section class="section" id="projects">
+                <div class="container">
+                    <h2 class="section__title">Proyectos</h2>
+                    <div class="projects">
+                        <article class="card project-card"">
+                            <h3>ERP Jurídico</h3>
+                            <p>Sistema para la gestión de procesos legales.</p>
+                            <button class="button project-button" data-project="erp" data-title="ERP Jurídico" data-description="Sistema ERP desarrollado para la administración de procesos jurídicos, control de expedientes, generación de documentos y seguimiento de casos legales.">
+                                Ver más
+                            </button>
+                        </article>
+                        <article class="card project-card">
+                            <h3>Plataforma Agrícola</h3>
+                            <p>Marketplace para productores y compradores.</p>
+                            <button class="button project-button" data-project="agricola" data-title="Plataforma Agrícola" data-description="Plataforma web para conectar productores y compradores de productos agrícolas, facilitando la comercialización y el intercambio de bienes.">
+                                Ver más
+                            </button>
+                        </article>
+                        <article class="card project-card">
+                            <h3>Compilador</h3>
+                            <p>Compilador con ANTLR y generación de código.</p>
+                            <button class="button project-button" data-project="compiler" data-title="Compilador" data-description="Compilador desarrollado con ANTLR para la generación de código a partir de un lenguaje de programación específico.">
+                                Ver más
+                            </button>
+                        </article>
+                    </div>
+                </div>
             </section>
-
-            <!-- Contacto -->
-            <section id="contacto">
-
+            <!-- CONTACTO -->
+            <section class="section" id="contact">
+                <div class="container">
+                    <h2 class="section__title">Contacto</h2>
+                    <form id="contact-form"
+                        class="contact-form"
+                        novalidate>
+                        <div class="form-group">
+                            <label for="name">Nombre</label>
+                            <input type="text" id="name" name="name" autocomplete="name" placeholder="Ingrese su nombre">
+                            <small class="error-message"></small>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Correo electrónico</label>
+                            <input type="email" id="email" name="email" autocomplete="email" placeholder="correo@ejemplo.com">
+                            <small class="error-message"></small>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Mensaje</label>
+                            <textarea id="message" name="message" rows="6" placeholder="Escriba su mensaje..."></textarea>
+                            <small class="error-message"></small>
+                        </div>
+                        <button type="submit" class="button">Enviar</button>
+                    </form>
+                </div>
             </section>
-
         </main>
-
-        <!-- PIE DE PÁGINA -->
-        <footer>
-
+        <!-- ===================== FOOTER ===================== -->
+        <footer class="footer">
+            <div class="container">
+                <p>© 2026 Edwin Valle | Desarrollo Web</p>
+            </div>
         </footer>
-
+        <!-- ===================== MODAL ===================== -->
+        <div id="modal" class="modal">
+            <div class="modal__content">
+                <button class="modal__close" id="close-modal"> &times;</button>
+                <h2 id="modal-title"></h2>
+                <p id="modal-description"></p>
+            </div>
+        </div>
         <script src="js/script.js"></script>
-
     </body>
 </html>
