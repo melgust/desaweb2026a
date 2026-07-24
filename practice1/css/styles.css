@@ -114,10 +114,23 @@ main {
   color: var(--accent);
 }
 
+.skills-category {
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  margin: 1.5rem 0 0.75rem;
+}
+
+.skills-category:first-of-type {
+  margin-top: 0;
+}
+
 .skills-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 1.25rem;
+  margin-bottom: 0.5rem;
 }
 
 .skill-card {
@@ -127,6 +140,11 @@ main {
   padding: 1rem;
   box-shadow: 0 2px 6px var(--shadow);
   transition: transform 0.2s ease;
+}
+
+.skill-card h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
 }
 
 .skill-card:hover {
