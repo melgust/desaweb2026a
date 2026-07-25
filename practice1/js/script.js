@@ -36,13 +36,53 @@ visits += 1;
 localStorage.setItem('visitCount', visits);
 visitCounterEl.textContent = visits;
 
-// ---- Expandable project cards ----
-document.querySelectorAll('.expand-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const details = btn.nextElementSibling;
-    const isOpen = details.classList.toggle('open');
-    btn.textContent = isOpen ? 'Ver menos' : 'Ver más';
-  });
+// ---- Project modal (shared by all project cards) ----
+const projectModal = document.getElementById('project-modal');
+const projectModalClose = document.getElementById('project-modal-close');
+const projectModalFile = document.getElementById('project-modal-file');
+const projectModalTitle = document.getElementById('project-modal-title');
+const projectModalDesc = document.getElementById('project-modal-desc');
+const projectModalLink = document.getElementById('project-modal-link');
+
+let lastProjectTrigger = null;
+
+function openProjectModal(trigger) {
+  projectModalFile.textContent = trigger.dataset.file || '';
+  projectModalTitle.textContent = trigger.dataset.title || '';
+  projectModalDesc.textContent = trigger.dataset.desc || '';
+
+  if (trigger.dataset.link) {
+    projectModalLink.href = trigger.dataset.link;
+    projectModalLink.textContent = trigger.dataset.linkText || '$ ver más';
+    projectModalLink.hidden = false;
+  } else {
+    projectModalLink.hidden = true;
+  }
+
+  lastProjectTrigger = trigger;
+  projectModal.hidden = false;
+  document.body.style.overflow = 'hidden';
+  projectModalClose.focus();
+}
+
+function closeProjectModal() {
+  projectModal.hidden = true;
+  document.body.style.overflow = '';
+  if (lastProjectTrigger) lastProjectTrigger.focus();
+}
+
+document.querySelectorAll('.project-link-btn').forEach(btn => {
+  btn.addEventListener('click', () => openProjectModal(btn));
+});
+
+projectModalClose.addEventListener('click', closeProjectModal);
+
+projectModal.addEventListener('click', (event) => {
+  if (event.target === projectModal) closeProjectModal();
+});
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && !projectModal.hidden) closeProjectModal();
 });
 
 // ---- Contact form validation ----

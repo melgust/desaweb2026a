@@ -21,7 +21,8 @@
     </div>
 
     <header class="header">
-      <img src="img/foto.jpg" alt="Foto de Frederick Montiel Tórtola" class="profile-photo">
+      <img src="https://i.ibb.co/5WJBcsxt/20260723-204039-1.jpg" alt="Foto de Frederick Montiel Tórtola"
+        class="profile-photo">
 
       <p class="prompt"><span class="user">frederick@umg</span>:<span class="path">~</span>$ whoami</p>
       <h1>Frederick Eduardo Montiel Tórtola</h1>
@@ -29,8 +30,7 @@
           Sistemas"</span>;</h2>
       <p class="university"><span class="kw">const</span> universidad <span class="op">=</span> <span
           class="str">"Universidad Mariano Gálvez"</span>;</p>
-      <p class="statement">Desarrollador full-stack en formación. Construyo software claro, funcional y bien
-        estructurado — del diseño de la interfaz al despliegue en el servidor.</p>
+      <p class="statement">Aprendo rápido, cuestiono todo.</p>
       <p id="datetime" class="datetime"></p>
     </header>
 
@@ -38,13 +38,18 @@
 
       <section id="about" class="section">
         <h2 class="section-title"><span class="hash">#</span> sobre-mi</h2>
+
         <div class="terminal-block">
           <p><span class="comment">// intereses</span></p>
-          <p>Desarrollo web y móvil, arquitectura de APIs, bases de datos y automatización de despliegues. Me gusta
-            resolver problemas con lógica limpia y código legible.</p>
-          <p><span class="comment">// meta profesional</span></p>
-          <p>Consolidarme como desarrollador full-stack capaz de llevar un producto completo: diseño, backend, base de
-            datos y puesta en producción, aportando valor real al equipo con el que trabaje.</p>
+          <p>Backend, arquitectura de sistemas escalables y bases de datos (PostgreSQL). Fuera del código: fútbol,
+            billar y ajedrez.</p>
+          <p><span class="comment">// habilidades</span></p>
+          <p>NestJS, TypeScript, Flutter y PostgreSQL como stack principal, con diseño de APIs y modelado de bases
+            de datos — ver detalle completo abajo.</p>
+          <p><span class="comment">// objetivo</span></p>
+          <p>Lanzar <a href="https://habitak.vip/" target="_blank" rel="noopener"><strong>Habitak</strong></a>, mi
+            SaaS de administración inteligente de edificios, y seguir profundizando en arquitectura de software e
+            infraestructura a gran escala.</p>
         </div>
       </section>
 
@@ -261,71 +266,96 @@
         <div class="projects-grid">
 
           <article class="project-card">
-            <p class="project-file">~/proyectos/inventario</p>
-            <h3>Sistema de Inventario</h3>
-            <p class="project-summary">Aplicación de escritorio para control de entradas y salidas de productos.</p>
-            <p class="tags"><span class="tag">Java</span><span class="tag">MySQL</span><span class="tag">Swing</span>
-            </p>
-            <button class="expand-btn">$ ver más</button>
-            <div class="project-details">
-              <p>Sistema desarrollado en Java para gestionar el inventario de una pequeña empresa: registro de
-                productos, control de stock y reportes básicos. Persistencia en MySQL mediante JDBC y validación de
-                movimientos para evitar existencias negativas.</p>
-            </div>
+            <p class="project-file">~/proyectos/habitak</p>
+            <h3>Habitak</h3>
+            <p class="project-summary">SaaS de administración inteligente de edificios y condominios.</p>
+            <p class="tags"><span class="tag">NestJS</span><span class="tag">TypeScript</span><span
+                class="tag">Flutter</span><span class="tag">PostgreSQL</span></p>
+            <button type="button" class="expand-btn project-link-btn" data-file="~/proyectos/habitak"
+              data-title="Habitak — Administración Inteligente de Edificios"
+              data-desc="Habitak es una plataforma SaaS para la administración inteligente de edificios y condominios, pensada para modernizar y automatizar tareas administrativas: control de pagos, comunicación con residentes, gestión de áreas comunes y reportes en tiempo real. El objetivo es reducir la carga manual de administradores y propietarios y mejorar la toma de decisiones mediante una arquitectura escalable capaz de atender cientos o miles de unidades. Desarrollada con NestJS y TypeScript en el backend, PostgreSQL como base de datos y Flutter para las apps móviles."
+              data-link="https://habitak.vip/" data-link-text="$ probar el sistema" aria-haspopup="dialog"
+              aria-controls="project-modal">$ ver más</button>
           </article>
 
           <article class="project-card">
-            <p class="project-file">~/proyectos/todo-app</p>
-            <h3>Lista de Tareas (To-Do App)</h3>
-            <p class="project-summary">Web app para organizar tareas diarias con JavaScript puro.</p>
-            <p class="tags"><span class="tag">HTML</span><span class="tag">CSS</span><span
-                class="tag">JavaScript</span><span class="tag">localStorage</span></p>
-            <button class="expand-btn">$ ver más</button>
-            <div class="project-details">
-              <p>Aplicación construida sin frameworks que permite agregar, completar y eliminar tareas. El estado se
-                guarda en el almacenamiento local del navegador, por lo que las tareas persisten entre sesiones sin
-                necesidad de backend.</p>
-            </div>
+            <p class="project-file">~/proyectos/filecon</p>
+            <h3>Filecon</h3>
+            <p class="project-summary">App Android para convertir imágenes a PDF y PDF a imágenes.</p>
+            <p class="tags"><span class="tag">Android</span><span class="tag">PDF</span><span
+                class="tag">Privacidad</span></p>
+            <button type="button" class="expand-btn project-link-btn" data-file="~/proyectos/filecon"
+              data-title="Filecon"
+              data-desc="Conversor de imágenes a PDF y de PDF a imágenes para Android. Lo desarrollé por hartazgo de las apps del rubro llenas de publicidad: Filecon es totalmente gratuito, sin anuncios y privado — no rastrea ningún documento ni foto. Solo cuenta cuántas veces se usa cada funcionalidad, para estudiar la interacción de los usuarios."
+              data-link="https://play.google.com/store/apps/details?id=tech.easyprojects.fileconverter.filecon&hl=es_GT"
+              data-link-text="$ probar aplicación" aria-haspopup="dialog" aria-controls="project-modal">$ ver
+              más</button>
           </article>
 
           <article class="project-card">
-            <p class="project-file">~/proyectos/calc-notas</p>
-            <h3>Calculadora de Notas</h3>
-            <p class="project-summary">Herramienta para calcular promedios y estado de aprobación de cursos.</p>
-            <p class="tags"><span class="tag">JavaScript</span><span class="tag">DOM</span><span
-                class="tag">Validación</span></p>
-            <button class="expand-btn">$ ver más</button>
-            <div class="project-details">
-              <p>Calcula la nota final de un curso a partir de la zona y el examen final, indicando si el estudiante
-                aprueba según el criterio configurado. Incluye validación de rangos y mensajes de error en tiempo real.
-              </p>
-            </div>
+            <p class="project-file">~/proyectos/simplerouter-php</p>
+            <h3>SimpleRouter PHP</h3>
+            <p class="project-summary">Librería de enrutamiento estilo Express, para PHP 7.4 a 8.3.</p>
+            <p class="tags"><span class="tag">PHP</span><span class="tag">Router</span><span class="tag">Open
+                Source</span></p>
+            <button type="button" class="expand-btn project-link-btn" data-file="~/proyectos/simplerouter-php"
+              data-title="SimpleRouter PHP"
+              data-desc="Librería de enrutamiento para PHP inspirada en Express.js, compatible desde PHP 7.4 hasta 8.3. Permite definir rutas GET, POST, PUT y DELETE de forma simple, con soporte para middlewares, configuración de CORS integrada, manejo de subida de archivos y acceso directo a parámetros, query strings, headers y body de la petición. Publicada como paquete open source en GitHub."
+              data-link="https://github.com/FrederickMontiel/SimpleRouter-php" data-link-text="$ ver repositorio"
+              aria-haspopup="dialog" aria-controls="project-modal">$ ver más</button>
           </article>
 
         </div>
       </section>
 
+      <div class="modal-overlay" id="project-modal" role="dialog" aria-modal="true"
+        aria-labelledby="project-modal-title" hidden>
+        <div class="modal-box">
+          <button type="button" class="modal-close" id="project-modal-close" aria-label="Cerrar">✕</button>
+          <p class="project-file" id="project-modal-file"></p>
+          <h3 id="project-modal-title"></h3>
+          <p class="modal-desc" id="project-modal-desc"></p>
+          <a class="modal-link" id="project-modal-link" target="_blank" rel="noopener" hidden></a>
+        </div>
+      </div>
+
       <section id="contact" class="section">
         <h2 class="section-title"><span class="hash">#</span> contacto</h2>
-        <form id="contact-form" novalidate>
-          <div class="form-group">
-            <label for="name">--nombre</label>
-            <input type="text" id="name" name="name" placeholder="Escribe tu nombre">
-            <span class="error-message" id="name-error"></span>
-          </div>
-          <div class="form-group">
-            <label for="email">--correo</label>
-            <input type="text" id="email" name="email" placeholder="tucorreo@ejemplo.com">
-            <span class="error-message" id="email-error"></span>
-          </div>
-          <div class="form-group">
-            <label for="message">--mensaje</label>
-            <textarea id="message" name="message" rows="5" placeholder="Escribe tu mensaje..."></textarea>
-            <span class="error-message" id="message-error"></span>
-          </div>
-          <button type="submit" class="submit-btn">$ enviar</button>
-          <p id="form-success" class="form-success"></p>
-        </form>
+
+        <div class="terminal-block">
+          <p class="prompt"><span class="user">frederick@umg</span>:<span class="path">~</span>$ ./contacto.sh</p>
+
+          <form id="contact-form" novalidate class="cli-form">
+            <div class="cli-field">
+              <span class="cli-mark">?</span>
+              <label for="name">nombre</label>
+              <span class="cli-sep">›</span>
+              <input type="text" id="name" name="name" class="cli-input" placeholder="tu nombre" autocomplete="off">
+            </div>
+            <span class="error-message cli-error" id="name-error"></span>
+
+            <div class="cli-field">
+              <span class="cli-mark">?</span>
+              <label for="email">correo</label>
+              <span class="cli-sep">›</span>
+              <input type="text" id="email" name="email" class="cli-input" placeholder="tucorreo@ejemplo.com"
+                autocomplete="off">
+            </div>
+            <span class="error-message cli-error" id="email-error"></span>
+
+            <div class="cli-field cli-field-block">
+              <span class="cli-mark">?</span>
+              <label for="message">mensaje</label>
+              <span class="cli-sep">›</span>
+              <textarea id="message" name="message" rows="4" class="cli-input"
+                placeholder="escribe tu mensaje..."></textarea>
+            </div>
+            <span class="error-message cli-error" id="message-error"></span>
+
+            <button type="submit" class="submit-btn">$ enviar</button>
+            <p id="form-success" class="form-success"></p>
+          </form>
+        </div>
       </section>
 
     </main>

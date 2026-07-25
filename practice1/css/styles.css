@@ -251,6 +251,17 @@ main {
   margin-top: 0.5rem;
 }
 
+.terminal-block a {
+  color: var(--accent-2);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--accent-2);
+}
+
+.terminal-block a:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
 /* ===== Habilidades ===== */
 .skills-category {
   font-size: 0.85rem;
@@ -380,71 +391,165 @@ main {
   transition: background 0.2s ease, color 0.2s ease;
 }
 
-.expand-btn:hover {
+.expand-btn:hover,
+.project-link-btn:hover {
   background: var(--accent);
   color: var(--bg);
 }
 
-.project-details {
+/* ===== Modal ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  z-index: 100;
+}
+
+.modal-overlay[hidden] {
   display: none;
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px dashed var(--border);
-  font-size: 0.85rem;
+}
+
+.modal-box {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  max-height: 85vh;
+  overflow-y: auto;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 20px 50px var(--shadow);
+  padding: 1.75rem;
+}
+
+.modal-close {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  width: 30px;
+  height: 30px;
+  color: var(--text-muted);
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.modal-close:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.modal-box h3 {
+  color: var(--accent-2);
+  font-size: 1.1rem;
+  margin: 0.35rem 2rem 1rem 0;
+}
+
+.modal-desc {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  margin-bottom: 1.25rem;
+}
+
+.modal-link {
+  display: inline-block;
+  color: var(--accent);
+  text-decoration: none;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  padding: 0.45rem 1rem;
+  font-size: 0.82rem;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.modal-link:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/* ===== Formulario (estilo prompt CLI) ===== */
+#contact-form {
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.cli-field {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.35rem 0;
+}
+
+.cli-field-block {
+  align-items: flex-start;
+}
+
+.cli-mark {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.cli-field label {
+  color: var(--accent-3);
+  font-size: 0.88rem;
+}
+
+.cli-sep {
   color: var(--text-muted);
 }
 
-.project-details.open {
-  display: block;
-}
-
-/* ===== Formulario ===== */
-#contact-form {
-  max-width: 520px;
-  display: flex;
-  flex-direction: column;
-  gap: 1.1rem;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-
-.form-group label {
-  font-size: 0.8rem;
-  color: var(--accent-3);
-}
-
-.form-group input,
-.form-group textarea {
-  padding: 0.65rem 0.8rem;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: var(--bg-card);
+.cli-input {
+  flex: 1;
+  min-width: 180px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border);
   color: var(--text);
   font-family: inherit;
-  font-size: 0.88rem;
+  font-size: 0.9rem;
+  padding: 0.2rem 0.1rem;
   resize: vertical;
   transition: border-color 0.2s ease;
 }
 
-.form-group input:focus,
-.form-group textarea:focus {
+.cli-input:focus {
   outline: none;
   border-color: var(--accent);
 }
 
-.form-group input::placeholder,
-.form-group textarea::placeholder {
+.cli-input::placeholder {
   color: var(--text-muted);
   opacity: 0.6;
 }
 
-.form-group input.invalid,
-.form-group textarea.invalid {
+.cli-input.invalid {
   border-color: var(--danger);
+}
+
+textarea.cli-input {
+  flex-basis: 100%;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.5rem 0.65rem;
+}
+
+textarea.cli-input:focus {
+  border-color: var(--accent);
+}
+
+.cli-error {
+  display: block;
+  padding-left: 1.6rem;
 }
 
 .error-message {
@@ -455,6 +560,7 @@ main {
 
 .submit-btn {
   align-self: flex-start;
+  margin-top: 0.75rem;
   background: var(--accent);
   color: var(--bg);
   border: none;
