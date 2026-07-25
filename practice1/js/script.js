@@ -8,7 +8,7 @@ function applyTheme(theme) {
   localStorage.setItem('theme', theme);
 }
 
-const savedTheme = localStorage.getItem('theme') || 'light';
+const savedTheme = localStorage.getItem('theme') || 'dark';
 applyTheme(savedTheme);
 
 themeToggleBtn.addEventListener('click', () => {

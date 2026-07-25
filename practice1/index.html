@@ -10,210 +10,333 @@
 
 <body>
 
-  <header class="header">
-    <button id="theme-toggle" class="theme-toggle" aria-label="Cambiar tema">🌙</button>
-    <img src="img/foto.jpg" alt="Foto de Frederick Montiel Tórtola" class="profile-photo">
-    <h1>Frederick Eduardo Montiel Tórtola</h1>
-    <h2>Ingeniería en Sistemas</h2>
-    <p class="university">Universidad Mariano Gálvez</p>
-    <p class="statement">Estudiante de Ingeniería en Sistemas enfocado en construir software claro, funcional y bien
-      estructurado, con ganas de seguir aprendiendo cada día.</p>
-    <p id="datetime" class="datetime"></p>
-  </header>
+  <div class="window">
 
-  <main>
+    <div class="window-bar">
+      <span class="dot dot-red"></span>
+      <span class="dot dot-yellow"></span>
+      <span class="dot dot-green"></span>
+      <span class="window-title">frederick-montiel — perfil.html</span>
+      <button id="theme-toggle" class="theme-toggle" aria-label="Cambiar tema">🌙</button>
+    </div>
 
-    <section id="about" class="section">
-      <h2>Sobre mí</h2>
-      <p>Me interesa el desarrollo web y de software en general, resolver problemas con lógica y código limpio. Mi meta
-        profesional es convertirme en un desarrollador full-stack capaz de crear soluciones completas, desde el diseño
-        hasta el despliegue, aportando valor real a los proyectos en los que participe.</p>
-    </section>
+    <header class="header">
+      <img src="img/foto.jpg" alt="Foto de Frederick Montiel Tórtola" class="profile-photo">
 
-    <section id="skills" class="section">
-      <h2>Habilidades</h2>
+      <p class="prompt"><span class="user">frederick@umg</span>:<span class="path">~</span>$ whoami</p>
+      <h1>Frederick Eduardo Montiel Tórtola</h1>
+      <h2 class="role"><span class="kw">const</span> carrera <span class="op">=</span> <span class="str">"Ingeniería en
+          Sistemas"</span>;</h2>
+      <p class="university"><span class="kw">const</span> universidad <span class="op">=</span> <span
+          class="str">"Universidad Mariano Gálvez"</span>;</p>
+      <p class="statement">Desarrollador full-stack en formación. Construyo software claro, funcional y bien
+        estructurado — del diseño de la interfaz al despliegue en el servidor.</p>
+      <p id="datetime" class="datetime"></p>
+    </header>
 
-      <h3 class="skills-category">Lenguajes</h3>
-      <div class="skills-grid">
-        <div class="skill-card">
-          <h4>HTML5</h4>
-          <div class="progress-bar"><div class="progress" style="width: 95%;"></div></div>
-        </div>
-        <div class="skill-card">
-          <h4>CSS3</h4>
-          <div class="progress-bar"><div class="progress" style="width: 95%;"></div></div>
-        </div>
-        <div class="skill-card">
-          <h4>JavaScript / TypeScript</h4>
-          <div class="progress-bar"><div class="progress" style="width: 95%;"></div></div>
-        </div>
-        <div class="skill-card">
-          <h4>Dart</h4>
-          <div class="progress-bar"><div class="progress" style="width: 80%;"></div></div>
-        </div>
-        <div class="skill-card">
-          <h4>PHP</h4>
-          <div class="progress-bar"><div class="progress" style="width: 95%;"></div></div>
-        </div>
-        <div class="skill-card">
-          <h4>Java</h4>
-          <div class="progress-bar"><div class="progress" style="width: 90%;"></div></div>
-        </div>
-        <div class="skill-card">
-          <h4>C#</h4>
-          <div class="progress-bar"><div class="progress" style="width: 40%;"></div></div>
-        </div>
-      </div>
+    <main>
 
-      <h3 class="skills-category">Bases de datos</h3>
-      <div class="skills-grid">
-        <div class="skill-card">
-          <h4>PostgreSQL</h4>
-          <div class="progress-bar"><div class="progress" style="width: 70%;"></div></div>
+      <section id="about" class="section">
+        <h2 class="section-title"><span class="hash">#</span> sobre-mi</h2>
+        <div class="terminal-block">
+          <p><span class="comment">// intereses</span></p>
+          <p>Desarrollo web y móvil, arquitectura de APIs, bases de datos y automatización de despliegues. Me gusta
+            resolver problemas con lógica limpia y código legible.</p>
+          <p><span class="comment">// meta profesional</span></p>
+          <p>Consolidarme como desarrollador full-stack capaz de llevar un producto completo: diseño, backend, base de
+            datos y puesta en producción, aportando valor real al equipo con el que trabaje.</p>
         </div>
-        <div class="skill-card">
-          <h4>MS SQL Server</h4>
-          <div class="progress-bar"><div class="progress" style="width: 70%;"></div></div>
-        </div>
-        <div class="skill-card">
-          <h4>MySQL / MariaDB</h4>
-          <div class="progress-bar"><div class="progress" style="width: 70%;"></div></div>
-        </div>
-        <div class="skill-card">
-          <h4>MongoDB</h4>
-          <div class="progress-bar"><div class="progress" style="width: 60%;"></div></div>
-        </div>
-        <div class="skill-card">
-          <h4>Firebase DB</h4>
-          <div class="progress-bar"><div class="progress" style="width: 60%;"></div></div>
-        </div>
-        <div class="skill-card">
-          <h4>Oracle</h4>
-          <div class="progress-bar"><div class="progress" style="width: 30%;"></div></div>
-        </div>
-        <div class="skill-card">
-          <h4>SQLite</h4>
-          <div class="progress-bar"><div class="progress" style="width: 30%;"></div></div>
-        </div>
-      </div>
+      </section>
 
-      <h3 class="skills-category">Frameworks &amp; librerías</h3>
-      <div class="skills-grid">
-        <div class="skill-card">
-          <h4>Angular</h4>
-          <div class="progress-bar"><div class="progress" style="width: 95%;"></div></div>
-        </div>
-        <div class="skill-card">
-          <h4>Flutter</h4>
-          <div class="progress-bar"><div class="progress" style="width: 95%;"></div></div>
-        </div>
-        <div class="skill-card">
-          <h4>React</h4>
-          <div class="progress-bar"><div class="progress" style="width: 80%;"></div></div>
-        </div>
-        <div class="skill-card">
-          <h4>React Native</h4>
-          <div class="progress-bar"><div class="progress" style="width: 80%;"></div></div>
-        </div>
-        <div class="skill-card">
-          <h4>Ionic</h4>
-          <div class="progress-bar"><div class="progress" style="width: 60%;"></div></div>
-        </div>
-        <div class="skill-card">
-          <h4>Spring Boot</h4>
-          <div class="progress-bar"><div class="progress" style="width: 60%;"></div></div>
-        </div>
-      </div>
+      <section id="skills" class="section">
+        <h2 class="section-title"><span class="hash">#</span> habilidades</h2>
 
-      <h3 class="skills-category">Metodologías</h3>
-      <div class="skills-grid">
-        <div class="skill-card">
-          <h4>Scrum</h4>
-          <div class="progress-bar"><div class="progress" style="width: 99%;"></div></div>
+        <h3 class="skills-category"><span class="comment">// lenguajes</span></h3>
+        <div class="skills-grid">
+          <div class="skill-card">
+            <h4>HTML5 <span class="skill-pct">95%</span></h4>
+            <div class="progress-bar">
+              <div class="progress" style="width: 95%;"></div>
+            </div>
+          </div>
+          <div class="skill-card">
+            <h4>CSS3 <span class="skill-pct">95%</span></h4>
+            <div class="progress-bar">
+              <div class="progress" style="width: 95%;"></div>
+            </div>
+          </div>
+          <div class="skill-card">
+            <h4>JavaScript / TypeScript <span class="skill-pct">95%</span></h4>
+            <div class="progress-bar">
+              <div class="progress" style="width: 95%;"></div>
+            </div>
+          </div>
+          <div class="skill-card">
+            <h4>Dart <span class="skill-pct">89%</span></h4>
+            <div class="progress-bar">
+              <div class="progress" style="width: 89%;"></div>
+            </div>
+          </div>
+          <div class="skill-card">
+            <h4>PHP <span class="skill-pct">95%</span></h4>
+            <div class="progress-bar">
+              <div class="progress" style="width: 95%;"></div>
+            </div>
+          </div>
+          <div class="skill-card">
+            <h4>Java <span class="skill-pct">90%</span></h4>
+            <div class="progress-bar">
+              <div class="progress" style="width: 90%;"></div>
+            </div>
+          </div>
+          <div class="skill-card">
+            <h4>C# <span class="skill-pct">40%</span></h4>
+            <div class="progress-bar">
+              <div class="progress" style="width: 40%;"></div>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <h3 class="skills-category">Sistemas / Servidores</h3>
-      <div class="skills-grid">
-        <div class="skill-card">
-          <h4>Linux</h4>
-          <div class="progress-bar"><div class="progress" style="width: 80%;"></div></div>
+        <h3 class="skills-category"><span class="comment">// bases de datos</span></h3>
+        <div class="skills-grid">
+          <div class="skill-card">
+            <h4>PostgreSQL <span class="skill-pct">70%</span></h4>
+            <div class="progress-bar">
+              <div class="progress" style="width: 70%;"></div>
+            </div>
+          </div>
+          <div class="skill-card">
+            <h4>MS SQL Server <span class="skill-pct">70%</span></h4>
+            <div class="progress-bar">
+              <div class="progress" style="width: 70%;"></div>
+            </div>
+          </div>
+          <div class="skill-card">
+            <h4>MySQL / MariaDB <span class="skill-pct">70%</span></h4>
+            <div class="progress-bar">
+              <div class="progress" style="width: 70%;"></div>
+            </div>
+          </div>
+          <div class="skill-card">
+            <h4>MongoDB <span class="skill-pct">60%</span></h4>
+            <div class="progress-bar">
+              <div class="progress" style="width: 60%;"></div>
+            </div>
+          </div>
+          <div class="skill-card">
+            <h4>Firebase DB <span class="skill-pct">60%</span></h4>
+            <div class="progress-bar">
+              <div class="progress" style="width: 60%;"></div>
+            </div>
+          </div>
+          <div class="skill-card">
+            <h4>Oracle <span class="skill-pct">30%</span></h4>
+            <div class="progress-bar">
+              <div class="progress" style="width: 30%;"></div>
+            </div>
+          </div>
+          <div class="skill-card">
+            <h4>SQLite <span class="skill-pct">30%</span></h4>
+            <div class="progress-bar">
+              <div class="progress" style="width: 30%;"></div>
+            </div>
+          </div>
         </div>
-        <div class="skill-card">
-          <h4>Windows Server</h4>
-          <div class="progress-bar"><div class="progress" style="width: 40%;"></div></div>
+
+        <h3 class="skills-category"><span class="comment">// frameworks &amp; librerías</span></h3>
+        <div class="skills-grid">
+          <div class="skill-card">
+            <h4>Angular <span class="skill-pct">95%</span></h4>
+            <div class="progress-bar">
+              <div class="progress" style="width: 95%;"></div>
+            </div>
+          </div>
+          <div class="skill-card">
+            <h4>Flutter <span class="skill-pct">95%</span></h4>
+            <div class="progress-bar">
+              <div class="progress" style="width: 95%;"></div>
+            </div>
+          </div>
+          <div class="skill-card">
+            <h4>NestJS <span class="skill-pct">90%</span></h4>
+            <div class="progress-bar">
+              <div class="progress" style="width: 90%;"></div>
+            </div>
+          </div>
+          <div class="skill-card">
+            <h4>React <span class="skill-pct">80%</span></h4>
+            <div class="progress-bar">
+              <div class="progress" style="width: 80%;"></div>
+            </div>
+          </div>
+          <div class="skill-card">
+            <h4>React Native <span class="skill-pct">80%</span></h4>
+            <div class="progress-bar">
+              <div class="progress" style="width: 80%;"></div>
+            </div>
+          </div>
+          <div class="skill-card">
+            <h4>Ionic <span class="skill-pct">60%</span></h4>
+            <div class="progress-bar">
+              <div class="progress" style="width: 60%;"></div>
+            </div>
+          </div>
+          <div class="skill-card">
+            <h4>Spring Boot <span class="skill-pct">60%</span></h4>
+            <div class="progress-bar">
+              <div class="progress" style="width: 60%;"></div>
+            </div>
+          </div>
+          <div class="skill-card">
+            <h4>.NET Framework <span class="skill-pct">60%</span></h4>
+            <div class="progress-bar">
+              <div class="progress" style="width: 60%;"></div>
+            </div>
+          </div>
+          <div class="skill-card">
+            <h4>Laravel <span class="skill-pct">30%</span></h4>
+            <div class="progress-bar">
+              <div class="progress" style="width: 30%;"></div>
+            </div>
+          </div>
+          <div class="skill-card">
+            <h4>Symfony <span class="skill-pct">30%</span></h4>
+            <div class="progress-bar">
+              <div class="progress" style="width: 30%;"></div>
+            </div>
+          </div>
         </div>
-      </div>
-    </section>
 
-    <section id="projects" class="section">
-      <h2>Proyectos</h2>
-      <div class="projects-grid">
+        <h3 class="skills-category"><span class="comment">// metodologías</span></h3>
+        <div class="skills-grid">
+          <div class="skill-card">
+            <h4>Scrum <span class="skill-pct">99%</span></h4>
+            <div class="progress-bar">
+              <div class="progress" style="width: 99%;"></div>
+            </div>
+          </div>
+        </div>
 
-        <article class="project-card">
-          <h3>Sistema de Inventario</h3>
-          <p class="project-summary">Aplicación de escritorio para control de entradas y salidas de productos.</p>
-          <button class="expand-btn">Ver más</button>
-          <div class="project-details">
-            <p>Sistema desarrollado en Java para gestionar inventario de una pequeña empresa, con registro de productos,
-              control de stock y reportes básicos. Conexión a base de datos MySQL para persistencia de la información.
+        <h3 class="skills-category"><span class="comment">// sistemas &amp; servidores</span></h3>
+        <div class="skills-grid">
+          <div class="skill-card">
+            <h4>Apache <span class="skill-pct">90%</span></h4>
+            <div class="progress-bar">
+              <div class="progress" style="width: 90%;"></div>
+            </div>
+          </div>
+          <div class="skill-card">
+            <h4>Linux <span class="skill-pct">80%</span></h4>
+            <div class="progress-bar">
+              <div class="progress" style="width: 80%;"></div>
+            </div>
+          </div>
+          <div class="skill-card">
+            <h4>Nginx <span class="skill-pct">70%</span></h4>
+            <div class="progress-bar">
+              <div class="progress" style="width: 70%;"></div>
+            </div>
+          </div>
+          <div class="skill-card">
+            <h4>Windows Server <span class="skill-pct">40%</span></h4>
+            <div class="progress-bar">
+              <div class="progress" style="width: 40%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="skills-category"><span class="comment">// idiomas</span></h3>
+        <div class="skills-grid">
+          <div class="skill-card">
+            <h4>Inglés <span class="skill-pct">50%</span></h4>
+            <div class="progress-bar">
+              <div class="progress" style="width: 50%;"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="projects" class="section">
+        <h2 class="section-title"><span class="hash">#</span> proyectos</h2>
+        <div class="projects-grid">
+
+          <article class="project-card">
+            <p class="project-file">~/proyectos/inventario</p>
+            <h3>Sistema de Inventario</h3>
+            <p class="project-summary">Aplicación de escritorio para control de entradas y salidas de productos.</p>
+            <p class="tags"><span class="tag">Java</span><span class="tag">MySQL</span><span class="tag">Swing</span>
             </p>
-          </div>
-        </article>
+            <button class="expand-btn">$ ver más</button>
+            <div class="project-details">
+              <p>Sistema desarrollado en Java para gestionar el inventario de una pequeña empresa: registro de
+                productos, control de stock y reportes básicos. Persistencia en MySQL mediante JDBC y validación de
+                movimientos para evitar existencias negativas.</p>
+            </div>
+          </article>
 
-        <article class="project-card">
-          <h3>Lista de Tareas (To-Do List)</h3>
-          <p class="project-summary">Web app para organizar tareas diarias con JavaScript puro.</p>
-          <button class="expand-btn">Ver más</button>
-          <div class="project-details">
-            <p>Aplicación construida con HTML, CSS y JavaScript que permite agregar, marcar como completadas y eliminar
-              tareas, guardando el progreso en el almacenamiento local del navegador para que persista entre sesiones.
-            </p>
-          </div>
-        </article>
+          <article class="project-card">
+            <p class="project-file">~/proyectos/todo-app</p>
+            <h3>Lista de Tareas (To-Do App)</h3>
+            <p class="project-summary">Web app para organizar tareas diarias con JavaScript puro.</p>
+            <p class="tags"><span class="tag">HTML</span><span class="tag">CSS</span><span
+                class="tag">JavaScript</span><span class="tag">localStorage</span></p>
+            <button class="expand-btn">$ ver más</button>
+            <div class="project-details">
+              <p>Aplicación construida sin frameworks que permite agregar, completar y eliminar tareas. El estado se
+                guarda en el almacenamiento local del navegador, por lo que las tareas persisten entre sesiones sin
+                necesidad de backend.</p>
+            </div>
+          </article>
 
-        <article class="project-card">
-          <h3>Calculadora de Notas</h3>
-          <p class="project-summary">Herramienta para calcular promedios y estado de aprobación de cursos.</p>
-          <button class="expand-btn">Ver más</button>
-          <div class="project-details">
-            <p>Proyecto que calcula el promedio final de un curso a partir de zonas y examen final, indicando si el
-              estudiante aprueba o no según el criterio ingresado. Incluye validación de datos de entrada.</p>
-          </div>
-        </article>
+          <article class="project-card">
+            <p class="project-file">~/proyectos/calc-notas</p>
+            <h3>Calculadora de Notas</h3>
+            <p class="project-summary">Herramienta para calcular promedios y estado de aprobación de cursos.</p>
+            <p class="tags"><span class="tag">JavaScript</span><span class="tag">DOM</span><span
+                class="tag">Validación</span></p>
+            <button class="expand-btn">$ ver más</button>
+            <div class="project-details">
+              <p>Calcula la nota final de un curso a partir de la zona y el examen final, indicando si el estudiante
+                aprueba según el criterio configurado. Incluye validación de rangos y mensajes de error en tiempo real.
+              </p>
+            </div>
+          </article>
 
-      </div>
-    </section>
-
-    <section id="contact" class="section">
-      <h2>Contacto</h2>
-      <form id="contact-form" novalidate>
-        <div class="form-group">
-          <label for="name">Nombre</label>
-          <input type="text" id="name" name="name">
-          <span class="error-message" id="name-error"></span>
         </div>
-        <div class="form-group">
-          <label for="email">Correo electrónico</label>
-          <input type="text" id="email" name="email">
-          <span class="error-message" id="email-error"></span>
-        </div>
-        <div class="form-group">
-          <label for="message">Mensaje</label>
-          <textarea id="message" name="message" rows="5"></textarea>
-          <span class="error-message" id="message-error"></span>
-        </div>
-        <button type="submit" class="submit-btn">Enviar</button>
-        <p id="form-success" class="form-success"></p>
-      </form>
-    </section>
+      </section>
 
-  </main>
+      <section id="contact" class="section">
+        <h2 class="section-title"><span class="hash">#</span> contacto</h2>
+        <form id="contact-form" novalidate>
+          <div class="form-group">
+            <label for="name">--nombre</label>
+            <input type="text" id="name" name="name" placeholder="Escribe tu nombre">
+            <span class="error-message" id="name-error"></span>
+          </div>
+          <div class="form-group">
+            <label for="email">--correo</label>
+            <input type="text" id="email" name="email" placeholder="tucorreo@ejemplo.com">
+            <span class="error-message" id="email-error"></span>
+          </div>
+          <div class="form-group">
+            <label for="message">--mensaje</label>
+            <textarea id="message" name="message" rows="5" placeholder="Escribe tu mensaje..."></textarea>
+            <span class="error-message" id="message-error"></span>
+          </div>
+          <button type="submit" class="submit-btn">$ enviar</button>
+          <p id="form-success" class="form-success"></p>
+        </form>
+      </section>
 
-  <footer class="footer">
-    <p>Visitas a esta página: <span id="visit-counter">0</span></p>
-    <p>&copy; 2026 Frederick Eduardo Montiel Tórtola</p>
-  </footer>
+    </main>
+
+    <footer class="footer">
+      <p><span class="comment">// visitas registradas:</span> <span id="visit-counter">0</span></p>
+      <p><span class="comment">/* &copy; 2026 Frederick Eduardo Montiel Tórtola — Universidad Mariano Gálvez */</span>
+      </p>
+    </footer>
+
+  </div>
 
   <script src="js/script.js"></script>
 </body>
