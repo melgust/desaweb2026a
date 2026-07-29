@@ -364,6 +364,7 @@ Se deberá entregar:
    - Instrucciones para ejecutar el proyecto.
    - Una breve explicación (2 o 3 párrafos) sobre qué es un **DTO**, un **Controller** y un **Helper**, indicando cómo fueron utilizados en la solución.
 4. Instrucciones o comandos curl para probar los endpoints.
+5. Su API debe estar corriendo en un contenedor
 
 ---
 
