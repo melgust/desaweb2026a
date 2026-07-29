@@ -1,32 +1,5 @@
 # Práctica: Desarrollo de una API REST con PHP y almacenamiento en archivos
 
-Previo a iniciar con la práctica dos se le solicita corregir la práctica 1. Fue un error no dejarlo en el enunciado.
-
-Si su rama tiene la siguiente estructura
-
-practrice1
-├── css
-│   └── styles.css
-├── img
-│   └── imgperfil.jpeg
-├── index.html
-├── instructions.md
-├── js
-│   └── script.js
-└── mcalic1.html
-
-Cree una carpeta con su usuario (UMG, para el ejemplo se usa student) y mueva los archivos de su práctica a él quedando de la siguiente manera
-
-practrice1
-├── mcalic1.html
-└── student
-    ├── css
-    │   └── styles.css
-    ├── img
-    │   └── imgperfil.jpeg
-    ├── index.html
-    └── js
-        └── script.js
 
 ## Objetivo
 
