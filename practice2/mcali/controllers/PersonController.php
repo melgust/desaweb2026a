@@ -5,106 +5,59 @@ require_once __DIR__ . '/../helpers/FileManager.php';
 
 class PersonController
 {
-    private FileManager $fileManager;
+    private FileManager $db;
 
-    public function __construct(FileManager $fileManager)
+    public function __construct(FileManager $db)
     {
-        $this->fileManager = $fileManager;
+        $this->db = $db;
     }
 
-    /**
-     * Get the request method
-     */
-    private function getRequestMethod(): string
+    private function input(): array
     {
-        return $_SERVER['REQUEST_METHOD'];
+        return json_decode(file_get_contents('php://input'), true) ?? [];
     }
 
-    /**
-     * Get the request path
-     */
-    private function getRequestPath(): string
+    private function json($data, $code = 200): void
     {
-        $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        return $path;
-    }
-
-    /**
-     * Get JSON input from request body
-     */
-    private function getJsonInput(): array
-    {
-        $input = file_get_contents('php://input');
-        $data = json_decode($input, true);
-        return $data ?? [];
-    }
-
-    /**
-     * Send JSON response
-     */
-    private function sendJsonResponse(array $data, int $statusCode = 200): void
-    {
-        http_response_code($statusCode);
-        header('Content-Type: application/json; charset=utf-8');
+        http_response_code($code);
         echo json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     }
 
-    /**
-     * Validate the PersonDTO data
-     */
-    private function validatePersonData(array $data, bool $isUpdate = false): array
+    private function validate($data, $isUpdate = false): array
     {
         $errors = [];
 
         if (!$isUpdate) {
-            if (empty($data['name'] ?? '')) {
-                $errors[] = 'El nombre es obligatorio y no puede estar vacío.';
-            }
-            if (empty($data['birthday'] ?? '')) {
-                $errors[] = 'La fecha de nacimiento es obligatoria.';
-            }
-            if (empty($data['email'] ?? '')) {
-                $errors[] = 'El correo es obligatorio.';
-            }
-        } else {
-            // For updates, validate only if field is provided
-            if (isset($data['name']) && empty($data['name'])) {
-                $errors[] = 'El nombre no puede estar vacío.';
-            }
-            if (isset($data['birthday']) && empty($data['birthday'])) {
-                $errors[] = 'La fecha de nacimiento no puede estar vacía.';
-            }
-            if (isset($data['email']) && empty($data['email'])) {
-                $errors[] = 'El correo no puede estar vacío.';
-            }
+            if (empty($data['name'] ?? '')) $errors[] = 'El nombre es obligatorio';
+            if (empty($data['birthday'] ?? '')) $errors[] = 'La fecha de nacimiento es obligatoria';
+            if (empty($data['email'] ?? '')) $errors[] = 'El correo es obligatorio';
         }
 
-        // Validate name (if provided)
-        if (isset($data['name']) && strlen($data['name']) > 0 && strlen($data['name']) < 2) {
-            $errors[] = 'El nombre debe tener al menos 2 caracteres.';
+        if (isset($data['name']) && empty($data['name'])) {
+            $errors[] = 'El nombre no puede estar vacío';
+        }
+        
+        if (isset($data['name']) && strlen($data['name']) < 2) {
+            $errors[] = 'El nombre debe tener al menos 2 caracteres';
         }
 
-        // Validate email format (if provided)
         if (isset($data['email']) && !empty($data['email'])) {
             if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-                $errors[] = 'El formato del correo no es válido.';
+                $errors[] = 'El correo no es válido';
             }
         }
 
-        // Validate birthday format and not in future (if provided)
         if (isset($data['birthday']) && !empty($data['birthday'])) {
             if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $data['birthday'])) {
-                $errors[] = 'La fecha de nacimiento debe tener el formato YYYY-MM-DD.';
+                $errors[] = 'Formato de fecha debe ser YYYY-MM-DD';
             } else {
                 try {
-                    $birthDate = new DateTime($data['birthday']);
-                    $now = new DateTime();
-                    
-                    if ($birthDate > $now) {
-                        $errors[] = 'La fecha de nacimiento no puede ser una fecha futura.';
+                    $birth = new DateTime($data['birthday']);
+                    if ($birth > new DateTime()) {
+                        $errors[] = 'La fecha no puede ser futura';
                     }
                 } catch (Exception $e) {
-                    $errors[] = 'La fecha de nacimiento no es válida.';
+                    $errors[] = 'Fecha inválida';
                 }
             }
         }
@@ -112,216 +65,150 @@ class PersonController
         return $errors;
     }
 
-    /**
-     * Create a new person
-     */
-    private function createPerson(): void
+    private function getPath(): string
     {
-        $data = $this->getJsonInput();
+        $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $path = substr($path, strpos($path, '/api/persons'));
+        $path = strlen($path) > 13 ? substr($path, 13) : '';
+        return strtok($path ?: '/', '?');
+    }
 
-        // Validate required fields
-        $validationErrors = $this->validatePersonData($data);
-        if (!empty($validationErrors)) {
-            $this->sendJsonResponse(['errors' => $validationErrors], 400);
+    public function dispatch(): void
+    {
+        $method = $_SERVER['REQUEST_METHOD'];
+        $path = $this->getPath();
+
+        if ($method === 'POST' && $path === '') {
+            $this->store();
             return;
         }
 
-        // Check for duplicate email
-        $existingPerson = $this->fileManager->findByEmail($data['email']);
-        if ($existingPerson) {
-            $this->sendJsonResponse(['error' => 'El correo ya está registrado.'], 400);
+        if ($method === 'GET' && $path === '') {
+            $this->list();
             return;
         }
 
-        // Create person
-        $personData = [
+        if (preg_match('|^/(\d+)(?:/age)?$|', $path, $m)) {
+            $id = (int)$m[1];
+
+            if ($method === 'GET' && str_contains($path, '/age')) {
+                $this->age($id);
+                return;
+            }
+
+            if ($method === 'GET') {
+                $this->show($id);
+                return;
+            }
+
+            if ($method === 'PUT') {
+                $this->update($id);
+                return;
+            }
+
+            if ($method === 'DELETE') {
+                $this->destroy($id);
+                return;
+            }
+        }
+
+        $this->json(['error' => 'Not found'], 404);
+    }
+
+    private function store(): void
+    {
+        $data = $this->input();
+        $errors = $this->validate($data);
+
+        if ($errors) {
+            $this->json(['errors' => $errors], 400);
+            return;
+        }
+
+        if ($this->db->findByEmail($data['email'])) {
+            $this->json(['error' => 'Correo ya registrado'], 400);
+            return;
+        }
+
+        $person = $this->db->add([
             'name' => $data['name'],
             'birthday' => $data['birthday'],
-            'email' => $data['email'],
-        ];
+            'email' => $data['email']
+        ]);
 
-        $createdPerson = $this->fileManager->create($personData);
-        $this->sendJsonResponse($createdPerson, 201);
+        $this->json($person, 201);
     }
 
-    /**
-     * Get all persons
-     */
-    private function getAllPersons(): void
+    private function list(): void
     {
-        $persons = $this->fileManager->read();
-        $this->sendJsonResponse($persons);
+        $this->json($this->db->read());
     }
 
-    /**
-     * Get a person by ID
-     */
-    private function getPersonById(int $id): void
+    private function show(int $id): void
     {
-        $person = $this->fileManager->findById($id);
-
+        $person = $this->db->findById($id);
         if (!$person) {
-            $this->sendJsonResponse(['message' => 'Person not found'], 404);
+            $this->json(['message' => 'Person not found'], 404);
             return;
         }
-
-        $this->sendJsonResponse($person);
+        $this->json($person);
     }
 
-    /**
-     * Get the age of a person
-     */
-    private function getPersonAge(int $id): void
+    private function age(int $id): void
     {
-        $person = $this->fileManager->findById($id);
-
+        $person = $this->db->findById($id);
         if (!$person) {
-            $this->sendJsonResponse(['message' => 'Person not found'], 404);
+            $this->json(['message' => 'Person not found'], 404);
             return;
         }
 
-        try {
-            $birthDate = new DateTime($person['birthday']);
-            $now = new DateTime();
-            $age = $now->diff($birthDate)->y;
+        $birth = new DateTime($person['birthday']);
+        $now = new DateTime();
+        $age = $now->diff($birth)->y;
 
-            $response = [
-                'id' => $person['id'],
-                'name' => $person['name'],
-                'age' => $age,
-            ];
-
-            $this->sendJsonResponse($response);
-        } catch (Exception $e) {
-            $this->sendJsonResponse(['error' => 'Error calculating age'], 500);
-        }
+        $this->json([
+            'id' => $person['id'],
+            'name' => $person['name'],
+            'age' => $age
+        ]);
     }
 
-    /**
-     * Update a person
-     */
-    private function updatePerson(int $id): void
+    private function update(int $id): void
     {
-        $person = $this->fileManager->findById($id);
-
+        $person = $this->db->findById($id);
         if (!$person) {
-            $this->sendJsonResponse(['message' => 'Person not found'], 404);
+            $this->json(['message' => 'Person not found'], 404);
             return;
         }
 
-        $data = $this->getJsonInput();
+        $data = $this->input();
+        $errors = $this->validate($data, true);
 
-        // Validate the update data
-        $validationErrors = $this->validatePersonData($data, true);
-        if (!empty($validationErrors)) {
-            $this->sendJsonResponse(['errors' => $validationErrors], 400);
+        if ($errors) {
+            $this->json(['errors' => $errors], 400);
             return;
         }
 
-        // Check for duplicate email if email is being updated
         if (isset($data['email']) && $data['email'] !== $person['email']) {
-            $existingPerson = $this->fileManager->findByEmail($data['email']);
-            if ($existingPerson) {
-                $this->sendJsonResponse(['error' => 'El correo ya está registrado.'], 400);
+            if ($this->db->findByEmail($data['email'])) {
+                $this->json(['error' => 'Correo ya registrado'], 400);
                 return;
             }
         }
 
-        // Update person
-        $updatedPerson = $this->fileManager->update($id, $data);
-
-        if (!$updatedPerson) {
-            $this->sendJsonResponse(['error' => 'Error updating person'], 500);
-            return;
-        }
-
-        $this->sendJsonResponse($updatedPerson);
+        $updated = $this->db->updateById($id, $data);
+        $this->json($updated);
     }
 
-    /**
-     * Delete a person
-     */
-    private function deletePerson(int $id): void
+    private function destroy(int $id): void
     {
-        $person = $this->fileManager->findById($id);
-
+        $person = $this->db->findById($id);
         if (!$person) {
-            $this->sendJsonResponse(['message' => 'Person not found'], 404);
+            $this->json(['message' => 'Person not found'], 404);
             return;
         }
 
-        if ($this->fileManager->delete($id)) {
-            $this->sendJsonResponse(['message' => 'Person deleted successfully']);
-        } else {
-            $this->sendJsonResponse(['error' => 'Error deleting person'], 500);
-        }
-    }
-
-    /**
-     * Route the request to the appropriate method
-     */
-    public function route(): void
-    {
-        $method = $this->getRequestMethod();
-        $path = $this->getRequestPath();
-
-        // Remove the base path /api/ if present
-        $basePath = '/api/persons';
-        if (strpos($path, $basePath) === 0) {
-            $path = substr($path, strlen($basePath));
-        }
-
-        // Remove query string if present
-        if (strpos($path, '?') !== false) {
-            $path = substr($path, 0, strpos($path, '?'));
-        }
-
-        // Route: GET /api/persons
-        if ($method === 'GET' && ($path === '' || $path === '/')) {
-            $this->getAllPersons();
-            return;
-        }
-
-        // Route: POST /api/persons
-        if ($method === 'POST' && ($path === '' || $path === '/')) {
-            $this->createPerson();
-            return;
-        }
-
-        // Extract ID from path
-        if (preg_match('|^/(\d+)(/age)?/?$|', $path, $matches)) {
-            $id = (int)$matches[1];
-            $isAge = isset($matches[2]) && $matches[2] === '/age';
-
-            // Route: GET /api/persons/{id}/age
-            if ($method === 'GET' && $isAge) {
-                $this->getPersonAge($id);
-                return;
-            }
-
-            // Route: GET /api/persons/{id}
-            if ($method === 'GET' && !$isAge) {
-                $this->getPersonById($id);
-                return;
-            }
-
-            // Route: PUT /api/persons/{id}
-            if ($method === 'PUT' && !$isAge) {
-                $this->updatePerson($id);
-                return;
-            }
-
-            // Route: DELETE /api/persons/{id}
-            if ($method === 'DELETE' && !$isAge) {
-                $this->deletePerson($id);
-                return;
-            }
-        }
-
-        // Route not found
-        http_response_code(404);
-        header('Content-Type: application/json; charset=utf-8');
-        echo json_encode(['error' => 'Endpoint not found']);
+        $this->db->removeById($id);
+        $this->json(['message' => 'Deleted']);
     }
 }
-?>
