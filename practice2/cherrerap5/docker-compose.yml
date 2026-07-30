@@ -3,7 +3,7 @@ version: "3.9"
 services:
   api:
     build: .
-    container_name: mcali
+    container_name: cherrerap5
     ports:
       - "8080:80"
     volumes:
