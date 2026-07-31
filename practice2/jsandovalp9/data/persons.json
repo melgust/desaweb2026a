@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "name": "Juan Pérez",
+        "birthday": "1998-06-15",
+        "email": "juan@email.com"
+    },
+    {
+        "id": 2,
+        "name": "Juan Pérezz",
+        "birthday": "1998-06-15",
+        "email": "juanz@email.com"
+    },
+    {
+        "id": 3,
+        "name": "Juan Pérezz",
+        "birthday": "1997-06-15",
+        "email": "javier@email.com"
+    },
+    {
+        "id": 4,
+        "name": "Juan Pérezz",
+        "birthday": "1997-06-15",
+        "email": "javierv@email.com"
+    }
+]
