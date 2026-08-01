@@ -117,29 +117,3 @@ curl -X DELETE http://localhost:8080/api/persons/1
 ```bash
 curl http://localhost:8080/api/persons/1/age
 ```
-
-
-# Validaciones implementadas
-
-La API valida las siguientes reglas:
-
-- Todos los campos son obligatorios.
-- El nombre no puede estar vacío.
-- El correo electrónico debe tener un formato válido.
-- No se permiten correos duplicados.
-- La fecha de nacimiento debe tener el formato `YYYY-MM-DD`.
-- La fecha de nacimiento no puede ser una fecha futura.
-- Todas las respuestas se devuelven en formato JSON.
-
-
-# Códigos HTTP utilizados
-
-| Código | Descripción |
-|---------|-------------|
-| 200 | Solicitud exitosa |
-| 201 | Recurso creado |
-| 400 | Error de validación |
-| 404 | Persona o endpoint no encontrado |
-| 405 | Método HTTP no permitido |
-| 409 | Correo electrónico duplicado |
-| 500 | Error interno del servidor |
