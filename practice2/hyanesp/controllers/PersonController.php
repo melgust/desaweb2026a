@@ -16,7 +16,9 @@ class PersonController
 
     public function index(): void
     {
-        $this->respond($this->fileManager->read());
+        $people = $this->fileManager->read();
+
+        $this->respond($people, 200);
     }
 
     public function show(int $id): void
@@ -25,11 +27,11 @@ class PersonController
 
         foreach ($people as $person) {
             if ((int) $person['id'] === $id) {
-                $this->respond($person);
+                $this->respond($person, 200);
             }
         }
 
-        $this->respond(['error' => 'Persona no encontrada'], 404);
+        $this->personNotFound();
     }
 
     public function store(array $data): void
@@ -37,7 +39,7 @@ class PersonController
         $errors = $this->validate($data);
 
         if (!empty($errors)) {
-            $this->respond(['errors' => $errors], 422);
+            $this->respond(['errors' => $errors], 400);
         }
 
         $people = $this->fileManager->read();
@@ -53,7 +55,9 @@ class PersonController
         $people[] = $person->toArray();
 
         if (!$this->fileManager->write($people)) {
-            $this->respond(['error' => 'No se pudo guardar la persona'], 500);
+            $this->respond([
+                'message' => 'Unable to save person'
+            ], 500);
         }
 
         $this->respond($person->toArray(), 201);
@@ -65,7 +69,7 @@ class PersonController
         $personIndex = $this->findPersonIndex($people, $id);
 
         if ($personIndex === null) {
-            $this->respond(['error' => 'Persona no encontrada'], 404);
+            $this->personNotFound();
         }
 
         $updatedData = [
@@ -77,7 +81,7 @@ class PersonController
         $errors = $this->validate($updatedData, $id);
 
         if (!empty($errors)) {
-            $this->respond(['errors' => $errors], 422);
+            $this->respond(['errors' => $errors], 400);
         }
 
         $person = new PersonDTO(
@@ -90,10 +94,12 @@ class PersonController
         $people[$personIndex] = $person->toArray();
 
         if (!$this->fileManager->write($people)) {
-            $this->respond(['error' => 'No se pudo actualizar la persona'], 500);
+            $this->respond([
+                'message' => 'Unable to update person'
+            ], 500);
         }
 
-        $this->respond($person->toArray());
+        $this->respond($person->toArray(), 200);
     }
 
     public function destroy(int $id): void
@@ -102,16 +108,20 @@ class PersonController
         $personIndex = $this->findPersonIndex($people, $id);
 
         if ($personIndex === null) {
-            $this->respond(['error' => 'Persona no encontrada'], 404);
+            $this->personNotFound();
         }
 
         array_splice($people, $personIndex, 1);
 
         if (!$this->fileManager->write($people)) {
-            $this->respond(['error' => 'No se pudo eliminar la persona'], 500);
+            $this->respond([
+                'message' => 'Unable to delete person'
+            ], 500);
         }
 
-        $this->respond(['message' => 'Persona eliminada correctamente']);
+        $this->respond([
+            'message' => 'Person deleted successfully'
+        ], 200);
     }
 
     public function age(int $id): void
@@ -128,11 +138,11 @@ class PersonController
                     'id' => $person['id'],
                     'name' => $person['name'],
                     'age' => $age
-                ]);
+                ], 200);
             }
         }
 
-        $this->respond(['error' => 'Persona no encontrada'], 404);
+        $this->personNotFound();
     }
 
     private function validate(array $data, ?int $ignoreId = null): array
@@ -140,27 +150,27 @@ class PersonController
         $errors = [];
 
         $name = trim($data['name'] ?? '');
-        $birthday = $data['birthday'] ?? '';
+        $birthday = trim($data['birthday'] ?? '');
         $email = trim($data['email'] ?? '');
 
         if ($name === '') {
-            $errors['name'] = 'El nombre es obligatorio';
+            $errors['name'] = 'Name is required';
         }
 
         if ($email === '') {
-            $errors['email'] = 'El correo electrónico es obligatorio';
+            $errors['email'] = 'Email is required';
         } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $errors['email'] = 'El correo electrónico no es válido';
+            $errors['email'] = 'Invalid email format';
         } elseif ($this->emailExists($email, $ignoreId)) {
-            $errors['email'] = 'El correo electrónico ya está registrado';
+            $errors['email'] = 'Email already exists';
         }
 
         if ($birthday === '') {
-            $errors['birthday'] = 'La fecha de nacimiento es obligatoria';
+            $errors['birthday'] = 'Birthday is required';
         } elseif (!$this->isValidDate($birthday)) {
-            $errors['birthday'] = 'La fecha debe tener el formato YYYY-MM-DD';
+            $errors['birthday'] = 'Birthday must use YYYY-MM-DD format';
         } elseif (new DateTime($birthday) > new DateTime()) {
-            $errors['birthday'] = 'La fecha de nacimiento no puede ser futura';
+            $errors['birthday'] = 'Birthday cannot be a future date';
         }
 
         return $errors;
@@ -171,8 +181,12 @@ class PersonController
         $people = $this->fileManager->read();
 
         foreach ($people as $person) {
-            $sameEmail = strtolower($person['email']) === strtolower($email);
-            $differentPerson = $ignoreId === null || (int) $person['id'] !== $ignoreId;
+            $sameEmail =
+                strtolower($person['email']) === strtolower($email);
+
+            $differentPerson =
+                $ignoreId === null ||
+                (int) $person['id'] !== $ignoreId;
 
             if ($sameEmail && $differentPerson) {
                 return true;
@@ -188,10 +202,13 @@ class PersonController
         $dateErrors = DateTime::getLastErrors();
 
         return $dateObject !== false
-            && ($dateErrors === false || (
-                $dateErrors['warning_count'] === 0
-                && $dateErrors['error_count'] === 0
-            ))
+            && (
+                $dateErrors === false
+                || (
+                    $dateErrors['warning_count'] === 0
+                    && $dateErrors['error_count'] === 0
+                )
+            )
             && $dateObject->format('Y-m-d') === $date;
     }
 
@@ -212,18 +229,30 @@ class PersonController
             return 1;
         }
 
-        $ids = array_column($people, 'id');
+        $ids = array_map(
+            'intval',
+            array_column($people, 'id')
+        );
 
         return max($ids) + 1;
+    }
+
+    private function personNotFound(): void
+    {
+        $this->respond([
+            'message' => 'Person not found'
+        ], 404);
     }
 
     private function respond(array $data, int $statusCode = 200): void
     {
         http_response_code($statusCode);
+
         echo json_encode(
             $data,
             JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
         );
+
         exit;
     }
 }
