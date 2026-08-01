@@ -105,3 +105,28 @@ const projectDetails = [
         text: 'Desarrollo de modulos en CRM'
     }
 ]; 
+
+const modal = document.getElementById('projectModal');
+const modalTitle = document.getElementById('modalTitle');
+const modalText = document.getElementById('modalText');
+const closeMOdal = document.getElementById('closeModal');
+
+document.querySelectorAll('.project-btn').forEach((button) => {
+    button.addEventListener('click', () => {  
+        const index = Number(button.getAttribute('data-project'));
+        modalTitle.textContent = projectDetails[index].title; 
+        modalText.textContent = projectDetails[index].text; 
+        modal.classList.add('show'); 
+      });
+});
+
+function closeProjectModal(){
+    modal.classList.remove('show');
+}
+
+closeMOdal.addEventListener('click', closeProjectModal); 
+modal.addEventListener('click', event => {
+    if(event.target === modal){
+        closeProjectModal();
+    }
+});
