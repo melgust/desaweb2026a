@@ -5,8 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Currículum - Angelina Victoria Pinto Garcia</title>
-    <link rel="stylesheet" href="apinto-umg/styles.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
+<!-- body -->
 
 <body>
     <div class="top-bar">
@@ -19,11 +20,16 @@
         <!-- header  -->
         <section class="card">
             <h3>Sobre mí</h3>
-            <p>Soy una profesional apasionada por la tecnología, el desarrollo web y la mejora continua. Me interesa crear experiencias digitales claras, funcionales y con un enfoque humano. Disfruto aprender nuevas herramientas y aplicar soluciones prácticas que aporten valor.</p>
+            <p>Soy una profesional apasionada por la tecnología, el desarrollo web y la mejora continua. Me interesa
+                crear experiencias digitales claras, funcionales y con un enfoque humano. Disfruto aprender nuevas
+                herramientas y aplicar soluciones prácticas que aporten valor.</p>
             <ul class="info-list">
-                <li><strong>Intereses:</strong> desarrollo web, diseño de interfaces, aprendizaje continuo y resolución de problemas.</li>
-                <li><strong>Habilidades:</strong> comunicación, trabajo en equipo, organización y adaptación rápida.</li>
-                <li><strong>Objetivos profesionales:</strong> crecer en el área de tecnología, fortalecer mis capacidades técnicas y contribuir a proyectos significativos.</li>
+                <li><strong>Intereses:</strong> desarrollo web, diseño de interfaces, aprendizaje continuo y resolución
+                    de problemas.</li>
+                <li><strong>Habilidades:</strong> comunicación, trabajo en equipo, organización y adaptación rápida.
+                </li>
+                <li><strong>Objetivos profesionales:</strong> crecer en el área de tecnología, fortalecer mis
+                    capacidades técnicas y contribuir a proyectos significativos.</li>
             </ul>
         </section>
 
@@ -38,6 +44,59 @@
                 <span class="skill-tag">Resolución de problemas</span>
             </div>
         </section>
+
+        <section class="card">
+            <h3>Proyectos</h3>
+            <div class="projects-grid">
+                <article class="project-card">
+                    <h4>Portafolio web</h4>
+                    <!-- <p>Diseño de una página personal con enfoque visual y experiencia de usuario.</p> -->
+                    <button class="project-btn" type="button" data-project="0">Ver más</button>
+                </article>
+                <article class="project-card">
+                    <h4>Aplicaciónes móvil</h4>
+                    <!-- <p>Creación y despliegue de una aplicaciones para el monitoreo de camiones y registro de quejas por condominos</p> -->
+                    <button class="project-btn" type="button" data-project="1">Ver más</button>
+                </article>
+                <article class="project-card">
+                    <h4> Modulos de integración </h4>
+                    <!-- <p>Desarrollo de modulos en CRM</p> -->
+                    <button class="project-btn" type="button" data-project="2">Ver más</button>
+                </article>
+            </div>
+
+            <div id="projectModal" class="modal" aria-hidden="true">
+                <div class="modal-content">
+                    <button id="closeModal" class="close-modal" type="button" aria-label="Cerrar">×</button>
+                    <h4 id="modalTitle"></h4>
+                    <p id="modalText"></p>
+                </div>
+            </div>
+        </section>
+
+        <section class="card">
+            <h3>Contacto</h3>
+            <form id="contactForm" novalidate>
+                <div class="form-group">
+                    <label for="name">Nombre:</label>
+                    <input type="text" id="name" name="name" placeholder="Tu nombre">
+                    <p class="error-message" id="nameError"></p>
+                </div>
+                <div class="form-group">
+                    <label for="email">Correo electronico:</label>
+                    <input id="email" name="email" placeholder="tucorreo@ejemplo.com">
+                    <p class="error-message" id="emailError"></p>
+                </div>
+                <div class="form-group">
+                    <label for="message">Mensaje</label>
+                    <textarea id="message" name="message" rows="4" placeholder="Escribe tu mensaje"></textarea>
+                    <p class="error-message" id="messageError"></p>
+                </div>
+                <button class="submit-btn" type="submit">Enviar</button>
+            </form>
+            <p id="formMessage" class="form-message" aria-live="polite"></p>
+        </section>
+
 
     </main>
 
