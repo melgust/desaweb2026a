@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "name": "Sixtino Eustaquio",
+        "birthday": "1978-01-25",
+        "email": "six@email.com"
+    },
+    {
+        "id": 2,
+        "name": "Sharma Cruz",
+        "birthday": "1988-12-07",
+        "email": "cruz@email.com"
+    },
+    {
+        "id": 3,
+        "name": "Goliat Paz",
+        "birthday": "2000-11-09",
+        "email": "paz@email.com"
+    }
+]

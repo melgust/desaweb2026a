@@ -1,11 +1,9 @@
-version: "3.9"
-
 services:
-  api:
+  persons-api:
     build: .
-    container_name: mcali
+    container_name: persons-api
     ports:
-      - "8080:80"
+      - "8080:8000"
     volumes:
-      - .:/var/www/html
+      - ./data:/app/data
     restart: unless-stopped
