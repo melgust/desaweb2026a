@@ -26,19 +26,14 @@ class PersonDTO
         return $this->id;
     }
 
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
     public function getName(): string
     {
         return $this->name;
-    }
-
-    public function getBirthday(): string
-    {
-        return $this->birthday;
-    }
-
-    public function getEmail(): string
-    {
-        return $this->email;
     }
 
     public function setName(string $name): void
@@ -46,9 +41,19 @@ class PersonDTO
         $this->name = $name;
     }
 
+    public function getBirthday(): string
+    {
+        return $this->birthday;
+    }
+
     public function setBirthday(string $birthday): void
     {
         $this->birthday = $birthday;
+    }
+
+    public function getEmail(): string
+    {
+        return $this->email;
     }
 
     public function setEmail(string $email): void
