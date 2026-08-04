@@ -131,6 +131,69 @@ class PersonController
         ];
         //Método para obtener datos 
     }
+    public function obtenerPersonas()
+    {
+        $persons = $this->cargarPersonas();
+
+        return [
+            'success' => true,
+            'data' => $persons,
+            'status' => 200,
+        ];
+    }
+
+    public function obtenerPersonaPorId($id)
+    {
+        $id = trim((string) $id);
+
+        if ($id === '') {
+            return [
+                'success' => false,
+                'message' => 'El id es obligatorio.',
+                'status' => 400,
+            ];
+        }
+
+        $persons = $this->cargarPersonas();
+
+        foreach ($persons as $person) {
+            if (is_array($person) && isset($person['id']) && (string) $person['id'] === $id) {
+                return [
+                    'success' => true,
+                    'data' => $person,
+                    'status' => 200,
+                ];
+            }
+        }
+
+        return [
+            'success' => false,
+            'message' => 'Persona no encontrada.',
+            'status' => 404,
+        ];
+    }
+
+    private function cargarPersonas()
+    {
+        $persons = [];
+        $dataDir = dirname($this->dataFile);
+
+        if (!is_dir($dataDir)) {
+            mkdir($dataDir, 0777, true);
+        }
+
+        if (file_exists($this->dataFile) && filesize($this->dataFile) > 0) {
+            $existingContent = file_get_contents($this->dataFile);
+            $existingPersons = json_decode($existingContent, true);
+
+            if (is_array($existingPersons)) {
+                $persons = $existingPersons;
+            }
+        }
+
+        return $persons;
+    }
+
     private function validarFechaNacimiento($fecha)
     {
         $date = DateTime::createFromFormat('Y-m-d', $fecha);

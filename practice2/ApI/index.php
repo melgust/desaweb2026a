@@ -26,45 +26,25 @@ if ($method === 'POST' && $uri === '/api/persons') {
     exit;
 }
 
-// if ($method === 'GET' && $uri === '/api/persons') {
-//     $controller = new PersonController();
-//     $response = $controller->obtenerPersonas();
+if ($method === 'GET' && $uri === '/api/persons') {
+    $controller = new PersonController();
+    $response = $controller->obtenerPersonas();
 
-//     http_response_code($response['status']);
-//     header('Content-Type: application/json');
-//     echo json_encode($response);
-//     exit;
-// }
+    http_response_code($response['status']);
+    header('Content-Type: application/json');
+    echo json_encode($response);
+    exit;
+}
 
-// if ($method === 'PUT' && preg_match('#^/api/persons/([^/]+)$#', $uri, $matches)) {
-//     $controller = new PersonController();
-//     $response = $controller->actualizarPersona($matches[1]);
+if ($method === 'GET' && preg_match('#^/api/persons/([^/]+)$#', $uri, $matches)) {
+    $controller = new PersonController();
+    $response = $controller->obtenerPersonaPorId($matches[1]);
 
-//     http_response_code($response['status']);
-//     header('Content-Type: application/json');
-//     echo json_encode($response);
-//     exit;
-// }
-
-// if ($method === 'GET' && preg_match('#^/api/persons/([^/]+)$#', $uri, $matches)) {
-//     $controller = new PersonController();
-//     $response = $controller->obtienePersonaPorId($matches[1]);
-
-//     http_response_code($response['status']);
-//     header('Content-Type: application/json');
-//     echo json_encode($response);
-//     exit;
-// }
-
-// if ($method === 'DELETE' && preg_match('#^/api/persons/([^/]+)$#', $uri, $matches)) {
-//     $controller = new PersonController();
-//     $response = $controller->eliminarPersona($matches[1]);
-
-//     http_response_code($response['status']);
-//     header('Content-Type: application/json');
-//     echo json_encode($response);
-//     exit;
-// }
+    http_response_code($response['status']);
+    header('Content-Type: application/json');
+    echo json_encode($response);
+    exit;
+}
 
 http_response_code(404);
 header('Content-Type: application/json');
