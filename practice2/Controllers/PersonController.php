@@ -4,14 +4,18 @@ class PersonController
 {
     private $dataFile;
 
-    public function _construct()
+    public function __construct()
     {
         $this->dataFile = __DIR__ . "/../data/persons.json";
     }
     //Graba persona 
     public function grabarPersona()
     {
-        $body = file_get_contents($this->dataFile);
+        $body = file_get_contents('php://input');
+
+        if (trim($body) === '' && defined('STDIN')) {
+            $body = stream_get_contents(STDIN);
+        }
 
         if (trim($body) === '') {
             return [
@@ -58,6 +62,11 @@ class PersonController
             $errors['fecha_nacimiento'] = 'La fecha de nacimiento debe tener el formato YYYY-MM-DD y no puede ser una fecha futura.';
         }
         $persons = [];
+        $dataDir = dirname($this->dataFile);
+        if (!is_dir($dataDir)) {
+            mkdir($dataDir, 0777, true);
+        }
+
         if (file_exists($this->dataFile) && filesize($this->dataFile) > 0) {
             $existingContent = file_get_contents($this->dataFile);
             $existingPersons = json_decode($existingContent, true);
@@ -99,7 +108,11 @@ class PersonController
 
         $persons[] = $dataToSave;
 
-        $saved = file_put_contents($this->dataFile, json_encode($persons, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+        $saved = file_put_contents(
+            $this->dataFile,
+            json_encode($persons, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE),
+            LOCK_EX
+        );
 
         if ($saved === false) {
             return [
@@ -117,5 +130,21 @@ class PersonController
             'status' => 201,
         ];
         //Método para obtener datos 
+    }
+    private function validarFechaNacimiento($fecha)
+    {
+        $date = DateTime::createFromFormat('Y-m-d', $fecha);
+        if ($date === false) {
+            return false;
+        }
+
+        $date->setTime(0, 0, 0);
+        $today = new DateTime('today');
+
+        if ($date > $today) {
+            return false;
+        }
+
+        return $date->format('Y-m-d') === $fecha;
     }
 }

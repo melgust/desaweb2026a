@@ -1,0 +1,20 @@
+[
+    {
+        "id": "1",
+        "nombre": "Juan",
+        "correo": "Juan@example.com",
+        "fecha_nacimiento": "1990-06-20"
+    },
+    {
+        "id": "2",
+        "nombre": "Maria",
+        "correo": "Maria@example.com",
+        "fecha_nacimiento": "1990-08-12"
+    },
+    {
+        "id": "3",
+        "nombre": "Pedro",
+        "correo": "Pedro@example.com",
+        "fecha_nacimiento": "1990-08-18"
+    }
+]
