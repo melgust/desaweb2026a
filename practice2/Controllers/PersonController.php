@@ -326,6 +326,55 @@ class PersonController
             'status' => 200,
         ];
     }
+    public function eliminarPersona($id)
+    {
+        $persons = [];
+        if (file_exists($this->dataFile) && filesize($this->dataFile) > 0) {
+            $existingContent = file_get_contents($this->dataFile);
+            $existingPersons = json_decode($existingContent, true);
+
+            if (is_array($existingPersons)) {
+                $persons = $existingPersons;
+            }
+        }
+
+        $foundIndex = -1;
+        foreach ($persons as $index => $person) {
+            if (is_array($person) && isset($person['id']) && (string)$person['id'] === (string)$id) {
+                $foundIndex = $index;
+                break;
+            }
+        }
+
+        if ($foundIndex === -1) {
+            return [
+                'success' => false,
+                'message' => 'Persona no encontrada.',
+                'status' => 404,
+            ];
+        }
+
+        unset($persons[$foundIndex]);
+        $persons = array_values($persons);
+
+        $saved = file_put_contents($this->dataFile, json_encode($persons, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+        if ($saved === false) {
+            return [
+                'success' => false,
+                'message' => 'No se pudo eliminar la persona.',
+                'errors' => ['file' => 'No se pudo escribir en el archivo de datos.'],
+                'status' => 500,
+            ];
+        }
+
+        return [
+            'success' => true,
+            'message' => 'Persona eliminada correctamente.',
+            'status' => 200,
+        ];
+    }
+
     private function validarFechaNacimiento($fecha)
     {
         $date = DateTime::createFromFormat('Y-m-d', $fecha);

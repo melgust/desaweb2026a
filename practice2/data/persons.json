@@ -12,12 +12,6 @@
         "fecha_nacimiento": "1990-08-12"
     },
     {
-        "id": "3",
-        "nombre": "Pedro",
-        "correo": "Pedro@example.com",
-        "fecha_nacimiento": "1990-08-18"
-    },
-    {
         "id": "4",
         "nombre": "Gerson",
         "correo": "Gerson@example.com",

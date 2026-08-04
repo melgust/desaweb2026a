@@ -65,7 +65,16 @@ if ($method === 'PUT' && preg_match('#^/api/persons/([^/]+)$#', $uri, $matches))
     echo json_encode($response);
     exit;
 }
+// Elimina información persona en JSON
+if ($method === 'DELETE' && preg_match('#^/api/persons/([^/]+)$#', $uri, $matches)) {
+    $controller = new PersonController();
+    $response = $controller->eliminarPersona($matches[1]);
 
+    http_response_code($response['status']);
+    header('Content-Type: application/json');
+    echo json_encode($response);
+    exit;
+}
 http_response_code(404);
 header('Content-Type: application/json');
 echo json_encode([
