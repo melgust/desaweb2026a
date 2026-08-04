@@ -1,9 +1,9 @@
 [
     {
         "id": "1",
-        "nombre": "Juan",
-        "correo": "Juan@example.com",
-        "fecha_nacimiento": "1990-06-20"
+        "nombre": "Juan Actualizado",
+        "correo": "juan.nuevo@email.com",
+        "fecha_nacimiento": "1998-06-15"
     },
     {
         "id": "2",

@@ -25,7 +25,7 @@ if ($method === 'POST' && $uri === '/api/persons') {
     echo json_encode($response);
     exit;
 }
-
+// Retorna Lista personas
 if ($method === 'GET' && $uri === '/api/persons') {
     $controller = new PersonController();
     $response = $controller->obtenerPersonas();
@@ -36,9 +36,29 @@ if ($method === 'GET' && $uri === '/api/persons') {
     exit;
 }
 
+if ($method === 'PUT' && preg_match('#^/api/persons/([^/]+)$#', $uri, $matches)) {
+    $controller = new PersonController();
+    $response = $controller->actualizarPersona($matches[1]);
+
+    http_response_code($response['status']);
+    header('Content-Type: application/json');
+    echo json_encode($response);
+    exit;
+}
+
 if ($method === 'GET' && preg_match('#^/api/persons/([^/]+)$#', $uri, $matches)) {
     $controller = new PersonController();
     $response = $controller->obtenerPersonaPorId($matches[1]);
+
+    http_response_code($response['status']);
+    header('Content-Type: application/json');
+    echo json_encode($response);
+    exit;
+}
+// Actualiza datos persona 
+if ($method === 'PUT' && preg_match('#^/api/persons/([^/]+)$#', $uri, $matches)) {
+    $controller = new PersonController();
+    $response = $controller->actualizarPersona($matches[1]);
 
     http_response_code($response['status']);
     header('Content-Type: application/json');

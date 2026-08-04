@@ -48,8 +48,8 @@ class PersonController
         if ($nombre === '') {
             $errors['nombre'] = 'El nombre no puede estar vacío.';
         }
-        
-         if (!isset($decodedBody['correo']) || !array_key_exists('correo', $decodedBody) || $correo === '') {
+
+        if (!isset($decodedBody['correo']) || !array_key_exists('correo', $decodedBody) || $correo === '') {
             $errors['correo'] = 'El campo correo es obligatorio.';
         } elseif (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
             $errors['correo'] = 'El correo debe tener un formato válido.';
@@ -75,7 +75,7 @@ class PersonController
                 $persons = $existingPersons;
             }
         }
-         foreach ($persons as $person) {
+        foreach ($persons as $person) {
             if (is_array($person)) {
                 if (isset($person['id']) && $person['id'] === $id) {
                     $errors['id'] = 'No se permiten IDs duplicados.';
@@ -90,7 +90,7 @@ class PersonController
                 break;
             }
         }
-    if (!empty($errors)) {
+        if (!empty($errors)) {
             return [
                 'success' => false,
                 'message' => 'Datos inválidos.',
@@ -193,7 +193,139 @@ class PersonController
 
         return $persons;
     }
+    public function actualizarPersona($id)
+    {
+        $body = file_get_contents('php://input');
 
+        if (trim($body) === '') {
+            return [
+                'success' => false,
+                'message' => 'El body está vacío.',
+                'errors' => ['body' => 'El cuerpo de la solicitud es obligatorio.'],
+                'status' => 400,
+            ];
+        }
+
+        $decodedBody = json_decode($body, true);
+        if (json_last_error() !== JSON_ERROR_NONE || !is_array($decodedBody)) {
+            return [
+                'success' => false,
+                'message' => 'El body debe ser un JSON válido.',
+                'errors' => ['json' => 'El formato del JSON es inválido.'],
+                'status' => 400,
+            ];
+        }
+
+        $bodyId = trim($decodedBody['id'] ?? '');
+        if ($bodyId !== '' && (string) $bodyId !== (string) $id) {
+            return [
+                'success' => false,
+                'message' => 'El id del body debe coincidir con el id de la URL.',
+                'errors' => ['id' => 'El id enviado en el body no coincide con el id de la ruta.'],
+                'status' => 400,
+            ];
+        }
+
+        $nombre = trim($decodedBody['nombre'] ?? '');
+        $correo = trim($decodedBody['correo'] ?? '');
+        $fechaNacimiento = trim($decodedBody['fecha_nacimiento'] ?? $decodedBody['fechaNacimiento'] ?? '');
+
+        $errors = [];
+
+        if ($nombre === '') {
+            $errors['nombre'] = 'El nombre no puede estar vacío.';
+        }
+
+        if (!isset($decodedBody['correo']) || !array_key_exists('correo', $decodedBody) || $correo === '') {
+            $errors['correo'] = 'El campo correo es obligatorio.';
+        } elseif (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+            $errors['correo'] = 'El correo debe tener un formato válido.';
+        }
+
+        if (!isset($decodedBody['fecha_nacimiento']) && !isset($decodedBody['fechaNacimiento'])) {
+            $errors['fecha_nacimiento'] = 'El campo fecha de nacimiento es obligatorio.';
+        } elseif ($fechaNacimiento === '') {
+            $errors['fecha_nacimiento'] = 'El campo fecha de nacimiento es obligatorio.';
+        } elseif (!$this->validarFechaNacimiento($fechaNacimiento)) {
+            $errors['fecha_nacimiento'] = 'La fecha de nacimiento debe tener el formato YYYY-MM-DD y no puede ser una fecha futura.';
+        }
+
+        $persons = [];
+        if (file_exists($this->dataFile) && filesize($this->dataFile) > 0) {
+            $existingContent = file_get_contents($this->dataFile);
+            $existingPersons = json_decode($existingContent, true);
+
+            if (is_array($existingPersons)) {
+                $persons = $existingPersons;
+            }
+        }
+
+        $found = false;
+        foreach ($persons as $person) {
+            if (is_array($person) && isset($person['id']) && (string) $person['id'] === (string) $id) {
+                $found = true;
+                break;
+            }
+        }
+
+        if (!$found) {
+            return [
+                'success' => false,
+                'message' => 'Persona no encontrada.',
+                'status' => 404,
+            ];
+        }
+
+        foreach ($persons as $person) {
+            if (is_array($person) && isset($person['id']) && (string) $person['id'] !== (string) $id) {
+                if (isset($person['correo']) && strtolower(trim($person['correo'])) === strtolower($correo)) {
+                    $errors['correo'] = 'No se permiten correos duplicados.';
+                    break;
+                }
+            }
+        }
+
+        if (!empty($errors)) {
+            return [
+                'success' => false,
+                'message' => 'Datos inválidos.',
+                'errors' => $errors,
+                'status' => 422,
+            ];
+        }
+
+        $updatedPerson = [
+            'id' => $id,
+            'nombre' => $nombre,
+            'correo' => $correo,
+            'fecha_nacimiento' => $fechaNacimiento,
+        ];
+
+        foreach ($persons as $index => $person) {
+            if (is_array($person) && isset($person['id']) && (string) $person['id'] === (string) $id) {
+                $persons[$index] = $updatedPerson;
+                break;
+            }
+        }
+
+        $saved = file_put_contents($this->dataFile, json_encode($persons, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+        if ($saved === false) {
+            return [
+                'success' => false,
+                'message' => 'No se pudo actualizar la persona.',
+                'errors' => ['file' => 'No se pudo escribir en el archivo de datos.'],
+                'status' => 500,
+            ];
+        }
+
+        return [
+            'success' => true,
+            'message' => 'Persona actualizada correctamente.',
+            'data' => $updatedPerson,
+            'status' => 200,
+        ];
+    }
     private function validarFechaNacimiento($fecha)
     {
         $date = DateTime::createFromFormat('Y-m-d', $fecha);
