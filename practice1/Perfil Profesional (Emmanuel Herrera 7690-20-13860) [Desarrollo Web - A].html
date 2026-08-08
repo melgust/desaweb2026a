@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfil Profesional - Emmanuel Herrera</title>
+  <style>
+
+
+:root {
+  --bg: #F6F5F1;
+  --ink: #14213D;
+  --ink-suave: #4A5568;
+  --navy: #0F1B2D;
+  --navy-2: #1B2C4A;
+  --amber: #E8A33D;
+  --teal: #4C9A8E;
+  --card: #FFFFFF;
+  --card-borde: #E4E1D8;
+  --sombra: 0 10px 30px rgba(15, 27, 45, 0.10);
+  --radio: 16px;
+  --transicion: 0.25s ease;
+  --fuente-display: 'Segoe UI', Arial, sans-serif;
+  --fuente-texto: 'Segoe UI', Arial, sans-serif;
+  --fuente-mono: 'Courier New', Consolas, monospace;
+}
+
+[data-tema="oscuro"] {
+  --bg: #0B1220;
+  --ink: #F1EFE7;
+  --ink-suave: #B7BFCC;
+  --card: #16233A;
+  --card-borde: #263353;
+  --sombra: 0 10px 30px rgba(0, 0, 0, 0.45);
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--fuente-texto);
+  line-height: 1.6;
+  transition: background var(--transicion), color var(--transicion);
+}
+
+h1, h2, h3 { font-family: var(--fuente-display); margin: 0; }
+
+img { max-width: 100%; display: block; }
+
+/* ===================== HERO / ENCABEZADO ===================== */
+
+.hero {
+  background: radial-gradient(circle at 20% 20%, var(--navy-2), var(--navy) 70%);
+  color: #F6F5F1;
+  padding: 1.25rem 1.5rem 3rem;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px),
+    radial-gradient(circle at 20% 20%, var(--navy-2), var(--navy) 70%);
+  background-size: 32px 32px, 32px 32px, cover;
+}
+
+.hero__topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 960px;
+  margin: 0 auto 2rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.hero__datetime {
+  font-family: var(--fuente-mono);
+  font-size: 0.85rem;
+  color: var(--amber);
+  letter-spacing: 0.03em;
+}
+
+.hero__content {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.hero__foto {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 4px solid var(--amber);
+  object-fit: cover;
+  box-shadow: var(--sombra);
+  flex-shrink: 0;
+}
+
+.hero__texto { flex: 1; min-width: 260px; }
+
+.hero__eyebrow {
+  font-family: var(--fuente-mono);
+  color: var(--teal);
+  margin: 0 0 0.25rem;
+  font-size: 0.9rem;
+}
+
+.hero__nombre {
+  font-size: clamp(2rem, 5vw, 2.75rem);
+  font-weight: 800;
+}
+
+.hero__carrera {
+  margin: 0.4rem 0 0.1rem;
+  font-size: 1.1rem;
+  color: var(--amber);
+  font-weight: 600;
+}
+
+.hero__universidad {
+  margin: 0 0 0.9rem;
+  color: #C9CFDD;
+  font-size: 0.95rem;
+}
+
+.hero__frase {
+  font-style: italic;
+  color: #E6E2D6;
+  border-left: 3px solid var(--teal);
+  padding-left: 0.9rem;
+  margin: 0;
+  max-width: 560px;
+}
+
+/* ===================== BOTONES ===================== */
+
+.btn {
+  font-family: var(--fuente-texto);
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform var(--transicion), box-shadow var(--transicion), background var(--transicion);
+}
+
+.btn:hover { transform: translateY(-2px); }
+.btn:active { transform: translateY(0); }
+
+.btn--ghost {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.25);
+  color: #F6F5F1;
+}
+.btn--ghost:hover { background: rgba(255,255,255,0.14); }
+
+.btn--primario {
+  background: var(--amber);
+  color: var(--navy);
+  box-shadow: 0 4px 14px rgba(232, 163, 61, 0.35);
+}
+.btn--primario:hover {
+  background: #f3b256;
+  box-shadow: 0 8px 20px rgba(232, 163, 61, 0.45);
+}
+
+/* ===================== SECCIONES ===================== */
+
+.seccion {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+
+.seccion__titulo {
+  font-size: 1.6rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.seccion__numero {
+  font-family: var(--fuente-mono);
+  font-size: 0.95rem;
+  color: var(--teal);
+}
+
+/* ===================== TARJETAS ===================== */
+
+.tarjeta {
+  background: var(--card);
+  border: 1px solid var(--card-borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  padding: 1.75rem;
+  transition: transform var(--transicion), box-shadow var(--transicion), background var(--transicion), border-color var(--transicion);
+}
+
+.tarjeta--texto p { margin: 0 0 1rem; color: var(--ink-suave); }
+.tarjeta--texto p:last-child { margin-bottom: 0; }
+
+/* ===================== HABILIDADES ===================== */
+
+.habilidades__lista {
+  display: grid;
+  gap: 1.1rem;
+}
+
+.habilidad__cabecera {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  margin-bottom: 0.35rem;
+}
+
+.habilidad__nombre { font-weight: 600; }
+.habilidad__valor { font-family: var(--fuente-mono); color: var(--teal); }
+
+.barra {
+  width: 100%;
+  height: 10px;
+  background: var(--card-borde);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.barra__relleno {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--teal), var(--amber));
+  transition: width 1.1s ease;
+}
+
+.barra__relleno.animar { width: var(--porcentaje); }
+
+/* ===================== PROYECTOS ===================== */
+
+.proyectos__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.tarjeta--proyecto:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 34px rgba(15, 27, 45, 0.18);
+  border-color: var(--amber);
+}
+
+.tarjeta--proyecto h3 { margin-bottom: 0.5rem; }
+.tarjeta--proyecto p { color: var(--ink-suave); margin: 0 0 1.2rem; min-height: 3.2em; }
+
+/* ===================== FORMULARIO ===================== */
+
+.formulario { display: grid; gap: 1.1rem; max-width: 520px; }
+
+.campo { display: grid; gap: 0.35rem; }
+
+.campo label { font-weight: 600; font-size: 0.9rem; }
+
+.campo input,
+.campo textarea {
+  font-family: var(--fuente-texto);
+  font-size: 0.95rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 10px;
+  border: 1.5px solid var(--card-borde);
+  background: var(--bg);
+  color: var(--ink);
+  transition: border-color var(--transicion), box-shadow var(--transicion);
+  resize: vertical;
+}
+
+.campo input:focus,
+.campo textarea:focus {
+  outline: none;
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(76, 154, 142, 0.2);
+}
+
+.campo input.invalido,
+.campo textarea.invalido { border-color: #D64545; }
+
+.error {
+  font-size: 0.82rem;
+  color: #D64545;
+  min-height: 1.1em;
+}
+
+.confirmacion {
+  color: var(--teal);
+  font-weight: 600;
+  margin: 0;
+}
+
+/* ===================== FOOTER ===================== */
+
+.footer {
+  text-align: center;
+  padding: 2rem 1rem 3rem;
+  color: var(--ink-suave);
+  font-size: 0.88rem;
+}
+
+/* ===================== MODAL ===================== */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 15, 25, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 50;
+  animation: aparecer var(--transicion);
+}
+
+.modal[hidden] { display: none; }
+
+@keyframes aparecer { from { opacity: 0; } to { opacity: 1; } }
+
+.modal__caja {
+  background: var(--navy);
+  color: #F1EFE7;
+  width: 100%;
+  max-width: 480px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+  animation: subir var(--transicion);
+}
+
+@keyframes subir { from { transform: translateY(16px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+.modal__barra {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.7rem 0.9rem;
+  background: rgba(255,255,255,0.05);
+}
+
+.modal__punto { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
+.modal__punto--rojo { background: #D64545; }
+.modal__punto--amarillo { background: var(--amber); }
+.modal__punto--verde { background: var(--teal); }
+
+.modal__cerrar {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: #C9CFDD;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: color var(--transicion);
+}
+.modal__cerrar:hover { color: #fff; }
+
+.modal__contenido { padding: 1.5rem; }
+.modal__contenido h3 { margin-bottom: 0.7rem; color: var(--amber); }
+.modal__contenido p { margin: 0; color: #D7DAE3; }
+
+/* ===================== RESPONSIVE ===================== */
+
+@media (max-width: 640px) {
+  .hero__content { flex-direction: column; text-align: center; }
+  .hero__frase { border-left: none; border-top: 3px solid var(--teal); padding-left: 0; padding-top: 0.6rem; }
+  .hero__topbar { justify-content: center; text-align: center; }
+  .seccion { padding: 2.25rem 1.25rem; }
+}
+
+/* Accesibilidad: respeta preferencia de menos movimiento */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+
+/* Foco visible para navegación con teclado */
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
+  outline: 3px solid var(--teal);
+  outline-offset: 2px;
+}
+
+</style>
+</head>
+<body>
+
+  <header class="hero">
+    <div class="hero__topbar">
+      <span id="fecha-hora" class="hero__datetime">--:--</span>
+      <button id="btn-tema" class="btn btn--ghost" aria-label="Cambiar tema claro u oscuro">
+        <span id="icono-tema">🌙</span> Modo oscuro
+      </button>
+    </div>
+
+    <div class="hero__content">
+      <img class="hero__foto" src="https://scontent-gua1-1.xx.fbcdn.net/v/t39.30808-6/653472105_26376934805277729_546625434555183492_n.jpg?stp=cp6_dst-jpg_tt6&cstp=mx2048x2048&ctp=s2048x2048&_nc_cat=107&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=E2BZGOYrheUQ7kNvwHOhr1x&_nc_oc=Adp5_E5Wv1xO66P8OF-kLz8jPJj3R_DD-ADXwJCCClHvYmIZm6-BiXp4HU_KXcgM76CmhjEbyFgORgPmAFdpMlaL&_nc_zt=23&_nc_ht=scontent-gua1-1.xx&_nc_gid=dgcpHSObt1CoFksZtXT4pA&_nc_ss=7b2a8&oh=00_AQEgG_KE3bI_AGm_K47J3Di9xie2uA3FIkwSM32psIgObQ&oe=6A7C7A86" alt="Fotografía">
+      <div class="hero__texto">
+        <p class="hero__eyebrow"></p>
+        <h1 class="hero__nombre">Emmanuel Herrera</h1>
+        <p class="hero__carrera">Ingeniería en Sistemas</p>
+        <p class="hero__universidad">Universidad Mariano Galvez de Guatemala</p>
+        <p class="hero__frase">"No lo sé todo, pero con esfuerzo siempre lo logro."</p>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    
+    <section class="seccion" id="sobre-mi">
+      <h2 class="seccion__titulo"><span class="seccion__numero">01</span> Sobre mí</h2>
+      <div class="tarjeta tarjeta--texto">
+        <p>
+          "Soy una persona polivalente con experiencia en el puesto de soporte IT, altamente
+          calificada con una base sólida en redes y telecomunicaciones, así como en
+          software y también en hardware. Poseo capacidad de aprendizaje rápido y
+          una comprensión profunda de la tecnología. He tenido relación con sistemas
+          operativos, redes, programación de bases de datos, seguridad informática,
+          soporte y problemas técnicos. Destaco mi excelente habilidad de
+          comunicación, además de una mentalidad de proactividad al resolver problemas.
+          Así mismo, tengo la capacidad de trabajar de forma independiente y en equipo, con
+          un alto nivel de compromiso y responsabilidad para el trabajo"
+        </p>
+      </div>
+    </section>
+
+
+    <section class="seccion" id="habilidades">
+      <h2 class="seccion__titulo"><span class="seccion__numero">02</span> Habilidades</h2>
+      <div class="habilidades__lista">
+
+        <div class="habilidad">
+          <div class="habilidad__cabecera">
+            <span class="habilidad__nombre">HTML &amp; CSS</span>
+            <span class="habilidad__valor">65%</span>
+          </div>
+          <div class="barra"><div class="barra__relleno" style="--porcentaje: 65%"></div></div>
+        </div>
+
+        <div class="habilidad">
+          <div class="habilidad__cabecera">
+            <span class="habilidad__nombre">Redes y Telecomunicaciones</span>
+            <span class="habilidad__valor">85%</span>
+          </div>
+          <div class="barra"><div class="barra__relleno" style="--porcentaje: 85%"></div></div>
+        </div>
+
+        <div class="habilidad">
+          <div class="habilidad__cabecera">
+            <span class="habilidad__nombre">Resolución de problemas</span>
+            <span class="habilidad__valor">90%</span>
+          </div>
+          <div class="barra"><div class="barra__relleno" style="--porcentaje: 90%"></div></div>
+        </div>
+
+        <div class="habilidad">
+          <div class="habilidad__cabecera">
+            <span class="habilidad__nombre">Trabajo en equipo</span>
+            <span class="habilidad__valor">95%</span>
+          </div>
+          <div class="barra"><div class="barra__relleno" style="--porcentaje: 95%"></div></div>
+        </div>
+
+        <div class="habilidad">
+          <div class="habilidad__cabecera">
+            <span class="habilidad__nombre">Electricidad y Electronica</span>
+            <span class="habilidad__valor">80%</span>
+          </div>
+          <div class="barra"><div class="barra__relleno" style="--porcentaje: 80%"></div></div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="seccion" id="proyectos">
+      <h2 class="seccion__titulo"><span class="seccion__numero">03</span> Proyectos</h2>
+      <div class="proyectos__grid">
+
+        <article class="tarjeta tarjeta--proyecto">
+          <h3>Montaje de Datacenter</h3>
+          <p>Proceso integral de infraestructura que principalmente el acondicionamiento físico del espacio para la centralización de equipo informatico.</p>
+          <button class="btn btn--primario btn-ver-mas"
+            data-titulo="Gestor de tareas"
+            data-detalle="Proceso integral de infraestructura que abarca desde el acondicionamiento físico del espacio (piso elevado, climatización de precisión y sistemas redundantes de energía y UPS) hasta la instalación de gabinetes y cableado estructurado, el montaje (rack & stack) de servidores, almacenamiento y equipos de red, finalizando con la configuración de la conectividad, la implementación de sistemas de seguridad ambiental e incendios, y las pruebas de comisionamiento para garantizar un funcionamiento continuo y sin interrupciones.">
+            Ver más
+          </button>
+        </article>
+
+        <article class="tarjeta tarjeta--proyecto">
+          <h3>Administración de Equipos para CiberSeguridad</h3>
+          <p>Implementar, operar y mantener la infraestructura de defensa digital de una organización.</p>
+          <button class="btn btn--primario btn-ver-mas"
+            data-titulo="Administración de Equipos para CiberSeguridad"
+            data-detalle="Implementar, operar y mantener la infraestructura de defensa digital de una organización —incluyendo firewalls, sistemas EDR/Antivirus, herramientas SIEM, VPNs y controles de acceso— asegurando que las políticas de protección estén correctamente configuradas, los parches actualizados y la red constantemente monitoreada para prevenir, detectar y responder a incidentes o vulnerabilidades.">
+            Ver más
+          </button>
+        </article>
+
+        <article class="tarjeta tarjeta--proyecto">
+          <h3>Active Directory para Empresas</h3>
+          <p>Gestionar de forma centralizada las identidades digitales de la organización, administrando el ciclo de vida de los usuarios.</p>
+          <button class="btn btn--primario btn-ver-mas"
+            data-titulo="Active Directory para Empresas"
+            data-detalle="Gestionar de forma centralizada las identidades digitales de la organización, administrando el ciclo de vida de los usuarios, el control de acceso a archivos y aplicaciones mediante roles, la aplicación de políticas de seguridad masivas (GPO) en las computadoras, y el mantenimiento de la infraestructura del dominio.">
+            Ver más
+          </button>
+        </article>
+
+      </div>
+    </section>
+
+    <section class="seccion" id="contacto">
+      <h2 class="seccion__titulo"><span class="seccion__numero">04</span> Contacto</h2>
+      <form id="form-contacto" class="tarjeta formulario" novalidate>
+
+        <div class="campo">
+          <label for="nombre">Nombre</label>
+          <input type="text" id="nombre" name="nombre" placeholder="Tu nombre completo">
+          <span class="error" id="error-nombre"></span>
+        </div>
+
+        <div class="campo">
+          <label for="correo">Correo electrónico</label>
+          <input type="text" id="correo" name="correo" placeholder="tu@correo.com">
+          <span class="error" id="error-correo"></span>
+        </div>
+
+        <div class="campo">
+          <label for="mensaje">Mensaje</label>
+          <textarea id="mensaje" name="mensaje" rows="4" placeholder="Escribe tu mensaje..."></textarea>
+          <span class="error" id="error-mensaje"></span>
+        </div>
+
+        <button type="submit" class="btn btn--primario">Enviar mensaje</button>
+        <p id="confirmacion" class="confirmacion" hidden>✔ Tu mensaje se validó correctamente.</p>
+      </form>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>Página vista <strong id="contador-visitas">0</strong> veces en este navegador.</p>
+    <p>&copy; <span id="anio"></span> Emmanuel Herrera · Perfil Profesional </p>
+  </footer>
+
+  <div id="modal" class="modal" hidden>
+    <div class="modal__caja">
+      <div class="modal__barra">
+        <span class="modal__punto modal__punto--rojo"></span>
+        <span class="modal__punto modal__punto--amarillo"></span>
+        <span class="modal__punto modal__punto--verde"></span>
+        <button id="modal-cerrar" class="modal__cerrar" aria-label="Cerrar">✕</button>
+      </div>
+      <div class="modal__contenido">
+        <h3 id="modal-titulo"></h3>
+        <p id="modal-detalle"></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  inicializarTema();
+  inicializarFechaHora();
+  inicializarContadorVisitas();
+  inicializarBarrasHabilidad();
+  inicializarModalProyectos();
+  inicializarFormulario();
+  document.getElementById('anio').textContent = new Date().getFullYear();
+});
+
+/* ---------------------------------------------------------
+   1) CAMBIO DE TEMA (claro / oscuro)
+   --------------------------------------------------------- */
+function inicializarTema() {
+  const btnTema = document.getElementById('btn-tema');
+  const icono = document.getElementById('icono-tema');
+  const temaGuardado = localStorage.getItem('tema') || 'claro';
+
+  aplicarTema(temaGuardado);
+
+  btnTema.addEventListener('click', () => {
+    const temaActual = document.documentElement.getAttribute('data-tema') === 'oscuro' ? 'oscuro' : 'claro';
+    const nuevoTema = temaActual === 'claro' ? 'oscuro' : 'claro';
+    aplicarTema(nuevoTema);
+    localStorage.setItem('tema', nuevoTema);
+  });
+
+  function aplicarTema(tema) {
+    if (tema === 'oscuro') {
+      document.documentElement.setAttribute('data-tema', 'oscuro');
+      icono.textContent = '☀️';
+      btnTema.lastChild.textContent = ' Modo claro';
+    } else {
+      document.documentElement.removeAttribute('data-tema');
+      icono.textContent = '🌙';
+      btnTema.lastChild.textContent = ' Modo oscuro';
+    }
+  }
+}
+
+/* ---------------------------------------------------------
+   2) FECHA Y HORA ACTUALES EN EL ENCABEZADO
+   --------------------------------------------------------- */
+function inicializarFechaHora() {
+  const contenedor = document.getElementById('fecha-hora');
+
+  function actualizar() {
+    const ahora = new Date();
+    const opcionesFecha = { day: '2-digit', month: 'long', year: 'numeric' };
+    const fechaTexto = ahora.toLocaleDateString('es-GT', opcionesFecha);
+    const horaTexto = ahora.toLocaleTimeString('es-GT', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    contenedor.textContent = `${fechaTexto} · ${horaTexto}`;
+  }
+
+  actualizar();
+  setInterval(actualizar, 1000);
+}
+
+/* ---------------------------------------------------------
+   3) CONTADOR DE VISITAS (persiste con localStorage)
+   --------------------------------------------------------- */
+function inicializarContadorVisitas() {
+  const clave = 'contadorVisitas';
+  const visitasPrevias = parseInt(localStorage.getItem(clave), 10) || 0;
+  const visitasActuales = visitasPrevias + 1;
+  localStorage.setItem(clave, visitasActuales);
+  document.getElementById('contador-visitas').textContent = visitasActuales;
+}
+
+/* ---------------------------------------------------------
+   4) ANIMACIÓN DE BARRAS DE HABILIDAD AL CARGAR
+   --------------------------------------------------------- */
+function inicializarBarrasHabilidad() {
+  const barras = document.querySelectorAll('.barra__relleno');
+  // Pequeño retraso para que la transición CSS sea visible
+  setTimeout(() => {
+    barras.forEach(barra => barra.classList.add('animar'));
+  }, 200);
+}
+
+/* ---------------------------------------------------------
+   5) MODAL "VER MÁS" DE PROYECTOS
+   --------------------------------------------------------- */
+function inicializarModalProyectos() {
+  const modal = document.getElementById('modal');
+  const modalTitulo = document.getElementById('modal-titulo');
+  const modalDetalle = document.getElementById('modal-detalle');
+  const botonCerrar = document.getElementById('modal-cerrar');
+  const botonesVerMas = document.querySelectorAll('.btn-ver-mas');
+
+  botonesVerMas.forEach(boton => {
+    boton.addEventListener('click', () => {
+      modalTitulo.textContent = boton.dataset.titulo;
+      modalDetalle.textContent = boton.dataset.detalle;
+      modal.hidden = false;
+      document.body.style.overflow = 'hidden';
+      botonCerrar.focus();
+    });
+  });
+
+  function cerrarModal() {
+    modal.hidden = true;
+    document.body.style.overflow = '';
+  }
+
+  botonCerrar.addEventListener('click', cerrarModal);
+
+  // Cerrar al hacer clic fuera de la caja del modal
+  modal.addEventListener('click', (evento) => {
+    if (evento.target === modal) cerrarModal();
+  });
+
+  // Cerrar con la tecla Escape
+  document.addEventListener('keydown', (evento) => {
+    if (evento.key === 'Escape' && !modal.hidden) cerrarModal();
+  });
+}
+
+/* ---------------------------------------------------------
+   6) VALIDACIÓN DEL FORMULARIO DE CONTACTO
+   --------------------------------------------------------- */
+function inicializarFormulario() {
+  const formulario = document.getElementById('form-contacto');
+  const campoNombre = document.getElementById('nombre');
+  const campoCorreo = document.getElementById('correo');
+  const campoMensaje = document.getElementById('mensaje');
+  const confirmacion = document.getElementById('confirmacion');
+
+  const regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  formulario.addEventListener('submit', (evento) => {
+    evento.preventDefault();
+    confirmacion.hidden = true;
+
+    const nombreValido = validarCampoTexto(campoNombre, 'error-nombre', 'El nombre no puede estar vacío.');
+    const correoValido = validarCorreo(campoCorreo, 'error-correo');
+    const mensajeValido = validarCampoTexto(campoMensaje, 'error-mensaje', 'El mensaje no puede estar vacío.');
+
+    if (nombreValido && correoValido && mensajeValido) {
+      confirmacion.hidden = false;
+      formulario.reset();
+      [campoNombre, campoCorreo, campoMensaje].forEach(c => c.classList.remove('invalido'));
+    }
+  });
+
+  // Validación en vivo: limpia el error cuando el usuario corrige el campo
+  [campoNombre, campoMensaje].forEach(campo => {
+    campo.addEventListener('input', () => {
+      if (campo.value.trim() !== '') {
+        campo.classList.remove('invalido');
+        document.getElementById(`error-${campo.id}`).textContent = '';
+      }
+    });
+  });
+
+  campoCorreo.addEventListener('input', () => {
+    if (regexCorreo.test(campoCorreo.value.trim())) {
+      campoCorreo.classList.remove('invalido');
+      document.getElementById('error-correo').textContent = '';
+    }
+  });
+
+  function validarCampoTexto(campo, idError, mensajeError) {
+    const valor = campo.value.trim();
+    const errorEl = document.getElementById(idError);
+    if (valor === '') {
+      campo.classList.add('invalido');
+      errorEl.textContent = mensajeError;
+      return false;
+    }
+    campo.classList.remove('invalido');
+    errorEl.textContent = '';
+    return true;
+  }
+
+  function validarCorreo(campo, idError) {
+    const valor = campo.value.trim();
+    const errorEl = document.getElementById(idError);
+
+    if (valor === '') {
+      campo.classList.add('invalido');
+      errorEl.textContent = 'El correo electrónico no puede estar vacío.';
+      return false;
+    }
+    if (!regexCorreo.test(valor)) {
+      campo.classList.add('invalido');
+      errorEl.textContent = 'Ingresa un correo electrónico con un formato válido (ejemplo@dominio.com).';
+      return false;
+    }
+    campo.classList.remove('invalido');
+    errorEl.textContent = '';
+    return true;
+  }
+}
+
+</script>
+</body>
+</html>
