@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: enterprise_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: YourSecurePassword123!
+      MYSQL_DATABASE: EnterpriseDb
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: enterprise_backend
+    restart: always
+    ports:
+      - "5000:80"
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=db;Database=EnterpriseDb;User Id=root;Password=YourSecurePassword123!;
+      - PRODUCT_SEED_COUNT=120
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: enterprise_frontend
+    restart: always
+    ports:
+      - "81:80"
+    depends_on:
+      - backend
+
+volumes:
+  db_data:
