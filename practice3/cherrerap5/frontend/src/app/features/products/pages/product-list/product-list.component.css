@@ -1,0 +1,43 @@
+.pagination-mode {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  margin: 1rem 0;
+}
+
+.pagination-mode button.active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: white;
+}
+
+.result-count {
+  margin-left: auto;
+  color: #64748b;
+}
+
+.inventory-scroll.infinite {
+  height: min(62vh, 460px);
+  overflow-y: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+}
+
+.inventory-scroll.infinite thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: white;
+}
+
+.loading-row,
+.end-message {
+  padding: 1rem;
+  text-align: center;
+  color: #64748b;
+}
+
+@media (max-width: 700px) {
+  .pagination-mode { flex-wrap: wrap; }
+  .result-count { width: 100%; margin-left: 0; }
+}
