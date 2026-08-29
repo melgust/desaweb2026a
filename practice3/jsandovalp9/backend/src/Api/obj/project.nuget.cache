@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "u3gxQvsHS48=",
+  "dgSpecHash": "G4SZyW72TKg=",
   "success": true,
-  "projectFilePath": "C:\\Users\\jisaa\\Desktop\\universidad\\ciclo8\\DesarrolloWeb\\ramaDesarrolloWeb\\desaweb2026a\\practice3\\jsandovalp9\\backend\\src\\Api\\Api.csproj",
+  "projectFilePath": "c:\\Users\\jisaa\\Desktop\\universidad\\ciclo8\\DesarrolloWeb\\ramaDesarrolloWeb\\desaweb2026a\\practice3\\jsandovalp9\\backend\\src\\Api\\Api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\jisaa\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\jisaa\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",

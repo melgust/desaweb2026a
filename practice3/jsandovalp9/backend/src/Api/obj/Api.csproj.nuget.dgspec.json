@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\jisaa\\Desktop\\universidad\\ciclo8\\DesarrolloWeb\\ramaDesarrolloWeb\\desaweb2026a\\practice3\\jsandovalp9\\backend\\src\\Api\\Api.csproj": {}
+    "c:\\Users\\jisaa\\Desktop\\universidad\\ciclo8\\DesarrolloWeb\\ramaDesarrolloWeb\\desaweb2026a\\practice3\\jsandovalp9\\backend\\src\\Api\\Api.csproj": {}
   },
   "projects": {
-    "C:\\Users\\jisaa\\Desktop\\universidad\\ciclo8\\DesarrolloWeb\\ramaDesarrolloWeb\\desaweb2026a\\practice3\\jsandovalp9\\backend\\src\\Api\\Api.csproj": {
+    "c:\\Users\\jisaa\\Desktop\\universidad\\ciclo8\\DesarrolloWeb\\ramaDesarrolloWeb\\desaweb2026a\\practice3\\jsandovalp9\\backend\\src\\Api\\Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\jisaa\\Desktop\\universidad\\ciclo8\\DesarrolloWeb\\ramaDesarrolloWeb\\desaweb2026a\\practice3\\jsandovalp9\\backend\\src\\Api\\Api.csproj",
+        "projectUniqueName": "c:\\Users\\jisaa\\Desktop\\universidad\\ciclo8\\DesarrolloWeb\\ramaDesarrolloWeb\\desaweb2026a\\practice3\\jsandovalp9\\backend\\src\\Api\\Api.csproj",
         "projectName": "Api",
-        "projectPath": "C:\\Users\\jisaa\\Desktop\\universidad\\ciclo8\\DesarrolloWeb\\ramaDesarrolloWeb\\desaweb2026a\\practice3\\jsandovalp9\\backend\\src\\Api\\Api.csproj",
+        "projectPath": "c:\\Users\\jisaa\\Desktop\\universidad\\ciclo8\\DesarrolloWeb\\ramaDesarrolloWeb\\desaweb2026a\\practice3\\jsandovalp9\\backend\\src\\Api\\Api.csproj",
         "packagesPath": "C:\\Users\\jisaa\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\jisaa\\Desktop\\universidad\\ciclo8\\DesarrolloWeb\\ramaDesarrolloWeb\\desaweb2026a\\practice3\\jsandovalp9\\backend\\src\\Api\\obj\\",
+        "outputPath": "c:\\Users\\jisaa\\Desktop\\universidad\\ciclo8\\DesarrolloWeb\\ramaDesarrolloWeb\\desaweb2026a\\practice3\\jsandovalp9\\backend\\src\\Api\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\jisaa\\AppData\\Roaming\\NuGet\\NuGet.Config"
