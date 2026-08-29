@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Oqv8o+v02nY=",
+  "dgSpecHash": "fRd/ZNcxdAY=",
   "success": true,
-  "projectFilePath": "/home/melgust/developer/U/desaweb2026a/practice3/mcalic1/backend/src/Api/Api.csproj",
+  "projectFilePath": "/home/melgust/developer/U/desaweb2026b/practice3/mcalic1/backend/src/Api/Api.csproj",
   "expectedPackageFiles": [
     "/home/melgust/.nuget/packages/bcrypt.net-next/4.0.3/bcrypt.net-next.4.0.3.nupkg.sha512",
     "/home/melgust/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
