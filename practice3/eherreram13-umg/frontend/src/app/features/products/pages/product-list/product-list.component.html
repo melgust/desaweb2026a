@@ -1,0 +1,58 @@
+<div class="container">
+  <header class="header">
+    <h2>Enterprise Products</h2>
+    <a *ngIf="auth.canManageProducts()" routerLink="/products/new" class="btn btn-primary">+ Add Product</a>
+  </header>
+
+  <div class="toolbar">
+    <input type="text" placeholder="Search products... (press Enter)" [(ngModel)]="searchTerm" (keyup.enter)="onSearchChange()" class="search-bar" />
+
+    <div class="mode-toggle">
+      <button type="button" [class.active]="paginationMode() === 'offset'" (click)="setMode('offset')">Paginación</button>
+      <button type="button" [class.active]="paginationMode() === 'infinite'" (click)="setMode('infinite')">Scroll infinito</button>
+    </div>
+  </div>
+
+  <table class="grid-table" *ngIf="!loading(); else loadingTpl">
+    <thead>
+      <tr>
+        <th (click)="toggleSort('name')">Name</th>
+        <th>Description</th>
+        <th (click)="toggleSort('price')">Price</th>
+        <th (click)="toggleSort('stock')">Stock</th>
+        <th *ngIf="auth.canManageProducts()">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of products()">
+        <td>{{ item.name }}</td>
+        <td>{{ item.description || '-' }}</td>
+        <td>\${{ item.price | number:'1.2-2' }}</td>
+        <td>{{ item.stock }}</td>
+        <td *ngIf="auth.canManageProducts()">
+          <a [routerLink]="['/products/edit', item.id]">Edit</a>
+          <button *ngIf="auth.canDeleteProducts()" (click)="deleteProduct(item.id)" class="text-danger">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Offset (page-by-page) pagination controls -->
+  <div class="pagination" *ngIf="paginationMode() === 'offset' && !loading()">
+    <button [disabled]="page() <= 1" (click)="setPage(page() - 1)">Prev</button>
+    <span>Page {{ page() }} of {{ totalPages() }}</span>
+    <button [disabled]="page() >= totalPages()" (click)="setPage(page() + 1)">Next</button>
+  </div>
+
+  <!-- Infinite scroll status: appends more items as the user scrolls down -->
+  <div class="infinite-status" *ngIf="paginationMode() === 'infinite' && !loading()">
+    <div *ngIf="loadingMore()" class="loading-more">
+      <span class="spinner"></span> Loading more products...
+    </div>
+    <div *ngIf="!loadingMore() && !hasMore() && products().length" class="no-more">
+      — No more products ({{ totalItems() }} total) —
+    </div>
+  </div>
+
+  <ng-template #loadingTpl><div class="loading-state">Loading data...</div></ng-template>
+</div>
