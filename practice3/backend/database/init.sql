@@ -1,0 +1,16 @@
+CREATE TABLE IF NOT EXISTS Categoria (
+    IdCategoria INT NOT NULL AUTO_INCREMENT,
+    Descripcion VARCHAR(255) NOT NULL,
+    PRIMARY KEY (IdCategoria)
+);
+
+CREATE TABLE IF NOT EXISTS Producto (
+    IdProducto INT NOT NULL AUTO_INCREMENT,
+    Nombre VARCHAR(150) NOT NULL,
+    Descripcion VARCHAR(500) NOT NULL,
+    Precio DECIMAL(10, 2) NOT NULL,
+    Stock INT NOT NULL DEFAULT 0,
+    ImagenUrl VARCHAR(500) NULL,
+    Estado BOOLEAN NOT NULL DEFAULT TRUE,
+    PRIMARY KEY (IdProducto)
+);
