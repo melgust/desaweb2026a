@@ -6,6 +6,8 @@ export interface Product {
   stock: number;
   isActive: boolean;
   createdAt: string;
+  supplierId?: string | null;
+  supplierName?: string | null;
 }
 
 export interface ProductPagedResult {

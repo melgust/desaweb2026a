@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/melgust/developer/U/desaweb2026a/practice3/mcalic1/backend/src/Api/Api.csproj": {}
+    "/home/melgust/developer/U/desaweb2026b/practice3/mcalic1/backend/src/Api/Api.csproj": {}
   },
   "projects": {
-    "/home/melgust/developer/U/desaweb2026a/practice3/mcalic1/backend/src/Api/Api.csproj": {
+    "/home/melgust/developer/U/desaweb2026b/practice3/mcalic1/backend/src/Api/Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/melgust/developer/U/desaweb2026a/practice3/mcalic1/backend/src/Api/Api.csproj",
+        "projectUniqueName": "/home/melgust/developer/U/desaweb2026b/practice3/mcalic1/backend/src/Api/Api.csproj",
         "projectName": "Api",
-        "projectPath": "/home/melgust/developer/U/desaweb2026a/practice3/mcalic1/backend/src/Api/Api.csproj",
+        "projectPath": "/home/melgust/developer/U/desaweb2026b/practice3/mcalic1/backend/src/Api/Api.csproj",
         "packagesPath": "/home/melgust/.nuget/packages/",
-        "outputPath": "/home/melgust/developer/U/desaweb2026a/practice3/mcalic1/backend/src/Api/obj/",
+        "outputPath": "/home/melgust/developer/U/desaweb2026b/practice3/mcalic1/backend/src/Api/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/melgust/.nuget/NuGet/NuGet.Config"
