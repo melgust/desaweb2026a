@@ -40,5 +40,34 @@ export const routes: Routes = [
       },
     ],
   },
+  {
+    path: 'suppliers',
+    canActivate: [authGuard],
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import(
+            './features/suppliers/pages/supplier-list/supplier-list.component'
+          ).then((m) => m.SupplierListComponent),
+      },
+      {
+        path: 'new',
+        canActivate: [roleGuard(['Admin', 'Manager'])],
+        loadComponent: () =>
+          import(
+            './features/suppliers/pages/supplier-form/supplier-form.component'
+          ).then((m) => m.SupplierFormComponent),
+      },
+      {
+        path: 'edit/:id',
+        canActivate: [roleGuard(['Admin', 'Manager'])],
+        loadComponent: () =>
+          import(
+            './features/suppliers/pages/supplier-form/supplier-form.component'
+          ).then((m) => m.SupplierFormComponent),
+      },
+    ],
+  },
   { path: '**', redirectTo: 'products' },
 ];

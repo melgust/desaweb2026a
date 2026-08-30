@@ -2,7 +2,8 @@
 FROM node:20-alpine AS build
 WORKDIR /app
 COPY package*.json ./
-RUN npm install
+# --ignore-scripts avoids admin-lte's transitive husky/summernote postinstall failing in CI/containers
+RUN npm install --ignore-scripts
 COPY . .
 RUN npm run build -- --configuration production
 
