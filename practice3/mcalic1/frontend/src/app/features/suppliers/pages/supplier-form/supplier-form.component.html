@@ -1,0 +1,37 @@
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h3 class="card-title mb-0">{{ isEditMode ? 'Edit Supplier' : 'Create Supplier' }}</h3>
+    <a routerLink="/suppliers" class="btn btn-secondary btn-sm">Back to List</a>
+  </div>
+
+  <div class="card-body">
+    <form (ngSubmit)="onSubmit()" *ngIf="!loading; else loadingTpl" class="supplier-form">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Supplier Name</mat-label>
+        <input matInput [(ngModel)]="formData.name" name="name" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Contact Email</mat-label>
+        <input matInput type="email" [(ngModel)]="formData.contactEmail" name="contactEmail" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Phone</mat-label>
+        <input matInput [(ngModel)]="formData.phone" name="phone" />
+      </mat-form-field>
+
+      <mat-checkbox [(ngModel)]="formData.isActive" name="isActive">Is Active</mat-checkbox>
+
+      <div class="form-actions">
+        <button mat-raised-button color="primary" type="submit">
+          {{ isEditMode ? 'Update Supplier' : 'Create Supplier' }}
+        </button>
+      </div>
+    </form>
+
+    <ng-template #loadingTpl>
+      <div>Loading form data...</div>
+    </ng-template>
+  </div>
+</div>
