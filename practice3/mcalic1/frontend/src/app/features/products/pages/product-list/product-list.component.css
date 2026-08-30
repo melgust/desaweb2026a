@@ -16,3 +16,8 @@ table {
 .text-center {
   text-align: center;
 }
+.table-container {
+  max-height: 500px;
+  overflow-y: auto;
+  overflow-x: auto;
+}

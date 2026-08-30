@@ -34,8 +34,8 @@
         />
       </div>
 
-      <button type="submit" [disabled]="loading" class="btn btn-primary btn-block">
-        {{ loading ? 'Signing in...' : 'Login' }}
+      <button type="submit" routerLink="/products"  [disabled]="loading" class="btn btn-primary btn-block">
+        <!-- {{ loading ? '/products' : '/products' }} -->
       </button>
     </form>
   </div>

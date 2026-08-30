@@ -50,6 +50,7 @@ export class ProductListComponent implements OnInit {
   sortDirection: 'asc' | 'desc' = 'asc';
 
   displayedColumns: string[] = ['name', 'description', 'price', 'stock', 'supplier'];
+  // displayedColumns: string[] = ['name', 'description', 'price', 'Category', 'stock', 'supplier'];
 
   constructor(public auth: AuthService, private productService: ProductService) {}
 
@@ -59,21 +60,100 @@ export class ProductListComponent implements OnInit {
     }
     this.loadProducts();
   }
+loadProducts(): void {
+  const products: Product[] = [
+    {
+      id: '1',
+      name: 'Laptop Lenovo IdeaPad',
+      description: 'Laptop para trabajo y estudio',
+      price: 4500,
+      stock: 15,
+      isActive: true,
+      createdAt: '2026-08-01T10:00:00',
+      supplierId: '1',
+      supplierName: 'Distribuidora Tech'
+    },
+    {
+      id: '2',
+      name: 'Mouse inalámbrico Logitech',
+      description: 'Mouse inalámbrico ergonómico',
+      price: 185,
+      stock: 35,
+      isActive: true,
+      createdAt: '2026-08-03T14:30:00',
+      supplierId: '2',
+      supplierName: 'Tecnología GT'
+    },
+    {
+      id: '3',
+      name: 'Teclado mecánico',
+      description: 'Teclado mecánico RGB',
+      price: 650,
+      stock: 20,
+      isActive: true,
+      createdAt: '2026-08-05T09:15:00',
+      supplierId: '2',
+      supplierName: 'Tecnología GT'
+    },
+    {
+      id: '4',
+      name: 'Monitor Samsung 24"',
+      description: 'Monitor Full HD de 24 pulgadas',
+      price: 1250,
+      stock: 10,
+      isActive: true,
+      createdAt: '2026-08-07T11:45:00',
+      supplierId: '3',
+      supplierName: 'Importadora Digital'
+    },
+    {
+      id: '5',
+      name: 'Cable HDMI',
+      description: 'Cable HDMI de 2 metros',
+      price: 75,
+      stock: 50,
+      isActive: true,
+      createdAt: '2026-08-10T16:20:00',
+      supplierId: '1',
+      supplierName: 'Distribuidora Tech'
+    },
+    {
+      id: '6',
+      name: 'Memoria USB 64GB',
+      description: 'Memoria USB 3.0 de 64GB',
+      price: 95,
+      stock: 40,
+      isActive: true,
+      createdAt: '2026-08-12T08:30:00',
+      supplierId: '3',
+      supplierName: 'Importadora Digital'
+    },
+    {
+      id: '7',
+      name: 'Disco SSD 1TB',
+      description: 'Unidad SSD NVMe de 1TB',
+      price: 850,
+      stock: 8,
+      isActive: true,
+      createdAt: '2026-08-15T13:10:00',
+      supplierId: '3',
+      supplierName: 'Importadora Digital'
+    },
+    {
+      id: '8',
+      name: 'Webcam HD',
+      description: 'Cámara web HD para videoconferencias',
+      price: 320,
+      stock: 0,
+      isActive: false,
+      createdAt: '2026-08-18T15:00:00',
+      supplierId: '2',
+      supplierName: 'Tecnología GT'
+    }
+  ];
 
-  loadProducts(): void {
-    this.loading.set(true);
-    this.productService
-      .getProducts(this.searchTerm, this.sortBy, this.sortDirection, this.pageIndex + 1, this.pageSize)
-      .subscribe({
-        next: (res) => {
-          this.products.set(res.items);
-          this.totalItems.set(res.totalItems);
-          this.loading.set(false);
-        },
-        error: () => this.loading.set(false)
-      });
-  }
-
+  this.products.set(products);
+}
   onSearchChange(): void {
     this.pageIndex = 0;
     this.loadProducts();
@@ -91,7 +171,19 @@ export class ProductListComponent implements OnInit {
     this.pageSize = event.pageSize;
     this.loadProducts();
   }
+  onTableScroll(event: Event): void {
+  const element = event.target as HTMLElement;
 
+  const atBottom =
+    element.scrollTop + element.clientHeight >= element.scrollHeight - 5;
+
+  if (atBottom) {
+    element.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }
+}
   deleteProduct(id: string): void {
     if (confirm('Delete product?')) {
       this.productService.deleteProduct(id).subscribe(() => this.loadProducts());

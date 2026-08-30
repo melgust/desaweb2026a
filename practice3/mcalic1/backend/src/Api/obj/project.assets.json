@@ -47,6 +47,28 @@
           "Microsoft.AspNetCore.App"
         ]
       },
+      "Microsoft.AspNetCore.OpenApi/10.0.11": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.OpenApi": "[2.7.5, 3.0.0)"
+        },
+        "compile": {
+          "lib/net10.0/Microsoft.AspNetCore.OpenApi.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0/Microsoft.AspNetCore.OpenApi.dll": {
+            "related": ".xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ],
+        "build": {
+          "build/Microsoft.AspNetCore.OpenApi.targets": {}
+        }
+      },
       "Microsoft.Bcl.AsyncInterfaces/7.0.0": {
         "type": "package",
         "compile": {
@@ -588,15 +610,15 @@
           }
         }
       },
-      "Microsoft.OpenApi/1.6.25": {
+      "Microsoft.OpenApi/2.7.5": {
         "type": "package",
         "compile": {
-          "lib/netstandard2.0/Microsoft.OpenApi.dll": {
+          "lib/net8.0/Microsoft.OpenApi.dll": {
             "related": ".pdb;.xml"
           }
         },
         "runtime": {
-          "lib/netstandard2.0/Microsoft.OpenApi.dll": {
+          "lib/net8.0/Microsoft.OpenApi.dll": {
             "related": ".pdb;.xml"
           }
         }
@@ -921,6 +943,24 @@
         "lib/net10.0/Microsoft.AspNetCore.Authentication.JwtBearer.xml",
         "microsoft.aspnetcore.authentication.jwtbearer.10.0.0.nupkg.sha512",
         "microsoft.aspnetcore.authentication.jwtbearer.nuspec"
+      ]
+    },
+    "Microsoft.AspNetCore.OpenApi/10.0.11": {
+      "sha512": "R/1EATnPLU+gRfB6lwVkMcymmyAY5ppBBdRN/5lhNEiT3xP1sWccuSFkU/f1lQvN/WgRq5Vn8AhCdE3fqgsL/w==",
+      "type": "package",
+      "path": "microsoft.aspnetcore.openapi/10.0.11",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "PACKAGE.md",
+        "THIRD-PARTY-NOTICES.TXT",
+        "analyzers/dotnet/cs/Microsoft.AspNetCore.OpenApi.SourceGenerators.dll",
+        "build/Microsoft.AspNetCore.OpenApi.targets",
+        "lib/net10.0/Microsoft.AspNetCore.OpenApi.dll",
+        "lib/net10.0/Microsoft.AspNetCore.OpenApi.xml",
+        "microsoft.aspnetcore.openapi.10.0.11.nupkg.sha512",
+        "microsoft.aspnetcore.openapi.nuspec"
       ]
     },
     "Microsoft.Bcl.AsyncInterfaces/7.0.0": {
@@ -2404,18 +2444,21 @@
         "microsoft.identitymodel.tokens.nuspec"
       ]
     },
-    "Microsoft.OpenApi/1.6.25": {
-      "sha512": "ZahSqNGtNV7N0JBYS/IYXPkLVexL/AZFxo6pqxv6A7Uli7Q7zfitNjkaqIcsV73Ukzxi4IlJdyDgcQiMXiH8cw==",
+    "Microsoft.OpenApi/2.7.5": {
+      "sha512": "0FA67RSnRM4tcBKqiqVu/HPdZ9+QOKbmeRjxRUGTCjPU4C0bmUhd97Dso7Yild5P7nOV6GxJ2xrK0Kv/O9xp0w==",
       "type": "package",
-      "path": "microsoft.openapi/1.6.25",
+      "path": "microsoft.openapi/2.7.5",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README.md",
+        "lib/net8.0/Microsoft.OpenApi.dll",
+        "lib/net8.0/Microsoft.OpenApi.pdb",
+        "lib/net8.0/Microsoft.OpenApi.xml",
         "lib/netstandard2.0/Microsoft.OpenApi.dll",
         "lib/netstandard2.0/Microsoft.OpenApi.pdb",
         "lib/netstandard2.0/Microsoft.OpenApi.xml",
-        "microsoft.openapi.1.6.25.nupkg.sha512",
+        "microsoft.openapi.2.7.5.nupkg.sha512",
         "microsoft.openapi.nuspec"
       ]
     },
@@ -2756,6 +2799,7 @@
     "net10.0": [
       "BCrypt.Net-Next >= 4.0.3",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 10.0.0",
+      "Microsoft.AspNetCore.OpenApi >= 10.0.11",
       "Microsoft.EntityFrameworkCore >= 9.0.0",
       "Microsoft.EntityFrameworkCore.Design >= 9.0.0",
       "Pomelo.EntityFrameworkCore.MySql >= 9.0.0",
@@ -2763,24 +2807,31 @@
     ]
   },
   "packageFolders": {
-    "/home/melgust/.nuget/packages/": {}
+    "C:\\Users\\Angelina Pinto\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/melgust/developer/U/desaweb2026b/practice3/mcalic1/backend/src/Api/Api.csproj",
+      "projectUniqueName": "C:\\Desarrollos U\\desaweb2026a\\practice3\\mcalic1\\backend\\src\\api\\Api.csproj",
       "projectName": "Api",
-      "projectPath": "/home/melgust/developer/U/desaweb2026b/practice3/mcalic1/backend/src/Api/Api.csproj",
-      "packagesPath": "/home/melgust/.nuget/packages/",
-      "outputPath": "/home/melgust/developer/U/desaweb2026b/practice3/mcalic1/backend/src/Api/obj/",
+      "projectPath": "C:\\Desarrollos U\\desaweb2026a\\practice3\\mcalic1\\backend\\src\\api\\Api.csproj",
+      "packagesPath": "C:\\Users\\Angelina Pinto\\.nuget\\packages\\",
+      "outputPath": "C:\\Desarrollos U\\desaweb2026a\\practice3\\mcalic1\\backend\\src\\api\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "/home/melgust/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\Angelina Pinto\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -2814,6 +2865,10 @@
           "Microsoft.AspNetCore.Authentication.JwtBearer": {
             "target": "Package",
             "version": "[10.0.0, )"
+          },
+          "Microsoft.AspNetCore.OpenApi": {
+            "target": "Package",
+            "version": "[10.0.11, )"
           },
           "Microsoft.EntityFrameworkCore": {
             "target": "Package",
@@ -2853,7 +2908,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/10.0.400/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.400/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.AspNetCore": "(,10.0.32767]",
           "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",

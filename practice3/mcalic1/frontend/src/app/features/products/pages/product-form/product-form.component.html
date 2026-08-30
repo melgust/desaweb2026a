@@ -5,7 +5,7 @@
   </div>
 
   <div class="card-body">
-    <form (ngSubmit)="onSubmit()" *ngIf="!loading; else loadingTpl" class="product-form">
+    <form  class="product-form">
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Product Name</mat-label>
         <input matInput [(ngModel)]="formData.name" name="name" required />
@@ -28,13 +28,13 @@
         </mat-form-field>
       </div>
 
-      <mat-form-field appearance="outline" class="full-width">
+      <!-- <mat-form-field appearance="outline" class="full-width">
         <mat-label>Supplier</mat-label>
         <mat-select [(ngModel)]="formData.supplierId" name="supplierId">
           <mat-option [value]="null">-- None --</mat-option>
           <mat-option *ngFor="let s of suppliers()" [value]="s.id">{{ s.name }}</mat-option>
         </mat-select>
-      </mat-form-field>
+      </mat-form-field> -->
 
       <mat-checkbox [(ngModel)]="formData.isActive" name="isActive">Is Active</mat-checkbox>
 

@@ -28,15 +28,15 @@ export class LoginComponent {
     this.loading = true;
     this.errorMessage = '';
 
-    this.authService.login({ email: this.email, password: this.password }).subscribe({
-      next: () => {
+    // this.authService.login({ email: this.email, password: this.password }).subscribe({
+    //   next: () => {
         this.loading = false;
         this.router.navigate(['/products']);
-      },
-      error: (err) => {
-        this.loading = false;
-        this.errorMessage = err.error?.message || 'Invalid login credentials.';
-      }
-    });
+      // },
+      // error: (err) => {
+      //   this.loading = false;
+      //   this.errorMessage = err.error?.message || 'Invalid login credentials.';
+      // }
+    // });
   }
 }
