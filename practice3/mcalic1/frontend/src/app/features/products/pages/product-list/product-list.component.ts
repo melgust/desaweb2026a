@@ -14,6 +14,7 @@ import { ProductService } from '../../../../core/services/product.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { Product } from '../../../../core/models/product.model';
 
+
 @Component({
   selector: 'app-product-list',
   standalone: true,
@@ -49,7 +50,12 @@ export class ProductListComponent implements OnInit {
   sortBy = 'name';
   sortDirection: 'asc' | 'desc' = 'asc';
 
-  displayedColumns: string[] = ['name', 'description', 'price', 'stock', 'supplier'];
+  displayedColumns: string[] = ['name', 
+    'description', 
+    'price',
+    'category', 
+    'stock', 
+    'supplier'];
   // displayedColumns: string[] = ['name', 'description', 'price', 'Category', 'stock', 'supplier'];
 
   constructor(public auth: AuthService, private productService: ProductService) {}
@@ -60,6 +66,7 @@ export class ProductListComponent implements OnInit {
     }
     this.loadProducts();
   }
+
 loadProducts(): void {
   const products: Product[] = [
     {
@@ -67,6 +74,7 @@ loadProducts(): void {
       name: 'Laptop Lenovo IdeaPad',
       description: 'Laptop para trabajo y estudio',
       price: 4500,
+      category:'Computación',
       stock: 15,
       isActive: true,
       createdAt: '2026-08-01T10:00:00',
@@ -78,6 +86,7 @@ loadProducts(): void {
       name: 'Mouse inalámbrico Logitech',
       description: 'Mouse inalámbrico ergonómico',
       price: 185,
+      category:'Computación',
       stock: 35,
       isActive: true,
       createdAt: '2026-08-03T14:30:00',
@@ -89,6 +98,7 @@ loadProducts(): void {
       name: 'Teclado mecánico',
       description: 'Teclado mecánico RGB',
       price: 650,
+      category:'Computación',
       stock: 20,
       isActive: true,
       createdAt: '2026-08-05T09:15:00',
@@ -100,6 +110,7 @@ loadProducts(): void {
       name: 'Monitor Samsung 24"',
       description: 'Monitor Full HD de 24 pulgadas',
       price: 1250,
+      category:'Computación',
       stock: 10,
       isActive: true,
       createdAt: '2026-08-07T11:45:00',
@@ -111,6 +122,7 @@ loadProducts(): void {
       name: 'Cable HDMI',
       description: 'Cable HDMI de 2 metros',
       price: 75,
+      category:'Computación',
       stock: 50,
       isActive: true,
       createdAt: '2026-08-10T16:20:00',
@@ -122,6 +134,7 @@ loadProducts(): void {
       name: 'Memoria USB 64GB',
       description: 'Memoria USB 3.0 de 64GB',
       price: 95,
+      category:'Computación',
       stock: 40,
       isActive: true,
       createdAt: '2026-08-12T08:30:00',
@@ -133,6 +146,7 @@ loadProducts(): void {
       name: 'Disco SSD 1TB',
       description: 'Unidad SSD NVMe de 1TB',
       price: 850,
+      category:'Computación',
       stock: 8,
       isActive: true,
       createdAt: '2026-08-15T13:10:00',
@@ -144,13 +158,17 @@ loadProducts(): void {
       name: 'Webcam HD',
       description: 'Cámara web HD para videoconferencias',
       price: 320,
+      category:'Computación',
       stock: 0,
       isActive: false,
       createdAt: '2026-08-18T15:00:00',
       supplierId: '2',
       supplierName: 'Tecnología GT'
     }
+    
   ];
+    console.log('Productos:', this.products());
+  console.log('Categorías:', this.products().map(p => p.category));
 
   this.products.set(products);
 }
