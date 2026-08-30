@@ -60,6 +60,41 @@ public static class DbSeeder
 
         await db.SaveChangesAsync(ct);
 
+        // --- Product categories ---
+        var categoryNames = new[] { "General", "Laptop", "Monitor", "Teclado", "Mouse", "Audifonos", "Webcam", "Impresora", "Router", "Disco SSD", "Memoria RAM" };
+        var existingCategories = await db.Categories.ToListAsync(ct);
+
+        foreach (var categoryName in categoryNames)
+        {
+            if (existingCategories.All(c => c.Name != categoryName))
+            {
+                var category = new Category
+                {
+                    Name = categoryName,
+                    Description = categoryName == "General"
+                        ? "Productos sin una categoria especifica"
+                        : $"Productos de tipo {categoryName}"
+                };
+                db.Categories.Add(category);
+                existingCategories.Add(category);
+            }
+        }
+
+        await db.SaveChangesAsync(ct);
+        var categoryByName = existingCategories.ToDictionary(c => c.Name, StringComparer.OrdinalIgnoreCase);
+
+        // Backfill products created before categories existed. Demo products can
+        // recover their category from their stable inventory name.
+        var uncategorizedProducts = await db.Products.Where(p => p.CategoryId == null).ToListAsync(ct);
+        foreach (var product in uncategorizedProducts)
+        {
+            var matchedCategory = categoryNames.Skip(1)
+                .FirstOrDefault(name => product.Name.Contains($"| {name} ", StringComparison.OrdinalIgnoreCase));
+            product.CategoryId = categoryByName[matchedCategory ?? "General"].Id;
+        }
+
+        await db.SaveChangesAsync(ct);
+
         // Demo inventory. Stable names make this seed idempotent; increasing the
         // configured count only inserts the records that are still missing.
         productCount = Math.Clamp(productCount, 0, 10_000);
@@ -68,14 +103,14 @@ public static class DbSeeder
             .Select(p => p.Name)
             .ToHashSetAsync(ct);
 
-        var categories = new[] { "Laptop", "Monitor", "Teclado", "Mouse", "Audifonos", "Webcam", "Impresora", "Router", "Disco SSD", "Memoria RAM" };
+        var productCategories = categoryNames.Skip(1).ToArray();
         var brands = new[] { "Nova", "Atlas", "Orion", "Vertex", "Nimbus", "Quantum" };
         var demoProducts = new List<Product>();
 
         for (var i = 1; i <= productCount; i++)
         {
-            var category = categories[(i - 1) % categories.Length];
-            var brand = brands[((i - 1) / categories.Length) % brands.Length];
+            var category = productCategories[(i - 1) % productCategories.Length];
+            var brand = brands[((i - 1) / productCategories.Length) % brands.Length];
             var name = $"INV-{i:D4} | {category} {brand}";
             if (existingSeedNames.Contains(name)) continue;
 
@@ -85,6 +120,7 @@ public static class DbSeeder
                 Description = $"Producto de demostracion para inventario: {category} marca {brand}.",
                 Price = decimal.Round(149.90m + (i * 37.45m) % 18_500m, 2),
                 Stock = (i * 17) % 151,
+                CategoryId = categoryByName[category].Id,
                 IsActive = i % 13 != 0,
                 CreatedAt = DateTime.UtcNow.AddMinutes(-i),
                 UpdatedAt = DateTime.UtcNow.AddMinutes(-i)

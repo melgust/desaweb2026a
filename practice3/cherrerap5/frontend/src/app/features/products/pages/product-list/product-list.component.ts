@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../../../core/services/product.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { Product } from '../../../../core/models/product.model';
+import { Category } from '../../../../core/models/category.model';
+import { CategoryService } from '../../../../core/services/category.service';
 
 @Component({
   selector: 'app-product-list',
@@ -19,23 +21,32 @@ export class ProductListComponent implements OnInit {
   totalPages = signal(0);
   page = signal(1);
   loading = signal(false);
+  loadError = signal('');
+  categories = signal<Category[]>([]);
   paginationMode: 'offset' | 'infinite' = 'offset';
   readonly pageSize = 10;
 
   searchTerm = '';
+  categoryId = '';
   sortBy = 'name';
   sortDirection: 'asc' | 'desc' = 'asc';
 
-  constructor(public auth: AuthService, private productService: ProductService) {}
+  constructor(
+    public auth: AuthService,
+    private productService: ProductService,
+    private categoryService: CategoryService
+  ) {}
 
   ngOnInit(): void {
+    this.categoryService.getCategories().subscribe(categories => this.categories.set(categories));
     this.loadProducts();
   }
 
   loadProducts(): void {
     if (this.loading()) return;
+    this.loadError.set('');
     this.loading.set(true);
-    this.productService.getProducts(this.searchTerm, this.sortBy, this.sortDirection, this.page(), this.pageSize).subscribe({
+    this.productService.getProducts(this.searchTerm, this.sortBy, this.sortDirection, this.page(), this.pageSize, this.categoryId).subscribe({
       next: (res) => {
         this.products.update(current =>
           this.paginationMode === 'infinite' && res.page > 1
@@ -46,11 +57,20 @@ export class ProductListComponent implements OnInit {
         this.totalPages.set(res.totalPages);
         this.loading.set(false);
       },
-      error: () => this.loading.set(false)
+      error: (error) => {
+        this.loading.set(false);
+        this.loadError.set(error.status === 401
+          ? 'Your session expired. Log out and sign in again.'
+          : 'Products could not be loaded. Please try again.');
+      }
     });
   }
 
   onSearchChange(): void {
+    this.resetAndLoad();
+  }
+
+  onCategoryChange(): void {
     this.resetAndLoad();
   }
 

@@ -42,7 +42,8 @@ export class AuthService {
   }
 
   getToken(): string | null {
-    return localStorage.getItem(this.TOKEN_KEY);
+    const token = localStorage.getItem(this.TOKEN_KEY);
+    return token && this.isTokenValid(token) ? token : null;
   }
 
   hasAnyRole(allowedRoles: string[]): boolean {
@@ -51,7 +52,27 @@ export class AuthService {
   }
 
   private getStoredUser(): User | null {
+    const token = localStorage.getItem(this.TOKEN_KEY);
+    if (!token || !this.isTokenValid(token)) {
+      localStorage.removeItem(this.TOKEN_KEY);
+      localStorage.removeItem(this.USER_KEY);
+      return null;
+    }
     const data = localStorage.getItem(this.USER_KEY);
-    return data ? JSON.parse(data) : null;
+    try {
+      return data ? JSON.parse(data) : null;
+    } catch {
+      localStorage.removeItem(this.USER_KEY);
+      return null;
+    }
+  }
+
+  private isTokenValid(token: string): boolean {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return typeof payload.exp === 'number' && payload.exp * 1000 > Date.now();
+    } catch {
+      return false;
+    }
   }
 }

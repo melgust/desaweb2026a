@@ -4,7 +4,13 @@
     <a *ngIf="auth.canManageProducts()" routerLink="/products/new" class="btn btn-primary">+ Add Product</a>
   </header>
 
-  <input type="text" placeholder="Search products... (press Enter)" [(ngModel)]="searchTerm" (keyup.enter)="onSearchChange()" class="search-bar" />
+  <div class="filters">
+    <input type="text" placeholder="Search products... (press Enter)" [(ngModel)]="searchTerm" (keyup.enter)="onSearchChange()" class="search-bar" />
+    <select [(ngModel)]="categoryId" (ngModelChange)="onCategoryChange()" aria-label="Filter by category">
+      <option value="">All categories</option>
+      <option *ngFor="let category of categories()" [value]="category.id">{{ category.name }}</option>
+    </select>
+  </div>
 
   <div class="pagination-mode" role="group" aria-label="Pagination mode">
     <span>View:</span>
@@ -13,12 +19,15 @@
     <span class="result-count">Showing {{ products().length }} of {{ totalItems() }} products</span>
   </div>
 
+  <div *ngIf="loadError()" class="load-error">{{ loadError() }}</div>
+
   <div class="inventory-scroll" [class.infinite]="paginationMode === 'infinite'" (scroll)="onInventoryScroll($event)">
   <table class="grid-table">
     <thead>
       <tr>
         <th (click)="toggleSort('name')">Name</th>
         <th>Description</th>
+        <th (click)="toggleSort('category')">Category</th>
         <th (click)="toggleSort('price')">Price</th>
         <th (click)="toggleSort('stock')">Stock</th>
         <th *ngIf="auth.canManageProducts()">Actions</th>
@@ -28,6 +37,7 @@
       <tr *ngFor="let item of products()">
         <td>{{ item.name }}</td>
         <td>{{ item.description || '-' }}</td>
+        <td><span class="category-badge">{{ item.categoryName || 'General' }}</span></td>
         <td>\${{ item.price | number:'1.2-2' }}</td>
         <td>{{ item.stock }}</td>
         <td *ngIf="auth.canManageProducts()">

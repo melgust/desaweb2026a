@@ -58,6 +58,12 @@ does not duplicate records. In the product list, use **Pages** for traditional
 offset pagination or **Infinite scroll** to append the next offset page when
 the inventory panel reaches the bottom.
 
+The seed also creates the product categories General, Laptop, Monitor,
+Teclado, Mouse, Audifonos, Webcam, Impresora, Router, Disco SSD and Memoria
+RAM. Existing products are assigned automatically on startup. Products can be
+filtered and sorted by category, and a category is required in the create/edit
+form.
+
 To stop and remove the containers:
 
 ```bash
@@ -149,6 +155,7 @@ dotnet ef database update --project src/Api/Api.csproj
 |--------|-------------------------|-----------------|--------------------------|
 | POST   | `/api/auth/login`       | Anonymous       | Authenticate, get JWT    |
 | GET    | `/api/products`         | Any role        | List products (paged)    |
+| GET    | `/api/categories`       | Any role        | List active categories   |
 | GET    | `/api/products/{id}`    | Any role        | Get a product            |
 | POST   | `/api/products`         | Admin, Manager  | Create a product         |
 | PUT    | `/api/products/{id}`    | Admin, Manager  | Update a product         |

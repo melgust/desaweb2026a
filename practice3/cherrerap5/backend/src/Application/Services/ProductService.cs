@@ -7,7 +7,7 @@ namespace Application.Services;
 
 public interface IProductService
 {
-    Task<ProductPagedResult> GetProductsAsync(string? search, string? sortBy, string? sortDirection, int page, int pageSize, CancellationToken ct);
+    Task<ProductPagedResult> GetProductsAsync(string? search, Guid? categoryId, string? sortBy, string? sortDirection, int page, int pageSize, CancellationToken ct);
     Task<ProductDto> GetByIdAsync(Guid id, CancellationToken ct);
     Task<ProductDto> CreateAsync(CreateProductRequest request, CancellationToken ct);
     Task<ProductDto> UpdateAsync(Guid id, UpdateProductRequest request, CancellationToken ct);
@@ -20,16 +20,21 @@ public class ProductService : IProductService
 
     public ProductService(AppDbContext db) => _db = db;
 
-    public async Task<ProductPagedResult> GetProductsAsync(string? search, string? sortBy, string? sortDirection, int page, int pageSize, CancellationToken ct)
+    public async Task<ProductPagedResult> GetProductsAsync(string? search, Guid? categoryId, string? sortBy, string? sortDirection, int page, int pageSize, CancellationToken ct)
     {
         page = Math.Max(page, 1);
         pageSize = Math.Clamp(pageSize, 1, 100);
         var query = _db.Products.AsNoTracking();
 
+        if (categoryId.HasValue)
+            query = query.Where(p => p.CategoryId == categoryId.Value);
+
         if (!string.IsNullOrWhiteSpace(search))
         {
             var lower = search.ToLower();
-            query = query.Where(p => p.Name.ToLower().Contains(lower) || (p.Description != null && p.Description.ToLower().Contains(lower)));
+            query = query.Where(p => p.Name.ToLower().Contains(lower)
+                || (p.Description != null && p.Description.ToLower().Contains(lower))
+                || (p.Category != null && p.Category.Name.ToLower().Contains(lower)));
         }
 
         bool isDesc = sortDirection?.ToLower() == "desc";
@@ -38,6 +43,7 @@ public class ProductService : IProductService
             "price" => isDesc ? query.OrderByDescending(p => p.Price).ThenBy(p => p.Id) : query.OrderBy(p => p.Price).ThenBy(p => p.Id),
             "stock" => isDesc ? query.OrderByDescending(p => p.Stock).ThenBy(p => p.Id) : query.OrderBy(p => p.Stock).ThenBy(p => p.Id),
             "createdat" => isDesc ? query.OrderByDescending(p => p.CreatedAt).ThenBy(p => p.Id) : query.OrderBy(p => p.CreatedAt).ThenBy(p => p.Id),
+            "category" => isDesc ? query.OrderByDescending(p => p.Category!.Name).ThenBy(p => p.Id) : query.OrderBy(p => p.Category!.Name).ThenBy(p => p.Id),
             _ => isDesc ? query.OrderByDescending(p => p.Name).ThenBy(p => p.Id) : query.OrderBy(p => p.Name).ThenBy(p => p.Id),
         };
 
@@ -45,7 +51,7 @@ public class ProductService : IProductService
         int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
 
         var items = await query.Skip((page - 1) * pageSize).Take(pageSize)
-            .Select(p => new ProductDto(p.Id, p.Name, p.Description, p.Price, p.Stock, p.IsActive, p.CreatedAt))
+            .Select(p => new ProductDto(p.Id, p.Name, p.Description, p.Price, p.Stock, p.IsActive, p.CreatedAt, p.CategoryId, p.Category != null ? p.Category.Name : null))
             .ToListAsync(ct);
 
         return new ProductPagedResult(items, totalItems, page, pageSize, totalPages);
@@ -53,29 +59,36 @@ public class ProductService : IProductService
 
     public async Task<ProductDto> GetByIdAsync(Guid id, CancellationToken ct)
     {
-        var p = await _db.Products.FindAsync(new object[] { id }, ct) ?? throw new KeyNotFoundException("Product not found.");
-        return new ProductDto(p.Id, p.Name, p.Description, p.Price, p.Stock, p.IsActive, p.CreatedAt);
+        var p = await _db.Products.AsNoTracking().Include(p => p.Category).FirstOrDefaultAsync(p => p.Id == id, ct)
+            ?? throw new KeyNotFoundException("Product not found.");
+        return ToDto(p);
     }
 
     public async Task<ProductDto> CreateAsync(CreateProductRequest request, CancellationToken ct)
     {
-        var p = new Product { Name = request.Name, Description = request.Description, Price = request.Price, Stock = request.Stock, IsActive = request.IsActive };
+        var category = await _db.Categories.FirstOrDefaultAsync(c => c.Id == request.CategoryId && c.IsActive, ct)
+            ?? throw new ArgumentException("Category not found or inactive.");
+        var p = new Product { Name = request.Name, Description = request.Description, Price = request.Price, Stock = request.Stock, IsActive = request.IsActive, CategoryId = category.Id, Category = category };
         _db.Products.Add(p);
         await _db.SaveChangesAsync(ct);
-        return new ProductDto(p.Id, p.Name, p.Description, p.Price, p.Stock, p.IsActive, p.CreatedAt);
+        return ToDto(p);
     }
 
     public async Task<ProductDto> UpdateAsync(Guid id, UpdateProductRequest request, CancellationToken ct)
     {
         var p = await _db.Products.FindAsync(new object[] { id }, ct) ?? throw new KeyNotFoundException("Product not found.");
+        var category = await _db.Categories.FirstOrDefaultAsync(c => c.Id == request.CategoryId && c.IsActive, ct)
+            ?? throw new ArgumentException("Category not found or inactive.");
         p.Name = request.Name;
         p.Description = request.Description;
         p.Price = request.Price;
         p.Stock = request.Stock;
         p.IsActive = request.IsActive;
+        p.CategoryId = category.Id;
+        p.Category = category;
         p.UpdatedAt = DateTime.UtcNow;
         await _db.SaveChangesAsync(ct);
-        return new ProductDto(p.Id, p.Name, p.Description, p.Price, p.Stock, p.IsActive, p.CreatedAt);
+        return ToDto(p);
     }
 
     public async Task DeleteAsync(Guid id, CancellationToken ct)
@@ -84,4 +97,7 @@ public class ProductService : IProductService
         _db.Products.Remove(p);
         await _db.SaveChangesAsync(ct);
     }
+
+    private static ProductDto ToDto(Product p) =>
+        new(p.Id, p.Name, p.Description, p.Price, p.Stock, p.IsActive, p.CreatedAt, p.CategoryId, p.Category?.Name);
 }

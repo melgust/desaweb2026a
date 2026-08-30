@@ -16,9 +16,9 @@ public class ProductsController : ControllerBase
 
     [HttpGet]
     [Authorize(Roles = "Admin,Manager,User")]
-    public async Task<ActionResult<ProductPagedResult>> GetProducts([FromQuery] string? search, [FromQuery] string? sortBy, [FromQuery] string? sortDirection, [FromQuery] int page = 1, [FromQuery] int pageSize = 10, CancellationToken ct = default)
+    public async Task<ActionResult<ProductPagedResult>> GetProducts([FromQuery] string? search, [FromQuery] Guid? categoryId, [FromQuery] string? sortBy, [FromQuery] string? sortDirection, [FromQuery] int page = 1, [FromQuery] int pageSize = 10, CancellationToken ct = default)
     {
-        return Ok(await _productService.GetProductsAsync(search, sortBy, sortDirection, page, pageSize, ct));
+        return Ok(await _productService.GetProductsAsync(search, categoryId, sortBy, sortDirection, page, pageSize, ct));
     }
 
     [HttpGet("{id:guid}")]

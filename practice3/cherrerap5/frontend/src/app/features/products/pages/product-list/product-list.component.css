@@ -38,6 +38,40 @@
 }
 
 @media (max-width: 700px) {
+  .filters { align-items: stretch; flex-direction: column; }
+  .filters select { width: 100%; }
   .pagination-mode { flex-wrap: wrap; }
   .result-count { width: 100%; margin-left: 0; }
+}
+.filters {
+  display: flex;
+  gap: .75rem;
+  align-items: center;
+}
+
+.filters .search-bar { flex: 1; }
+.filters select {
+  min-width: 190px;
+  padding: .65rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 5px;
+  background: white;
+}
+
+.category-badge {
+  display: inline-block;
+  padding: .2rem .55rem;
+  border-radius: 999px;
+  background: #e0e7ff;
+  color: #3730a3;
+  font-size: .85rem;
+  white-space: nowrap;
+}
+.load-error {
+  margin: .75rem 0;
+  padding: .75rem 1rem;
+  border: 1px solid #fecaca;
+  border-radius: 5px;
+  background: #fef2f2;
+  color: #b91c1c;
 }
