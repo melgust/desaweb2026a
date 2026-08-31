@@ -1,0 +1,38 @@
+<div class="container">
+  <header class="header">
+    <h2>Categories</h2>
+    <div style="display:flex; gap:8px;">
+      <a routerLink="/products" class="btn">Back to Products</a>
+      <a *ngIf="auth.canManageProducts()" routerLink="/categories/new" class="btn btn-primary">+ Add Category</a>
+    </div>
+  </header>
+
+  <div *ngIf="errorMessage()" class="error-banner">{{ errorMessage() }}</div>
+
+  <table class="grid-table" *ngIf="!loading(); else loadingTpl">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th># Products</th>
+        <th *ngIf="auth.canManageProducts()">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let cat of categories()">
+        <td>{{ cat.name }}</td>
+        <td>{{ cat.description || '-' }}</td>
+        <td>{{ cat.productCount }}</td>
+        <td *ngIf="auth.canManageProducts()">
+          <a [routerLink]="['/categories/edit', cat.id]">Edit</a>
+          <button *ngIf="auth.canDeleteProducts()" (click)="deleteCategory(cat.id)" class="text-danger">Delete</button>
+        </td>
+      </tr>
+      <tr *ngIf="!categories().length">
+        <td colspan="4" style="text-align:center; color:#888;">No categories yet.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <ng-template #loadingTpl><div class="loading-state">Loading data...</div></ng-template>
+</div>
