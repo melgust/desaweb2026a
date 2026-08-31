@@ -3,19 +3,22 @@
     <h3 class="card-title mb-0">{{ isEditMode ? 'Edit Product' : 'Create New Product' }}</h3>
     <a routerLink="/products" class="btn btn-secondary btn-sm">Back to List</a>
   </div>
-
   <div class="card-body">
     <form (ngSubmit)="onSubmit()" *ngIf="!loading; else loadingTpl" class="product-form">
+      
+      <!-- Nombre del producto -->
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Product Name</mat-label>
         <input matInput [(ngModel)]="formData.name" name="name" required />
       </mat-form-field>
 
+      <!-- Descripción -->
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Description</mat-label>
         <textarea matInput [(ngModel)]="formData.description" name="description" rows="3"></textarea>
       </mat-form-field>
 
+      <!-- Precio y Stock en la misma fila -->
       <div class="form-row">
         <mat-form-field appearance="outline">
           <mat-label>Price ($)</mat-label>
@@ -28,16 +31,30 @@
         </mat-form-field>
       </div>
 
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Supplier</mat-label>
-        <mat-select [(ngModel)]="formData.supplierId" name="supplierId">
-          <mat-option [value]="null">-- None --</mat-option>
-          <mat-option *ngFor="let s of suppliers()" [value]="s.id">{{ s.name }}</mat-option>
-        </mat-select>
-      </mat-form-field>
+      <!-- Categoría y Proveedor en la misma fila (NUEVO) -->
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Category</mat-label>
+          <mat-select [(ngModel)]="formData.categoryId" name="categoryId" required>
+            <mat-option [value]="null">-- Select a category --</mat-option>
+            <mat-option *ngFor="let c of categories()" [value]="c.id">{{ c.name }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="!formData.categoryId">Category is required</mat-error>
+        </mat-form-field>
 
+        <mat-form-field appearance="outline">
+          <mat-label>Supplier</mat-label>
+          <mat-select [(ngModel)]="formData.supplierId" name="supplierId">
+            <mat-option [value]="null">-- None --</mat-option>
+            <mat-option *ngFor="let s of suppliers()" [value]="s.id">{{ s.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Checkbox de estado activo -->
       <mat-checkbox [(ngModel)]="formData.isActive" name="isActive">Is Active</mat-checkbox>
 
+      <!-- Botones de acción -->
       <div class="form-actions">
         <button mat-raised-button color="primary" type="submit">
           {{ isEditMode ? 'Update Product' : 'Create Product' }}

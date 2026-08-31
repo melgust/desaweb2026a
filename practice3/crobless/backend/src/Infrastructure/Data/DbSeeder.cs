@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Infrastructure.Data;
 
 /// <summary>
-/// Seeds initial roles, users, and dummy products if they don't exist yet.
+/// Seeds initial roles, users, categories, suppliers, and dummy products if they don't exist yet.
 /// Idempotent: safe to run on every startup.
 /// </summary>
 public static class DbSeeder
@@ -60,44 +60,70 @@ public static class DbSeeder
 
         await db.SaveChangesAsync(ct);
 
-        // --- 3. NUEVO: Proveedores de prueba ---
-        var supplier1 = await db.Suppliers.FirstOrDefaultAsync(s => s.Name == "Tech Supplies Co.", ct);
-        if (supplier1 == null)
+        // --- 3. Categories (NUEVO) ---
+        var cat1 = await db.Categories.FirstOrDefaultAsync(c => c.Name == "Tecnología", ct);
+        if (cat1 == null)
         {
-            supplier1 = new Supplier { Name = "Tech Supplies Co.", ContactEmail = "contact@tech.com", IsActive = true };
-            db.Suppliers.Add(supplier1);
+            cat1 = new Category { Name = "Tecnología", IsActive = true };
+            db.Categories.Add(cat1);
         }
 
-        var supplier2 = await db.Suppliers.FirstOrDefaultAsync(s => s.Name == "Global Hardware Ltd.", ct);
-        if (supplier2 == null)
+        var cat2 = await db.Categories.FirstOrDefaultAsync(c => c.Name == "Hogar", ct);
+        if (cat2 == null)
         {
-            supplier2 = new Supplier { Name = "Global Hardware Ltd.", ContactEmail = "info@global.com", IsActive = true };
-            db.Suppliers.Add(supplier2);
+            cat2 = new Category { Name = "Hogar", IsActive = true };
+            db.Categories.Add(cat2);
+        }
+
+        var cat3 = await db.Categories.FirstOrDefaultAsync(c => c.Name == "Ropa", ct);
+        if (cat3 == null)
+        {
+            cat3 = new Category { Name = "Ropa", IsActive = true };
+            db.Categories.Add(cat3);
         }
 
         await db.SaveChangesAsync(ct);
 
-        // --- 4. NUEVO: 30 Productos de prueba para el Scroll Infinito ---
+        // --- 4. Suppliers (NUEVO/ACTUALIZADO para asegurar que existan para los productos) ---
+        var sup1 = await db.Suppliers.FirstOrDefaultAsync(s => s.Name == "Tech Supplies Co.", ct);
+        if (sup1 == null)
+        {
+            sup1 = new Supplier { Name = "Tech Supplies Co.", ContactEmail = "contact@tech.com", IsActive = true };
+            db.Suppliers.Add(sup1);
+        }
+
+        var sup2 = await db.Suppliers.FirstOrDefaultAsync(s => s.Name == "Global Hardware Ltd.", ct);
+        if (sup2 == null)
+        {
+            sup2 = new Supplier { Name = "Global Hardware Ltd.", ContactEmail = "info@global.com", IsActive = true };
+            db.Suppliers.Add(sup2);
+        }
+
+        await db.SaveChangesAsync(ct);
+
+        // --- 5. Productos de prueba (NUEVO/ACTUALIZADO) ---
         var productCount = await db.Products.CountAsync(ct);
         
-        // Solo los crea si hay menos de 25 productos en la base de datos
+        // Solo los crea si hay menos de 25 productos en la base de datos para no duplicar o interferir con datos reales
         if (productCount < 25)
         {
             var random = new Random();
-            var suppliers = new[] { supplier1, supplier2 };
+            var categories = new[] { cat1, cat2, cat3 };
+            var suppliers = new[] { sup1, sup2 };
 
             for (int i = 1; i <= 30; i++)
             {
                 db.Products.Add(new Product
                 {
                     Name = $"Producto de Prueba {i:D2}",
-                    Description = $"Descripción detallada para el producto número {i}. Ideal para pruebas de paginación y scroll infinito.",
+                    Description = $"Descripción detallada para el producto número {i}. Ideal para pruebas de paginación, scroll infinito y filtrado por categoría.",
                     Price = Math.Round((decimal)(random.NextDouble() * 500 + 10), 2), // Precio entre 10 y 510
                     Stock = random.Next(5, 200), // Stock entre 5 y 200
                     IsActive = true,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow,
-                    SupplierId = suppliers[random.Next(0, suppliers.Length)].Id
+                    CategoryId = categories[random.Next(0, categories.Length)].Id, // <-- RELACIÓN CON CATEGORÍA
+                    SupplierId = suppliers[random.Next(0, suppliers.Length)].Id    // <-- RELACIÓN CON PROVEEDOR
                 });
             }
 

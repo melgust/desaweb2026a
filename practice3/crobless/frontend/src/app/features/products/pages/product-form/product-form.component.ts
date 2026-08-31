@@ -9,7 +9,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { ProductService } from '../../../../core/services/product.service';
 import { SupplierService } from '../../../../core/services/supplier.service';
+import { CategoryService } from '../../../../core/services/category.service'; // <-- AGREGADO
 import { Supplier } from '../../../../core/models/supplier.model';
+import { Category } from '../../../../core/models/category.model'; // <-- AGREGADO
 
 @Component({
   selector: 'app-product-form',
@@ -33,6 +35,7 @@ export class ProductFormComponent implements OnInit {
   loading = false;
 
   suppliers = signal<Supplier[]>([]);
+  categories = signal<Category[]>([]); // <-- AGREGADO: Signal para las categorías
 
   formData = {
     name: '',
@@ -40,22 +43,32 @@ export class ProductFormComponent implements OnInit {
     price: 0,
     stock: 0,
     isActive: true,
-    supplierId: null as string | null
+    supplierId: null as string | null,
+    categoryId: null as string | null // <-- AGREGADO: Para guardar el ID de la categoría seleccionada
   };
 
   constructor(
     private productService: ProductService,
     private supplierService: SupplierService,
+    private categoryService: CategoryService, // <-- AGREGADO: Inyección del servicio
     private route: ActivatedRoute,
     private router: Router
   ) {}
 
   ngOnInit(): void {
+    // 1. Cargar proveedores para el dropdown
     this.supplierService.getAllSuppliers().subscribe({
       next: (list) => this.suppliers.set(list),
       error: () => this.suppliers.set([])
     });
 
+    // 2. Cargar categorías para el dropdown <-- AGREGADO
+    this.categoryService.getAllCategories().subscribe({
+      next: (list) => this.categories.set(list),
+      error: () => this.categories.set([])
+    });
+
+    // 3. Verificar si estamos en modo edición
     this.productId = this.route.snapshot.paramMap.get('id');
     if (this.productId) {
       this.isEditMode = true;
@@ -73,7 +86,8 @@ export class ProductFormComponent implements OnInit {
           price: product.price,
           stock: product.stock,
           isActive: product.isActive,
-          supplierId: product.supplierId ?? null
+          supplierId: product.supplierId ?? null,
+          categoryId: product.categoryId ?? null // <-- AGREGADO: Cargar la categoría existente al editar
         };
         this.loading = false;
       },
@@ -83,6 +97,7 @@ export class ProductFormComponent implements OnInit {
 
   onSubmit(): void {
     this.loading = true;
+    
     const request$ = this.isEditMode && this.productId
       ? this.productService.updateProduct(this.productId, this.formData)
       : this.productService.createProduct(this.formData);
