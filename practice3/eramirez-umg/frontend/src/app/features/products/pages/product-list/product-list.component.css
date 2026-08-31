@@ -1,0 +1,30 @@
+.category-badge {
+  display: inline-block;
+  padding: 0.28rem 0.7rem;
+  border-radius: 999px;
+  background: #e8f1ff;
+  color: #164a8a;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 1px solid #bfd4f8;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.grid-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.grid-table th,
+.grid-table td {
+  padding: 0.75rem 0.9rem;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+}
+
+.grid-table th {
+  background: #f8fafc;
+}

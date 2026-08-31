@@ -17,21 +17,31 @@
 
     <div class="form-row">
       <div class="form-group col">
-        <label for="price">Price ($)</label>
-        <input type="number" id="price" [(ngModel)]="formData.price" name="price" class="form-control" step="0.01" required />
+        <label for="category">Categoría</label>
+        <select id="category" [(ngModel)]="formData.categoryId" name="categoryId" class="form-control">
+          <option value="">Sin categoría</option>
+          <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+        </select>
       </div>
 
       <div class="form-group col">
-        <label for="stock">Stock Quantity</label>
-        <input type="number" id="stock" [(ngModel)]="formData.stock" name="stock" class="form-control" required />
+        <label for="price">Precio ($)</label>
+        <input type="number" id="price" [(ngModel)]="formData.price" name="price" class="form-control" step="0.01" required />
       </div>
     </div>
 
-    <div class="form-group checkbox-group">
-      <label>
-        <input type="checkbox" [(ngModel)]="formData.isActive" name="isActive" />
-        Is Active
-      </label>
+    <div class="form-row">
+      <div class="form-group col">
+        <label for="stock">Cantidad en stock</label>
+        <input type="number" id="stock" [(ngModel)]="formData.stock" name="stock" class="form-control" required />
+      </div>
+
+      <div class="form-group col checkbox-group">
+        <label>
+          <input type="checkbox" [(ngModel)]="formData.isActive" name="isActive" />
+          Activo
+        </label>
+      </div>
     </div>
 
     <button type="submit" class="btn btn-primary">

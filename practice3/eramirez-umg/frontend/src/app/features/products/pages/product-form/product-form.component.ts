@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ProductService } from '../../../../core/services/product.service';
+import { CategoryService } from '../../../../core/services/category.service';
 
 @Component({
   selector: 'app-product-form',
@@ -16,26 +17,42 @@ export class ProductFormComponent implements OnInit {
   productId: string | null = null;
   loading = false;
 
+  categories: { id: string; name: string }[] = [];
+
   formData = {
     name: '',
     description: '',
     price: 0,
     stock: 0,
-    isActive: true
+    isActive: true,
+    categoryId: ''
   };
 
   constructor(
     private productService: ProductService,
+    private categoryService: CategoryService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
 
   ngOnInit(): void {
+    this.loadCategories();
     this.productId = this.route.snapshot.paramMap.get('id');
     if (this.productId) {
       this.isEditMode = true;
       this.loadProduct(this.productId);
     }
+  }
+
+  loadCategories(): void {
+    this.categoryService.getCategories().subscribe({
+      next: (categories) => {
+        this.categories = categories;
+        if (!this.isEditMode && categories.length > 0) {
+          this.formData.categoryId = categories[0].id;
+        }
+      }
+    });
   }
 
   loadProduct(id: string): void {
@@ -47,7 +64,8 @@ export class ProductFormComponent implements OnInit {
           description: product.description || '',
           price: product.price,
           stock: product.stock,
-          isActive: product.isActive
+          isActive: product.isActive,
+          categoryId: this.categories.find(c => c.name === product.categoryName)?.id ?? ''
         };
         this.loading = false;
       },

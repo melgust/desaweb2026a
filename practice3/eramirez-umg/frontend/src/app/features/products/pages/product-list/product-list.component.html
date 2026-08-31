@@ -15,22 +15,24 @@
   <table class="grid-table" *ngIf="!loading() || products().length > 0; else loadingTpl">
     <thead>
       <tr>
-        <th (click)="toggleSort('name')">Name</th>
-        <th>Description</th>
-        <th (click)="toggleSort('price')">Price</th>
+        <th (click)="toggleSort('name')">Nombre</th>
+        <th>Categoría</th>
+        <th>Descripción</th>
+        <th (click)="toggleSort('price')">Precio</th>
         <th (click)="toggleSort('stock')">Stock</th>
-        <th *ngIf="auth.canManageProducts()">Actions</th>
+        <th *ngIf="auth.canManageProducts()">Acciones</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let item of products()">
         <td>{{ item.name }}</td>
+        <td><span class="category-badge">{{ item.categoryName || 'Sin categoría' }}</span></td>
         <td>{{ item.description || '-' }}</td>
         <td>\${{ item.price | number:'1.2-2' }}</td>
         <td>{{ item.stock }}</td>
         <td *ngIf="auth.canManageProducts()">
-          <a [routerLink]="['/products/edit', item.id]">Edit</a>
-          <button *ngIf="auth.canDeleteProducts()" (click)="deleteProduct(item.id)" class="text-danger">Delete</button>
+          <a [routerLink]="['/products/edit', item.id]">Editar</a>
+          <button *ngIf="auth.canDeleteProducts()" (click)="deleteProduct(item.id)" class="text-danger">Eliminar</button>
         </td>
       </tr>
     </tbody>

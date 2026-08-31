@@ -6,6 +6,7 @@ export interface Product {
   stock: number;
   isActive: boolean;
   createdAt: string;
+  categoryName?: string | null;
 }
 
 export interface ProductPagedResult {
@@ -14,4 +15,11 @@ export interface ProductPagedResult {
   page: number;
   pageSize: number;
   totalPages: number;
+}
+
+export interface Category {
+  id: string;
+  name: string;
+  description?: string | null;
+  createdAt: string;
 }
