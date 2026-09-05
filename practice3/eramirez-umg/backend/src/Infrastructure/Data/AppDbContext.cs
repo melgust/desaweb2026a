@@ -11,6 +11,8 @@ public class AppDbContext : DbContext
     public DbSet<Role> Roles => Set<Role>();
     public DbSet<Category> Categories => Set<Category>();
     public DbSet<Product> Products => Set<Product>();
+    public DbSet<Supplier> Suppliers => Set<Supplier>();
+    public DbSet<Invoice> Invoices => Set<Invoice>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -31,5 +33,14 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
         modelBuilder.Entity<Role>().HasIndex(r => r.Name).IsUnique();
         modelBuilder.Entity<Category>().HasIndex(c => c.Name).IsUnique();
+
+        modelBuilder.Entity<Supplier>().HasIndex(s => s.TaxId).IsUnique();
+        modelBuilder.Entity<Invoice>().HasIndex(i => i.Number).IsUnique();
+
+        modelBuilder.Entity<Invoice>()
+            .HasOne(i => i.Supplier)
+            .WithMany(s => s.Invoices)
+            .HasForeignKey(i => i.SupplierId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

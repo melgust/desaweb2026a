@@ -22,7 +22,7 @@ public class ProductService : IProductService
 
     public async Task<ProductPagedResult> GetProductsAsync(string? search, string? sortBy, string? sortDirection, int page, int pageSize, CancellationToken ct)
     {
-        var query = _db.Products.AsNoTracking().Include(p => p.Category);
+        IQueryable<Product> query = _db.Products.AsNoTracking().Include(p => p.Category);
 
         if (!string.IsNullOrWhiteSpace(search))
         {

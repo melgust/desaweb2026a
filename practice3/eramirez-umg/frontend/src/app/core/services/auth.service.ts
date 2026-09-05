@@ -20,6 +20,10 @@ export class AuthService {
   readonly isAdmin = computed(() => this.role() === 'Admin');
   readonly canManageProducts = computed(() => this.isAdmin() || this.role() === 'Manager');
   readonly canDeleteProducts = computed(() => this.isAdmin());
+  readonly canManageSuppliers = computed(() => this.isAdmin() || this.role() === 'Manager');
+  readonly canDeleteSuppliers = computed(() => this.isAdmin());
+  readonly canManageInvoices = computed(() => this.isAdmin() || this.role() === 'Manager');
+  readonly canDeleteInvoices = computed(() => this.isAdmin());
 
   constructor(private http: HttpClient, private router: Router) {}
 
