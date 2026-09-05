@@ -1,14 +1,14 @@
 namespace Domain.Entities;
 
-public class Product
+public class Supplier
 {
     public Guid Id { get; set; } = Guid.NewGuid();
     public string Name { get; set; } = string.Empty;
-    public string? Description { get; set; }
-    public decimal Price { get; set; }
-    public int Stock { get; set; }
-    public Guid? CategoryId { get; set; }
-    public Category? Category { get; set; }
+    public string? TaxId { get; set; }
+    public string? ContactName { get; set; }
+    public string? Email { get; set; }
+    public string? Phone { get; set; }
+    public string? Address { get; set; }
     public bool IsActive { get; set; } = true;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;

@@ -40,5 +40,19 @@ export const routes: Routes = [
       },
     ],
   },
+  {
+    path: 'suppliers', canActivate: [authGuard], children: [
+      { path: '', loadComponent: () => import('./features/suppliers/supplier-list.component').then(m => m.SupplierListComponent) },
+      { path: 'new', canActivate: [roleGuard(['Admin', 'Manager'])], loadComponent: () => import('./features/suppliers/supplier-form.component').then(m => m.SupplierFormComponent) },
+      { path: 'edit/:id', canActivate: [roleGuard(['Admin', 'Manager'])], loadComponent: () => import('./features/suppliers/supplier-form.component').then(m => m.SupplierFormComponent) }
+    ]
+  },
+  {
+    path: 'invoices', canActivate: [authGuard], children: [
+      { path: '', loadComponent: () => import('./features/invoices/invoice-list.component').then(m => m.InvoiceListComponent) },
+      { path: 'new', canActivate: [roleGuard(['Admin', 'Manager'])], loadComponent: () => import('./features/invoices/invoice-form.component').then(m => m.InvoiceFormComponent) },
+      { path: 'edit/:id', canActivate: [roleGuard(['Admin', 'Manager'])], loadComponent: () => import('./features/invoices/invoice-form.component').then(m => m.InvoiceFormComponent) }
+    ]
+  },
   { path: '**', redirectTo: 'products' },
 ];

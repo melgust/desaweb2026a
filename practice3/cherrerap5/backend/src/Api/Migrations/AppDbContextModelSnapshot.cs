@@ -87,6 +87,24 @@ namespace Api.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Supplier", b =>
+                {
+                    b.Property<Guid>("Id").ValueGeneratedOnAdd().HasColumnType("char(36)");
+                    b.Property<string>("Address").HasColumnType("longtext");
+                    b.Property<string>("ContactName").HasColumnType("longtext");
+                    b.Property<DateTime>("CreatedAt").HasColumnType("datetime(6)");
+                    b.Property<string>("Email").HasColumnType("longtext");
+                    b.Property<bool>("IsActive").HasColumnType("tinyint(1)");
+                    b.Property<string>("Name").IsRequired().HasColumnType("varchar(255)");
+                    b.Property<string>("Phone").HasColumnType("longtext");
+                    b.Property<string>("TaxId").HasColumnType("varchar(255)");
+                    b.Property<DateTime>("UpdatedAt").HasColumnType("datetime(6)");
+                    b.HasKey("Id");
+                    b.HasIndex("Name");
+                    b.HasIndex("TaxId").IsUnique();
+                    b.ToTable("Suppliers");
+                });
+
             modelBuilder.Entity("Domain.Entities.Role", b =>
                 {
                     b.Property<Guid>("Id")
@@ -152,6 +170,28 @@ namespace Api.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Invoice", b =>
+                {
+                    b.Property<Guid>("Id").ValueGeneratedOnAdd().HasColumnType("char(36)");
+                    b.Property<DateTime>("CreatedAt").HasColumnType("datetime(6)");
+                    b.Property<DateTime?>("DueDate").HasColumnType("datetime(6)");
+                    b.Property<DateTime>("InvoiceDate").HasColumnType("datetime(6)");
+                    b.Property<string>("Notes").HasColumnType("longtext");
+                    b.Property<string>("Number").IsRequired().HasColumnType("varchar(255)");
+                    b.Property<Guid>("ProductId").HasColumnType("char(36)");
+                    b.Property<int>("Quantity").HasColumnType("int");
+                    b.Property<string>("Status").IsRequired().HasColumnType("longtext");
+                    b.Property<Guid>("SupplierId").HasColumnType("char(36)");
+                    b.Property<decimal>("Total").HasPrecision(18, 2).HasColumnType("decimal(18,2)");
+                    b.Property<decimal>("UnitPrice").HasPrecision(18, 2).HasColumnType("decimal(18,2)");
+                    b.Property<DateTime>("UpdatedAt").HasColumnType("datetime(6)");
+                    b.HasKey("Id");
+                    b.HasIndex("Number").IsUnique();
+                    b.HasIndex("ProductId");
+                    b.HasIndex("SupplierId");
+                    b.ToTable("Invoices");
+                });
+
             modelBuilder.Entity("Domain.Entities.Product", b =>
                 {
                     b.HasOne("Domain.Entities.Category", "Category")
@@ -162,9 +202,31 @@ namespace Api.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Invoice", b =>
+                {
+                    b.HasOne("Domain.Entities.Product", "Product")
+                        .WithMany("Invoices").HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict).IsRequired();
+                    b.HasOne("Domain.Entities.Supplier", "Supplier")
+                        .WithMany("Invoices").HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Restrict).IsRequired();
+                    b.Navigation("Product");
+                    b.Navigation("Supplier");
+                });
+
             modelBuilder.Entity("Domain.Entities.Category", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Product", b =>
+                {
+                    b.Navigation("Invoices");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Supplier", b =>
+                {
+                    b.Navigation("Invoices");
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
