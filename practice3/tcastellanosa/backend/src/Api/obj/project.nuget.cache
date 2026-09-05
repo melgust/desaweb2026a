@@ -1,16 +1,16 @@
 {
   "version": 2,
-  "dgSpecHash": "egstowJMUAs=",
+  "dgSpecHash": "2vKh8KlTJ90=",
   "success": false,
-  "projectFilePath": "c:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj",
+  "projectFilePath": "C:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj",
   "expectedPackageFiles": [],
   "logs": [
     {
       "code": "NU1100",
       "level": "Error",
-      "message": "Unable to resolve 'BCrypt.Net-Next (>= 4.0.3)' for 'net10.0'.",
-      "projectPath": "c:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj",
-      "filePath": "c:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj",
+      "message": "No se puede resolver 'BCrypt.Net-Next (>= 4.0.3)' para 'net10.0'.",
+      "projectPath": "C:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj",
+      "filePath": "C:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj",
       "libraryId": "BCrypt.Net-Next",
       "targetGraphs": [
         "net10.0"
@@ -19,9 +19,9 @@
     {
       "code": "NU1100",
       "level": "Error",
-      "message": "Unable to resolve 'Microsoft.AspNetCore.Authentication.JwtBearer (>= 10.0.0)' for 'net10.0'.",
-      "projectPath": "c:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj",
-      "filePath": "c:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj",
+      "message": "No se puede resolver 'Microsoft.AspNetCore.Authentication.JwtBearer (>= 10.0.0)' para 'net10.0'.",
+      "projectPath": "C:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj",
+      "filePath": "C:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj",
       "libraryId": "Microsoft.AspNetCore.Authentication.JwtBearer",
       "targetGraphs": [
         "net10.0"
@@ -30,9 +30,9 @@
     {
       "code": "NU1100",
       "level": "Error",
-      "message": "Unable to resolve 'Microsoft.EntityFrameworkCore (>= 9.0.0)' for 'net10.0'.",
-      "projectPath": "c:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj",
-      "filePath": "c:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj",
+      "message": "No se puede resolver 'Microsoft.EntityFrameworkCore (>= 9.0.0)' para 'net10.0'.",
+      "projectPath": "C:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj",
+      "filePath": "C:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj",
       "libraryId": "Microsoft.EntityFrameworkCore",
       "targetGraphs": [
         "net10.0"
@@ -41,9 +41,9 @@
     {
       "code": "NU1100",
       "level": "Error",
-      "message": "Unable to resolve 'Microsoft.EntityFrameworkCore.Design (>= 9.0.0)' for 'net10.0'.",
-      "projectPath": "c:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj",
-      "filePath": "c:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj",
+      "message": "No se puede resolver 'Microsoft.EntityFrameworkCore.Design (>= 9.0.0)' para 'net10.0'.",
+      "projectPath": "C:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj",
+      "filePath": "C:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj",
       "libraryId": "Microsoft.EntityFrameworkCore.Design",
       "targetGraphs": [
         "net10.0"
@@ -52,9 +52,9 @@
     {
       "code": "NU1100",
       "level": "Error",
-      "message": "Unable to resolve 'Pomelo.EntityFrameworkCore.MySql (>= 9.0.0)' for 'net10.0'.",
-      "projectPath": "c:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj",
-      "filePath": "c:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj",
+      "message": "No se puede resolver 'Pomelo.EntityFrameworkCore.MySql (>= 9.0.0)' para 'net10.0'.",
+      "projectPath": "C:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj",
+      "filePath": "C:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj",
       "libraryId": "Pomelo.EntityFrameworkCore.MySql",
       "targetGraphs": [
         "net10.0"
@@ -63,9 +63,9 @@
     {
       "code": "NU1100",
       "level": "Error",
-      "message": "Unable to resolve 'Swashbuckle.AspNetCore (>= 9.0.6)' for 'net10.0'.",
-      "projectPath": "c:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj",
-      "filePath": "c:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj",
+      "message": "No se puede resolver 'Swashbuckle.AspNetCore (>= 9.0.6)' para 'net10.0'.",
+      "projectPath": "C:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj",
+      "filePath": "C:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj",
       "libraryId": "Swashbuckle.AspNetCore",
       "targetGraphs": [
         "net10.0"

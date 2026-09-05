@@ -141,3 +141,14 @@ body {
   text-align: center;
   font-size: 14px;
 }
+
+.form-row, .detail-row { display: flex; gap: 16px; }
+.form-row .col { flex: 1; }
+.form-group { margin-bottom: 12px; }
+.detail-row { align-items: flex-start; margin: 10px 0; }
+.detail-row .form-control { margin-bottom: 0; }
+.detail-row select { flex: 2; }
+.detail-row input { flex: 1; }
+.form-error { color: #b91c1c; margin-bottom: 12px; }
+.invoice-total { font-size: 18px; font-weight: 600; margin: 18px 0; }
+@media (max-width: 700px) { .form-row, .detail-row { flex-direction: column; gap: 0; } .detail-row select, .detail-row input { width: 100%; } }

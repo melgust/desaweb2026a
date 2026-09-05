@@ -62,13 +62,19 @@ export class ProductFormComponent implements OnInit {
 
   onSubmit(): void {
     this.loading = true;
+    // An empty select value is not a valid Guid for the API. Omitting it lets
+    // the nullable CategoryId parameter receive null.
+    const request = {
+      ...this.formData,
+      categoryId: this.formData.categoryId || undefined
+    };
     if (this.isEditMode && this.productId) {
-      this.productService.updateProduct(this.productId, this.formData).subscribe({
+      this.productService.updateProduct(this.productId, request).subscribe({
         next: () => this.router.navigate(['/products']),
         error: () => (this.loading = false)
       });
     } else {
-      this.productService.createProduct(this.formData).subscribe({
+      this.productService.createProduct(request).subscribe({
         next: () => this.router.navigate(['/products']),
         error: () => (this.loading = false)
       });

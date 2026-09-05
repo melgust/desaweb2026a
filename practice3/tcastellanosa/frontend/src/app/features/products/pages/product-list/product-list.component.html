@@ -1,26 +1,26 @@
 <div class="container">
   <header class="header">
-    <h2>Enterprise Products</h2>
-    <a *ngIf="auth.canManageProducts()" routerLink="/products/new" class="btn btn-primary">+ Add Product</a>
+    <h2>Productos empresariales</h2>
+    <a *ngIf="auth.canManageProducts()" routerLink="/products/new" class="btn btn-primary">+ Agregar producto</a>
   </header>
 
   <div class="view-options" aria-label="Pagination mode">
-    <span>Pagination:</span>
-    <button [class.active]="paginationMode() === 'offset'" (click)="setPaginationMode('offset')">Pages</button>
-    <button [class.active]="paginationMode() === 'infinite'" (click)="setPaginationMode('infinite')">Infinite scroll</button>
+    <span>Paginación:</span>
+    <button [class.active]="paginationMode() === 'offset'" (click)="setPaginationMode('offset')">Páginas</button>
+    <button [class.active]="paginationMode() === 'infinite'" (click)="setPaginationMode('infinite')">Desplazamiento infinito</button>
   </div>
 
-  <input type="text" placeholder="Search products... (press Enter)" [(ngModel)]="searchTerm" (keyup.enter)="onSearchChange()" class="search-bar" />
+  <input type="text" placeholder="Buscar productos... (presiona Enter)" [(ngModel)]="searchTerm" (keyup.enter)="onSearchChange()" class="search-bar" />
 
   <table class="grid-table" *ngIf="products().length > 0; else loadingTpl">
     <thead>
       <tr>
-        <th (click)="toggleSort('name')">Name</th>
-        <th>Description</th>
-        <th (click)="toggleSort('price')">Price</th>
-        <th (click)="toggleSort('stock')">Stock</th>
-        <th>Category</th>
-        <th *ngIf="auth.canManageProducts()">Actions</th>
+        <th (click)="toggleSort('name')">Nombre</th>
+        <th>Descripción</th>
+        <th (click)="toggleSort('price')">Precio</th>
+        <th (click)="toggleSort('stock')">Existencia</th>
+        <th>Categoría</th>
+        <th *ngIf="auth.canManageProducts()">Acciones</th>
       </tr>
     </thead>
     <tbody>
@@ -31,24 +31,24 @@
         <td>{{ item.stock }}</td>
         <td>{{ item.categoryName || '-' }}</td>
         <td *ngIf="auth.canManageProducts()">
-          <a [routerLink]="['/products/edit', item.id]">Edit</a>
-          <button *ngIf="auth.canDeleteProducts()" (click)="deleteProduct(item.id)" class="text-danger">Delete</button>
+          <a [routerLink]="['/products/edit', item.id]">Editar</a>
+          <button *ngIf="auth.canDeleteProducts()" (click)="deleteProduct(item.id)" class="text-danger">Eliminar</button>
         </td>
       </tr>
     </tbody>
   </table>
 
   <div class="pagination" *ngIf="paginationMode() === 'offset'">
-    <button [disabled]="page() <= 1" (click)="setPage(page() - 1)">Prev</button>
-    <span>Page {{ page() }} of {{ totalPages() }}</span>
-    <button [disabled]="page() >= totalPages()" (click)="setPage(page() + 1)">Next</button>
+    <button [disabled]="page() <= 1" (click)="setPage(page() - 1)">Anterior</button>
+    <span>Página {{ page() }} de {{ totalPages() }}</span>
+    <button [disabled]="page() >= totalPages()" (click)="setPage(page() + 1)">Siguiente</button>
   </div>
 
   <div class="infinite-status" *ngIf="paginationMode() === 'infinite'">
-    <span *ngIf="loading()">Loading more products...</span>
-    <span *ngIf="!loading() && !hasMore()">All {{ totalItems() }} products loaded</span>
-    <span *ngIf="!loading() && hasMore()">Scroll down to load more</span>
+    <span *ngIf="loading()">Cargando más productos...</span>
+    <span *ngIf="!loading() && !hasMore()">Se cargaron los {{ totalItems() }} productos</span>
+    <span *ngIf="!loading() && hasMore()">Desplázate para cargar más</span>
   </div>
 
-  <ng-template #loadingTpl><div>Loading data...</div></ng-template>
+  <ng-template #loadingTpl><div>Cargando datos...</div></ng-template>
 </div>

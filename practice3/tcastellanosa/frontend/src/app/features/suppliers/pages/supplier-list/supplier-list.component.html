@@ -1,0 +1,8 @@
+<div class="container">
+  <header class="header"><h2>Proveedores</h2><a *ngIf="auth.canManageProducts()" routerLink="/suppliers/new" class="btn btn-primary">+ Agregar proveedor</a></header>
+  <p *ngIf="error" class="form-error">{{ error }}</p>
+  <table class="grid-table" *ngIf="suppliers().length; else empty"><thead><tr><th>Nombre</th><th>NIT</th><th>Correo</th><th>Teléfono</th><th>Estado</th><th *ngIf="auth.canManageProducts()">Acciones</th></tr></thead>
+    <tbody><tr *ngFor="let supplier of suppliers()"><td>{{ supplier.name }}</td><td>{{ supplier.taxId || '-' }}</td><td>{{ supplier.email || '-' }}</td><td>{{ supplier.phone || '-' }}</td><td>{{ supplier.isActive ? 'Activo' : 'Inactivo' }}</td><td *ngIf="auth.canManageProducts()"><a [routerLink]="['/suppliers/edit', supplier.id]">Editar</a><button *ngIf="auth.canDeleteProducts()" class="text-danger" (click)="delete(supplier.id)">Eliminar</button></td></tr></tbody>
+  </table>
+  <ng-template #empty><p>{{ loading() ? 'Cargando proveedores...' : 'No hay proveedores registrados.' }}</p></ng-template>
+</div>

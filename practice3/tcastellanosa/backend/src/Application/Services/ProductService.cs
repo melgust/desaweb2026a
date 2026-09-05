@@ -57,6 +57,7 @@ public class ProductService : IProductService
 
     public async Task<ProductDto> CreateAsync(CreateProductRequest request, CancellationToken ct)
     {
+        await ValidateCategoryAsync(request.CategoryId, ct);
         var p = new Product { Name = request.Name, Description = request.Description, Price = request.Price, Stock = request.Stock, IsActive = request.IsActive, CategoryId = request.CategoryId };
         _db.Products.Add(p);
         await _db.SaveChangesAsync(ct);
@@ -66,6 +67,7 @@ public class ProductService : IProductService
     public async Task<ProductDto> UpdateAsync(Guid id, UpdateProductRequest request, CancellationToken ct)
     {
         var p = await _db.Products.FindAsync(new object[] { id }, ct) ?? throw new KeyNotFoundException("Product not found.");
+        await ValidateCategoryAsync(request.CategoryId, ct);
         p.Name = request.Name;
         p.Description = request.Description;
         p.Price = request.Price;
@@ -80,7 +82,14 @@ public class ProductService : IProductService
     public async Task DeleteAsync(Guid id, CancellationToken ct)
     {
         var p = await _db.Products.FindAsync(new object[] { id }, ct) ?? throw new KeyNotFoundException("Product not found.");
+        if (await _db.InvoiceDetails.AnyAsync(detail => detail.ProductId == id, ct)) throw new InvalidOperationException("The product cannot be deleted because it belongs to an invoice.");
         _db.Products.Remove(p);
         await _db.SaveChangesAsync(ct);
+    }
+
+    private async Task ValidateCategoryAsync(Guid? categoryId, CancellationToken ct)
+    {
+        if (categoryId.HasValue && !await _db.Categories.AnyAsync(c => c.Id == categoryId && c.IsActive, ct))
+            throw new InvalidOperationException("The category does not exist or is inactive.");
     }
 }

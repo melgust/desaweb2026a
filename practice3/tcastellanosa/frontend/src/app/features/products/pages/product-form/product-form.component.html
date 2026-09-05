@@ -1,36 +1,36 @@
 <div class="container">
   <header class="header">
-    <h2>{{ isEditMode ? 'Edit Product' : 'Create New Product' }}</h2>
-    <a routerLink="/products" class="btn">Back to List</a>
+    <h2>{{ isEditMode ? 'Editar producto' : 'Crear producto' }}</h2>
+    <a routerLink="/products" class="btn">Regresar al listado</a>
   </header>
 
   <form (ngSubmit)="onSubmit()" *ngIf="!loading; else loadingTpl">
     <div class="form-group">
-      <label for="name">Product Name</label>
+      <label for="name">Nombre del producto</label>
       <input type="text" id="name" [(ngModel)]="formData.name" name="name" class="form-control" required />
     </div>
 
     <div class="form-group">
-      <label for="description">Description</label>
+      <label for="description">Descripción</label>
       <textarea id="description" [(ngModel)]="formData.description" name="description" class="form-control" rows="3"></textarea>
     </div>
 
     <div class="form-row">
       <div class="form-group col">
-        <label for="price">Price ($)</label>
+        <label for="price">Precio ($)</label>
         <input type="number" id="price" [(ngModel)]="formData.price" name="price" class="form-control" step="0.01" required />
       </div>
 
       <div class="form-group col">
-        <label for="stock">Stock Quantity</label>
+        <label for="stock">Cantidad en existencia</label>
         <input type="number" id="stock" [(ngModel)]="formData.stock" name="stock" class="form-control" required />
       </div>
     </div>
 
     <div class="form-group">
-      <label for="categoryId">Category</label>
+      <label for="categoryId">Categoría</label>
       <select id="categoryId" [(ngModel)]="formData.categoryId" name="categoryId" class="form-control">
-        <option value="">No category</option>
+        <option value="">Sin categoría</option>
         <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
       </select>
     </div>
@@ -38,16 +38,16 @@
     <div class="form-group checkbox-group">
       <label>
         <input type="checkbox" [(ngModel)]="formData.isActive" name="isActive" />
-        Is Active
+        Activo
       </label>
     </div>
 
     <button type="submit" class="btn btn-primary">
-      {{ isEditMode ? 'Update Product' : 'Create Product' }}
+      {{ isEditMode ? 'Actualizar producto' : 'Crear producto' }}
     </button>
   </form>
 
   <ng-template #loadingTpl>
-    <div>Loading form data...</div>
+    <div>Cargando datos del formulario...</div>
   </ng-template>
 </div>

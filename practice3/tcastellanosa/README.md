@@ -42,7 +42,7 @@ docker compose up -d --build
 
 On startup the backend automatically:
 
-1. Applies EF Core migrations (creates the `Users`, `Roles`, and `Products` tables).
+1. Applies EF Core migrations (creates users, products, categories, suppliers, invoices and invoice details).
 2. Seeds default roles and users (see [Seeded Accounts](#seeded-accounts)).
 
 Then open <http://localhost:81> and log in.
@@ -151,8 +151,12 @@ dotnet ef database update --project src/Api/Api.csproj
 | POST   | `/api/products`         | Admin, Manager  | Create a product         |
 | PUT    | `/api/products/{id}`    | Admin, Manager  | Update a product         |
 | DELETE | `/api/products/{id}`    | Admin           | Delete a product         |
+| GET/POST/PUT/DELETE | `/api/suppliers` | Any / Admin, Manager / Admin | Supplier management |
+| GET/POST | `/api/invoices` | Any / Admin, Manager | Invoice list and purchase registration |
 
 `GET /api/products` supports query params: `search`, `sortBy` (`name`, `price`, `stock`, `createdat`), `sortDirection` (`asc`/`desc`), `page`, `pageSize`.
+
+When registering an invoice, each detail needs an active product, a positive quantity and unit price. The supplier must be active, repeated products are rejected and the received quantity is added to product stock. Products or suppliers that are already used in invoices cannot be deleted.
 
 ## Project Structure
 

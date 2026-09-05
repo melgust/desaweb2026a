@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj": {}
+    "C:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj": {}
   },
   "projects": {
-    "c:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj": {
+    "C:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj",
+        "projectUniqueName": "C:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj",
         "projectName": "Api",
-        "projectPath": "c:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj",
+        "projectPath": "C:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj",
         "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\obj\\",
+        "outputPath": "C:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

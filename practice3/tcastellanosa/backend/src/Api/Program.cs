@@ -16,6 +16,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ISupplierService, SupplierService>();
+builder.Services.AddScoped<IInvoiceService, InvoiceService>();
 
 // JWT authentication
 var jwtKey = builder.Configuration["Jwt:Key"]!;
@@ -51,6 +53,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.UseExceptionHandler(errorApp => errorApp.Run(async context =>
+{
+    var error = context.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerFeature>()?.Error;
+    context.Response.StatusCode = error switch { KeyNotFoundException => StatusCodes.Status404NotFound, InvalidOperationException => StatusCodes.Status400BadRequest, _ => StatusCodes.Status500InternalServerError };
+    await context.Response.WriteAsJsonAsync(new { error = error?.Message ?? "An unexpected error occurred." });
+}));
 
 // Automatically apply migrations and seed initial data on application startup
 using (var scope = app.Services.CreateScope())

@@ -21,11 +21,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj",
+      "projectUniqueName": "C:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj",
       "projectName": "Api",
-      "projectPath": "c:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj",
+      "projectPath": "C:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\Api.csproj",
       "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\obj\\",
+      "outputPath": "C:\\Users\\HP\\Desktop\\UMG\\OCTAVO CICLO\\DESARROLLO WEB\\desaweb2026a\\practice3\\tcastellanosa\\backend\\src\\Api\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -529,7 +529,7 @@
     {
       "code": "NU1100",
       "level": "Error",
-      "message": "Unable to resolve 'BCrypt.Net-Next (>= 4.0.3)' for 'net10.0'.",
+      "message": "No se puede resolver 'BCrypt.Net-Next (>= 4.0.3)' para 'net10.0'.",
       "libraryId": "BCrypt.Net-Next",
       "targetGraphs": [
         "net10.0"
@@ -538,7 +538,7 @@
     {
       "code": "NU1100",
       "level": "Error",
-      "message": "Unable to resolve 'Microsoft.AspNetCore.Authentication.JwtBearer (>= 10.0.0)' for 'net10.0'.",
+      "message": "No se puede resolver 'Microsoft.AspNetCore.Authentication.JwtBearer (>= 10.0.0)' para 'net10.0'.",
       "libraryId": "Microsoft.AspNetCore.Authentication.JwtBearer",
       "targetGraphs": [
         "net10.0"
@@ -547,7 +547,7 @@
     {
       "code": "NU1100",
       "level": "Error",
-      "message": "Unable to resolve 'Microsoft.EntityFrameworkCore (>= 9.0.0)' for 'net10.0'.",
+      "message": "No se puede resolver 'Microsoft.EntityFrameworkCore (>= 9.0.0)' para 'net10.0'.",
       "libraryId": "Microsoft.EntityFrameworkCore",
       "targetGraphs": [
         "net10.0"
@@ -556,7 +556,7 @@
     {
       "code": "NU1100",
       "level": "Error",
-      "message": "Unable to resolve 'Microsoft.EntityFrameworkCore.Design (>= 9.0.0)' for 'net10.0'.",
+      "message": "No se puede resolver 'Microsoft.EntityFrameworkCore.Design (>= 9.0.0)' para 'net10.0'.",
       "libraryId": "Microsoft.EntityFrameworkCore.Design",
       "targetGraphs": [
         "net10.0"
@@ -565,7 +565,7 @@
     {
       "code": "NU1100",
       "level": "Error",
-      "message": "Unable to resolve 'Pomelo.EntityFrameworkCore.MySql (>= 9.0.0)' for 'net10.0'.",
+      "message": "No se puede resolver 'Pomelo.EntityFrameworkCore.MySql (>= 9.0.0)' para 'net10.0'.",
       "libraryId": "Pomelo.EntityFrameworkCore.MySql",
       "targetGraphs": [
         "net10.0"
@@ -574,7 +574,7 @@
     {
       "code": "NU1100",
       "level": "Error",
-      "message": "Unable to resolve 'Swashbuckle.AspNetCore (>= 9.0.6)' for 'net10.0'.",
+      "message": "No se puede resolver 'Swashbuckle.AspNetCore (>= 9.0.6)' para 'net10.0'.",
       "libraryId": "Swashbuckle.AspNetCore",
       "targetGraphs": [
         "net10.0"

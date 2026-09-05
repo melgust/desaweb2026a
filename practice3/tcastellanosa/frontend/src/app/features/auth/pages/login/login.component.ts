@@ -21,7 +21,7 @@ export class LoginComponent {
 
   onSubmit(): void {
     if (!this.email || !this.password) {
-      this.errorMessage = 'Please enter both email and password.';
+      this.errorMessage = 'Ingresa el correo y la contraseña.';
       return;
     }
 
@@ -35,7 +35,7 @@ export class LoginComponent {
       },
       error: (err) => {
         this.loading = false;
-        this.errorMessage = err.error?.message || 'Invalid login credentials.';
+        this.errorMessage = err.error?.message || 'Las credenciales no son válidas.';
       }
     });
   }
