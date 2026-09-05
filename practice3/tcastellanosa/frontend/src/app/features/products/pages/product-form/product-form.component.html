@@ -27,6 +27,14 @@
       </div>
     </div>
 
+    <div class="form-group">
+      <label for="categoryId">Category</label>
+      <select id="categoryId" [(ngModel)]="formData.categoryId" name="categoryId" class="form-control">
+        <option value="">No category</option>
+        <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+      </select>
+    </div>
+
     <div class="form-group checkbox-group">
       <label>
         <input type="checkbox" [(ngModel)]="formData.isActive" name="isActive" />

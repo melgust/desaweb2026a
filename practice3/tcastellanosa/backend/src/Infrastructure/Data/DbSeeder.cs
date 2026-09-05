@@ -35,6 +35,24 @@ public static class DbSeeder
 
         await db.SaveChangesAsync(ct);
 
+        var categories = new[]
+        {
+            new { Name = "Hardware", Description = "Computers and physical equipment" },
+            new { Name = "Software", Description = "Applications and licenses" },
+            new { Name = "Office", Description = "Office furniture and supplies" },
+            new { Name = "Networking", Description = "Network and connectivity equipment" }
+        };
+
+        foreach (var category in categories)
+        {
+            if (!await db.Categories.AnyAsync(c => c.Name == category.Name, ct))
+            {
+                db.Categories.Add(new Category { Name = category.Name, Description = category.Description });
+            }
+        }
+
+        await db.SaveChangesAsync(ct);
+
         // --- Users ---
         if (!await db.Users.AnyAsync(u => u.Email == "admin@enterprise.com", ct))
         {

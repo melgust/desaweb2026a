@@ -19,6 +19,7 @@
         <th>Description</th>
         <th (click)="toggleSort('price')">Price</th>
         <th (click)="toggleSort('stock')">Stock</th>
+        <th>Category</th>
         <th *ngIf="auth.canManageProducts()">Actions</th>
       </tr>
     </thead>
@@ -28,6 +29,7 @@
         <td>{{ item.description || '-' }}</td>
         <td>\${{ item.price | number:'1.2-2' }}</td>
         <td>{{ item.stock }}</td>
+        <td>{{ item.categoryName || '-' }}</td>
         <td *ngIf="auth.canManageProducts()">
           <a [routerLink]="['/products/edit', item.id]">Edit</a>
           <button *ngIf="auth.canDeleteProducts()" (click)="deleteProduct(item.id)" class="text-danger">Delete</button>

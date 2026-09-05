@@ -43,7 +43,7 @@ public class ProductService : IProductService
         int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
 
         var items = await query.Skip((page - 1) * pageSize).Take(pageSize)
-            .Select(p => new ProductDto(p.Id, p.Name, p.Description, p.Price, p.Stock, p.IsActive, p.CreatedAt))
+            .Select(p => new ProductDto(p.Id, p.Name, p.Description, p.Price, p.Stock, p.IsActive, p.CreatedAt, p.CategoryId, p.Category != null ? p.Category.Name : null))
             .ToListAsync(ct);
 
         return new ProductPagedResult(items, totalItems, page, pageSize, totalPages);
@@ -52,15 +52,15 @@ public class ProductService : IProductService
     public async Task<ProductDto> GetByIdAsync(Guid id, CancellationToken ct)
     {
         var p = await _db.Products.FindAsync(new object[] { id }, ct) ?? throw new KeyNotFoundException("Product not found.");
-        return new ProductDto(p.Id, p.Name, p.Description, p.Price, p.Stock, p.IsActive, p.CreatedAt);
+        return new ProductDto(p.Id, p.Name, p.Description, p.Price, p.Stock, p.IsActive, p.CreatedAt, p.CategoryId, p.Category != null ? p.Category.Name : null);
     }
 
     public async Task<ProductDto> CreateAsync(CreateProductRequest request, CancellationToken ct)
     {
-        var p = new Product { Name = request.Name, Description = request.Description, Price = request.Price, Stock = request.Stock, IsActive = request.IsActive };
+        var p = new Product { Name = request.Name, Description = request.Description, Price = request.Price, Stock = request.Stock, IsActive = request.IsActive, CategoryId = request.CategoryId };
         _db.Products.Add(p);
         await _db.SaveChangesAsync(ct);
-        return new ProductDto(p.Id, p.Name, p.Description, p.Price, p.Stock, p.IsActive, p.CreatedAt);
+        return new ProductDto(p.Id, p.Name, p.Description, p.Price, p.Stock, p.IsActive, p.CreatedAt, p.CategoryId, p.Category != null ? p.Category.Name : null);
     }
 
     public async Task<ProductDto> UpdateAsync(Guid id, UpdateProductRequest request, CancellationToken ct)
@@ -71,9 +71,10 @@ public class ProductService : IProductService
         p.Price = request.Price;
         p.Stock = request.Stock;
         p.IsActive = request.IsActive;
+        p.CategoryId = request.CategoryId;
         p.UpdatedAt = DateTime.UtcNow;
         await _db.SaveChangesAsync(ct);
-        return new ProductDto(p.Id, p.Name, p.Description, p.Price, p.Stock, p.IsActive, p.CreatedAt);
+        return new ProductDto(p.Id, p.Name, p.Description, p.Price, p.Stock, p.IsActive, p.CreatedAt, p.CategoryId, p.Category != null ? p.Category.Name : null);
     }
 
     public async Task DeleteAsync(Guid id, CancellationToken ct)

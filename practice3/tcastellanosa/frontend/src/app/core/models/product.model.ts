@@ -6,6 +6,15 @@ export interface Product {
   stock: number;
   isActive: boolean;
   createdAt: string;
+  categoryId?: string;
+  categoryName?: string;
+}
+
+export interface Category {
+  id: string;
+  name: string;
+  description?: string;
+  isActive: boolean;
 }
 
 export interface ProductPagedResult {

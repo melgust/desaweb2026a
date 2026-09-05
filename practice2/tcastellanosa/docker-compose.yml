@@ -1,0 +1,8 @@
+services:
+  api-php:
+    build: .
+    container_name: api_personas
+    ports:
+      - "8080:80"
+    volumes:
+      - ./data:/var/www/html/data
