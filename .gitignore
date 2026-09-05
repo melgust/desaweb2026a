@@ -2,3 +2,35 @@
 # .NET generated files
 **/bin/
 **/obj/
+
+# Frontend generated files
+**/.angular/
+**/node_modules/
+**/dist/
+
+```
+
+# .NET backend build artifacts
+**/bin/
+**/obj/
+**/publish/
+*.dll
+*.exe
+*.pdb
+*.cache
+*.deps.json
+*.runtimeconfig.json
+*.sourcelink.json
+*.nupkg
+*.snupkg
+
+# .NET tooling and test output
+.vs/
+TestResults/
+artifacts/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+```
