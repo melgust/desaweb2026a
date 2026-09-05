@@ -1,0 +1,81 @@
+<div class="container">
+  <h2>
+    {{ isEditMode ? 'Edit Customer' : 'New Customer' }}
+  </h2>
+
+  <form #customerForm="ngForm" (ngSubmit)="onSubmit()">
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Name</mat-label>
+      <input
+        matInput
+        name="name"
+        [(ngModel)]="formData.name"
+        required
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>NIT</mat-label>
+      <input
+        matInput
+        name="nit"
+        [(ngModel)]="formData.nit"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Address</mat-label>
+      <input
+        matInput
+        name="address"
+        [(ngModel)]="formData.address"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Phone</mat-label>
+      <input
+        matInput
+        name="phone"
+        [(ngModel)]="formData.phone"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email</mat-label>
+      <input
+        matInput
+        type="email"
+        name="email"
+        [(ngModel)]="formData.email"
+      />
+    </mat-form-field>
+
+    <mat-checkbox
+      name="isActive"
+      [(ngModel)]="formData.isActive"
+    >
+      Active
+    </mat-checkbox>
+
+    <div class="actions">
+      <a
+        mat-button
+        routerLink="/customers"
+      >
+        Cancel
+      </a>
+
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="customerForm.invalid || loading"
+      >
+        {{ isEditMode ? 'Update' : 'Save' }}
+      </button>
+    </div>
+
+  </form>
+</div>

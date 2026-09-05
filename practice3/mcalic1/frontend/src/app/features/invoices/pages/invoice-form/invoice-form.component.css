@@ -1,0 +1,62 @@
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+h3 {
+  margin-top: 20px;
+  margin-bottom: 16px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.detail-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.product-field {
+  flex: 1;
+  min-width: 280px;
+}
+
+.quantity-field {
+  width: 140px;
+}
+
+.subtotal {
+  min-width: 150px;
+}
+
+.add-product {
+  align-self: flex-start;
+  margin-top: 8px;
+}
+
+.total {
+  text-align: right;
+  font-size: 20px;
+  margin-top: 20px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}

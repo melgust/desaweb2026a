@@ -1,0 +1,154 @@
+<div class="container">
+  <div class="header">
+    <h2>Customers</h2>
+
+    <a
+      *ngIf="auth.canManageProducts()"
+      mat-raised-button
+      color="primary"
+      routerLink="/customers/new"
+    >
+      <mat-icon>add</mat-icon>
+      Add Customer
+    </a>
+  </div>
+
+  <mat-form-field appearance="outline" class="search-field">
+    <mat-label>Search customers</mat-label>
+
+    <input
+      matInput
+      [(ngModel)]="searchTerm"
+      (keyup.enter)="onSearchChange()"
+      placeholder="Name, NIT or email"
+    />
+
+    <button
+      mat-icon-button
+      matSuffix
+      type="button"
+      (click)="onSearchChange()"
+    >
+      <mat-icon>search</mat-icon>
+    </button>
+  </mat-form-field>
+
+  <mat-progress-bar
+    *ngIf="loading()"
+    mode="indeterminate"
+  ></mat-progress-bar>
+
+  <div class="table-container">
+    <table
+      mat-table
+      [dataSource]="customers()"
+      class="mat-elevation-z2"
+    >
+
+      <!-- Name -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>
+          Name
+        </th>
+
+        <td mat-cell *matCellDef="let customer">
+          {{ customer.name }}
+        </td>
+      </ng-container>
+
+      <!-- NIT -->
+      <ng-container matColumnDef="nit">
+        <th mat-header-cell *matHeaderCellDef>
+          NIT
+        </th>
+
+        <td mat-cell *matCellDef="let customer">
+          {{ customer.nit || '-' }}
+        </td>
+      </ng-container>
+
+      <!-- Phone -->
+      <ng-container matColumnDef="phone">
+        <th mat-header-cell *matHeaderCellDef>
+          Phone
+        </th>
+
+        <td mat-cell *matCellDef="let customer">
+          {{ customer.phone || '-' }}
+        </td>
+      </ng-container>
+
+      <!-- Email -->
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef>
+          Email
+        </th>
+
+        <td mat-cell *matCellDef="let customer">
+          {{ customer.email || '-' }}
+        </td>
+      </ng-container>
+
+      <!-- Active -->
+      <ng-container matColumnDef="isActive">
+        <th mat-header-cell *matHeaderCellDef>
+          Active
+        </th>
+
+        <td mat-cell *matCellDef="let customer">
+          {{ customer.isActive ? 'Yes' : 'No' }}
+        </td>
+      </ng-container>
+
+      <!-- Actions -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>
+          Actions
+        </th>
+
+        <td mat-cell *matCellDef="let customer">
+
+          <a
+            mat-icon-button
+            [routerLink]="['/customers/edit', customer.id]"
+            title="Edit"
+          >
+            <mat-icon>edit</mat-icon>
+          </a>
+
+          <button
+            *ngIf="auth.canDeleteProducts()"
+            mat-icon-button
+            type="button"
+            (click)="deleteCustomer(customer.id)"
+            title="Delete"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+
+        </td>
+      </ng-container>
+
+      <tr
+        mat-header-row
+        *matHeaderRowDef="displayedColumns"
+      ></tr>
+
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+      ></tr>
+
+    </table>
+  </div>
+
+  <mat-paginator
+    [length]="totalItems()"
+    [pageIndex]="pageIndex"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="pageSizeOptions"
+    (page)="onPageChange($event)"
+    showFirstLastButtons
+  >
+  </mat-paginator>
+</div>

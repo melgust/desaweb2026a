@@ -1,0 +1,13 @@
+.supplier-form {
+  display: flex;
+  flex-direction: column;
+  max-width: 520px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.form-actions {
+  margin-top: 12px;
+}

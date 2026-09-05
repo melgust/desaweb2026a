@@ -1,0 +1,140 @@
+<div class="container">
+  <h2>New Invoice</h2>
+
+  <form #invoiceForm="ngForm" (ngSubmit)="onSubmit()">
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Invoice Number</mat-label>
+      <input
+        matInput
+        name="invoiceNumber"
+        [(ngModel)]="formData.invoiceNumber"
+        required
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Customer</mat-label>
+      <mat-select
+        name="customerId"
+        [(ngModel)]="formData.customerId"
+        required
+      >
+        <mat-option
+          *ngFor="let customer of customers"
+          [value]="customer.id"
+        >
+          {{ customer.name }}
+          <span *ngIf="customer.nit">
+            - {{ customer.nit }}
+          </span>
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Date</mat-label>
+      <input
+        matInput
+        type="date"
+        name="date"
+        [(ngModel)]="formData.date"
+      />
+    </mat-form-field>
+
+    <h3>Products</h3>
+
+    <div
+      class="detail-row"
+      *ngFor="let detail of formData.details; let i = index"
+    >
+      <mat-form-field appearance="outline" class="product-field">
+        <mat-label>Product</mat-label>
+
+        <mat-select
+          [name]="'productId' + i"
+          [(ngModel)]="detail.productId"
+          required
+        >
+          <mat-option
+            *ngFor="let product of products"
+            [value]="product.id"
+          >
+            {{ product.name }}
+            - Stock: {{ product.stock }}
+            - {{ product.price | currency }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="quantity-field">
+        <mat-label>Quantity</mat-label>
+
+        <input
+          matInput
+          type="number"
+          min="1"
+          [name]="'quantity' + i"
+          [(ngModel)]="detail.quantity"
+          required
+        />
+      </mat-form-field>
+
+      <div class="subtotal">
+        Subtotal:
+        <strong>
+          {{
+            getSubtotal(
+              detail.productId,
+              detail.quantity
+            ) | currency
+          }}
+        </strong>
+      </div>
+
+      <button
+        mat-icon-button
+        type="button"
+        (click)="removeDetail(i)"
+        [disabled]="formData.details.length === 1"
+        title="Remove product"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+
+    <button
+      mat-stroked-button
+      type="button"
+      (click)="addDetail()"
+      class="add-product"
+    >
+      <mat-icon>add</mat-icon>
+      Add Product
+    </button>
+
+    <div class="total">
+      Total:
+      <strong>{{ getTotal() | currency }}</strong>
+    </div>
+
+    <div class="actions">
+      <a
+        mat-button
+        routerLink="/invoices"
+      >
+        Cancel
+      </a>
+
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="invoiceForm.invalid || loading"
+      >
+        Save Invoice
+      </button>
+    </div>
+
+  </form>
+</div>
