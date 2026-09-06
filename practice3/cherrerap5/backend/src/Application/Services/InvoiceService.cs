@@ -18,22 +18,27 @@ public class InvoiceService : IInvoiceService
 {
     private static readonly string[] ValidStatuses = ["Pending", "Paid", "Cancelled"];
     private readonly AppDbContext _db;
-    public InvoiceService(AppDbContext db) => _db = db;
+    private readonly ICatalogClient _catalogClient;
+    public InvoiceService(AppDbContext db, ICatalogClient catalogClient)
+    {
+        _db = db;
+        _catalogClient = catalogClient;
+    }
 
     public async Task<IReadOnlyList<InvoiceDto>> GetAllAsync(CancellationToken ct) =>
         await _db.Invoices.AsNoTracking().OrderByDescending(i => i.InvoiceDate).ThenBy(i => i.Number)
-            .Select(i => new InvoiceDto(i.Id, i.Number, i.SupplierId, i.Supplier.Name, i.ProductId, i.Product.Name, i.InvoiceDate, i.DueDate, i.Quantity, i.UnitPrice, i.Total, i.Status, i.Notes, i.CreatedAt))
+            .Select(i => new InvoiceDto(i.Id, i.Number, i.SupplierId, i.SupplierName, i.ProductId, i.ProductName, i.InvoiceDate, i.DueDate, i.Quantity, i.UnitPrice, i.Total, i.Status, i.Notes, i.CreatedAt))
             .ToListAsync(ct);
 
     public async Task<InvoiceDto> GetByIdAsync(Guid id, CancellationToken ct) =>
-        ToDto(await _db.Invoices.AsNoTracking().Include(i => i.Supplier).Include(i => i.Product)
+        ToDto(await _db.Invoices.AsNoTracking()
             .FirstOrDefaultAsync(i => i.Id == id, ct) ?? throw new KeyNotFoundException("Invoice not found."));
 
     public async Task<InvoiceDto> CreateAsync(SaveInvoiceRequest request, CancellationToken ct)
     {
-        await ValidateAsync(request, null, ct);
+        var references = await ValidateAsync(request, null, ct);
         var invoice = new Invoice();
-        Apply(invoice, request);
+        Apply(invoice, request, references.Supplier, references.Product);
         _db.Invoices.Add(invoice);
         await _db.SaveChangesAsync(ct);
         return await GetByIdAsync(invoice.Id, ct);
@@ -41,10 +46,10 @@ public class InvoiceService : IInvoiceService
 
     public async Task<InvoiceDto> UpdateAsync(Guid id, SaveInvoiceRequest request, CancellationToken ct)
     {
-        await ValidateAsync(request, id, ct);
+        var references = await ValidateAsync(request, id, ct);
         var invoice = await _db.Invoices.FindAsync(new object[] { id }, ct)
             ?? throw new KeyNotFoundException("Invoice not found.");
-        Apply(invoice, request);
+        Apply(invoice, request, references.Supplier, references.Product);
         invoice.UpdatedAt = DateTime.UtcNow;
         await _db.SaveChangesAsync(ct);
         return await GetByIdAsync(id, ct);
@@ -58,23 +63,25 @@ public class InvoiceService : IInvoiceService
         await _db.SaveChangesAsync(ct);
     }
 
-    private async Task ValidateAsync(SaveInvoiceRequest r, Guid? currentId, CancellationToken ct)
+    private async Task<(CatalogReference Supplier, CatalogReference Product)> ValidateAsync(SaveInvoiceRequest r, Guid? currentId, CancellationToken ct)
     {
         if (string.IsNullOrWhiteSpace(r.Number)) throw new ArgumentException("Invoice number is required.");
         if (r.Quantity <= 0 || r.UnitPrice < 0) throw new ArgumentException("Quantity and unit price are invalid.");
         if (!ValidStatuses.Contains(r.Status)) throw new ArgumentException("Invalid invoice status.");
-        if (!await _db.Suppliers.AnyAsync(s => s.Id == r.SupplierId && s.IsActive, ct)) throw new ArgumentException("Supplier not found or inactive.");
-        if (!await _db.Products.AnyAsync(p => p.Id == r.ProductId && p.IsActive, ct)) throw new ArgumentException("Product not found or inactive.");
         if (await _db.Invoices.AnyAsync(i => i.Number == r.Number.Trim() && i.Id != currentId, ct)) throw new ArgumentException("Invoice number already exists.");
+        var supplier = await _catalogClient.GetActiveSupplierAsync(r.SupplierId, ct);
+        var product = await _catalogClient.GetActiveProductAsync(r.ProductId, ct);
+        return (supplier, product);
     }
 
-    private static void Apply(Invoice i, SaveInvoiceRequest r)
+    private static void Apply(Invoice i, SaveInvoiceRequest r, CatalogReference supplier, CatalogReference product)
     {
-        i.Number = r.Number.Trim(); i.SupplierId = r.SupplierId; i.ProductId = r.ProductId;
+        i.Number = r.Number.Trim(); i.SupplierId = supplier.Id; i.SupplierName = supplier.Name;
+        i.ProductId = product.Id; i.ProductName = product.Name;
         i.InvoiceDate = r.InvoiceDate; i.DueDate = r.DueDate; i.Quantity = r.Quantity;
         i.UnitPrice = r.UnitPrice; i.Total = r.Quantity * r.UnitPrice; i.Status = r.Status;
         i.Notes = string.IsNullOrWhiteSpace(r.Notes) ? null : r.Notes.Trim();
     }
 
-    private static InvoiceDto ToDto(Invoice i) => new(i.Id, i.Number, i.SupplierId, i.Supplier.Name, i.ProductId, i.Product.Name, i.InvoiceDate, i.DueDate, i.Quantity, i.UnitPrice, i.Total, i.Status, i.Notes, i.CreatedAt);
+    private static InvoiceDto ToDto(Invoice i) => new(i.Id, i.Number, i.SupplierId, i.SupplierName, i.ProductId, i.ProductName, i.InvoiceDate, i.DueDate, i.Quantity, i.UnitPrice, i.Total, i.Status, i.Notes, i.CreatedAt);
 }

@@ -6,7 +6,7 @@ import { Category } from '../models/category.model';
 
 @Injectable({ providedIn: 'root' })
 export class CategoryService {
-  private readonly apiUrl = `${environment.apiUrl}/categories`;
+  private readonly apiUrl = `${environment.catalogApiUrl}/categories`;
 
   constructor(private http: HttpClient) {}
 

@@ -6,7 +6,7 @@ import { Supplier, SupplierPayload } from '../models/supplier.model';
 
 @Injectable({ providedIn: 'root' })
 export class SupplierService {
-  private readonly url = `${environment.apiUrl}/suppliers`;
+  private readonly url = `${environment.catalogApiUrl}/suppliers`;
   constructor(private http: HttpClient) {}
   getAll(): Observable<Supplier[]> { return this.http.get<Supplier[]>(this.url); }
   getById(id: string): Observable<Supplier> { return this.http.get<Supplier>(`${this.url}/${id}`); }

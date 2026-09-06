@@ -1,128 +1,181 @@
 # Enterprise Management Solution
 
-Full-stack enterprise application built with **.NET 10 Web API**, **Angular 18**, and **MySQL 8**.
+Aplicación académica de gestión empresarial con frontend Angular y dos backends especializados. Autenticación y facturas permanecen en .NET/MySQL; el catálogo de categorías, productos y proveedores pertenece a Spring Boot/MongoDB.
 
-The backend follows a layered (Clean Architecture) structure — Api, Application, Domain, Infrastructure — compiled as a single project. It uses JWT authentication with role-based authorization (Admin, Manager, User), Entity Framework Core with the Pomelo MySQL provider, and BCrypt password hashing.
+## Arquitectura de microservicios
 
-## Tech Stack
+```mermaid
+flowchart LR
+    Browser[Angular Frontend<br/>Nginx :81]
+    DotNet[.NET Backend<br/>Auth e Invoices :5000]
+    Catalog[Spring Boot Catalog Service<br/>Categories, Products y Suppliers :8080]
+    MySQL[(MySQL 8<br/>usuarios, roles y facturas)]
+    Mongo[(MongoDB 8<br/>catálogo)]
 
-| Layer     | Technology                                             |
-|-----------|--------------------------------------------------------|
-| Frontend  | Angular 18 (standalone components), served via Nginx   |
-| Backend   | ASP.NET Core 10 Web API, EF Core 9 (Pomelo MySQL)      |
-| Database  | MySQL 8.0                                               |
-| Auth      | JWT Bearer tokens, BCrypt password hashing             |
+    Browser -->|JWT, auth y facturas| DotNet
+    Browser -->|CRUD de catálogo| Catalog
+    DotNet -->|EF Core| MySQL
+    DotNet -->|validación de referencias| Catalog
+    Catalog -->|Spring Data| Mongo
+```
 
-## Ports
+Docker Compose conecta los contenedores mediante `enterprise_network`. Entre contenedores se usan los nombres `db`, `mongo` y `catalog-service`; las URLs con `localhost` corresponden únicamente al acceso desde el navegador o desde el host.
 
-When running via Docker Compose, the host-side ports are:
+### Responsabilidades
 
-| Service   | Host URL / Port           | Container Port | Notes                                    |
-|-----------|---------------------------|----------------|------------------------------------------|
-| Frontend  | `http://localhost:81`     | 80             | Angular app served by Nginx              |
-| Backend   | `http://localhost:5000`   | 80             | REST API + Swagger                       |
-| MySQL     | `localhost:3307`          | 3306           | `root` / `YourSecurePassword123!`        |
+| Componente | Responsabilidad | Persistencia |
+|---|---|---|
+| Angular 18 | Interfaz, rutas, formularios y envío del JWT | Navegador |
+| Backend .NET 10 | Login, roles, usuarios y facturas | MySQL 8 |
+| Spring Boot 4 / Java 21 | Categorías, productos y proveedores | MongoDB 8 |
+| Docker Compose | Red, variables, dependencias, healthchecks y volúmenes | `db_data`, `mongo_data` |
 
-Useful backend URLs:
+### Responsabilidad por dominio
 
-- **API base**: `http://localhost:5000/api`
-- **Swagger** (Development only): `http://localhost:5000/swagger`
+| Dominio | Responsable | Fuente de verdad |
+|---|---|---|
+| Authentication | Backend .NET | MySQL |
+| Invoices | Backend .NET | MySQL |
+| Categories | Spring Boot Catalog Service | MongoDB |
+| Products | Spring Boot Catalog Service | MongoDB |
+| Suppliers | Spring Boot Catalog Service | MongoDB |
 
-> Note: inside the Docker network the backend reaches MySQL at `Server=db` on port `3306` (not the host port `3307`). The frontend calls the API at `http://localhost:5000/api` from the browser.
+No existe escritura duplicada entre MySQL y MongoDB. Angular consume cada dominio desde su servicio propietario.
 
-## Quick Start (Docker)
+Las facturas guardan `productId`, `productName`, `supplierId` y `supplierName` como datos históricos. Al crear o editar una factura, .NET valida las referencias contra Catalog Service; consultar una factura existente no depende de que el producto o proveedor continúe en MongoDB.
 
-Run the whole stack (MySQL + Backend + Frontend):
+## Puertos
+
+| Servicio | URL desde el host | Puerto interno |
+|---|---|---|
+| Frontend | <http://localhost:81> | 80 |
+| Backend .NET | <http://localhost:5000> | 80 |
+| Catalog Service | <http://localhost:8080> | 8080 |
+| MongoDB | `localhost:27017` | 27017 |
+| MySQL | `localhost:3307` | 3306 |
+
+Endpoints de salud:
+
+- Catalog Service: <http://localhost:8080/actuator/health>
+- MongoDB se comprueba internamente con `mongosh`.
+
+## Inicio rápido con Docker
+
+Desde este directorio:
 
 ```bash
 docker compose up -d --build
 ```
 
-On startup the backend automatically:
+Después, abrir <http://localhost:81>.
 
-1. Applies EF Core migrations (creates the `Users`, `Roles`, and `Products` tables).
-2. Seeds default roles and users (see [Seeded Accounts](#seeded-accounts)).
+El arranque realiza lo siguiente:
 
-Then open <http://localhost:81> and log in.
+1. Espera a que MongoDB esté saludable.
+2. Inicia Catalog Service y crea los datos iniciales faltantes.
+3. Inicia .NET, aplica migraciones EF Core y crea usuarios/roles.
+4. Inicia Angular cuando Catalog Service está saludable.
 
-The inventory starts with 75 deterministic demo products so both pagination
-modes are easy to test. Change the amount in `docker-compose.yml` before
-starting the backend, for example:
+> La migración `RemoveLegacyCatalogTables` elimina de MySQL las tablas antiguas `Categories`, `Products` y `Suppliers`. Si se necesitan sus datos históricos, deben respaldarse antes del primer arranque que aplique esa migración. MongoDB es la fuente de verdad del catálogo.
 
-```yaml
-InventorySeed__ProductCount=250
+Consultar el estado:
+
+```bash
+docker compose ps
 ```
 
-The seed accepts between 0 and 10,000 products and is idempotent: restarting
-does not duplicate records. In the product list, use **Pages** for traditional
-offset pagination or **Infinite scroll** to append the next offset page when
-the inventory panel reaches the bottom.
-
-The seed also creates the product categories General, Laptop, Monitor,
-Teclado, Mouse, Audifonos, Webcam, Impresora, Router, Disco SSD and Memoria
-RAM. Existing products are assigned automatically on startup. Products can be
-filtered and sorted by category, and a category is required in the create/edit
-form.
-
-To stop and remove the containers:
+Detener los contenedores conservando datos:
 
 ```bash
 docker compose down
 ```
 
-To also wipe the database volume (fresh start):
+Eliminar también ambos volúmenes persistentes y comenzar desde cero:
 
 ```bash
 docker compose down -v
 ```
 
-## Seeded Accounts
+Este último comando elimina los datos locales de MySQL y MongoDB.
 
-The database is seeded on first startup with these accounts (idempotent — safe on every run):
+## Datos iniciales
 
-| Role  | Email                   | Password    |
-|-------|-------------------------|-------------|
-| Admin | admin@enterprise.com    | `Admin123!` |
-| User  | user@enterprise.com     | `User123!`  |
+Catalog Service crea de forma idempotente:
 
-Roles seeded: **Admin** (full access), **Manager** (manage products), **User** (read-only).
+- 11 categorías: General, Laptop, Monitor, Teclado, Mouse, Audifonos, Webcam, Impresora, Router, Disco SSD y Memoria RAM.
+- 75 productos de demostración.
 
-> These are development defaults. Change them before using anywhere beyond local development.
+El número de productos se configura en `docker-compose.yml`:
 
-### Role permissions (products)
-
-| Action              | Admin | Manager | User |
-|---------------------|:-----:|:-------:|:----:|
-| View / list         |  ✅   |   ✅    |  ✅  |
-| Create / update     |  ✅   |   ✅    |  ❌  |
-| Delete              |  ✅   |   ❌    |  ❌  |
-
-## Manual Development Setup
-
-Requires the **.NET 10 SDK** (pinned via `backend/global.json`), **Node.js 20+**, and a reachable **MySQL 8** instance.
-
-### 1. Start a MySQL instance
-
-```bash
-docker run --name enterprise_db \
-  -e MYSQL_ROOT_PASSWORD=YourSecurePassword123! \
-  -e MYSQL_DATABASE=EnterpriseDb \
-  -p 3307:3306 -d mysql:8.0
+```yaml
+CATALOG_SEED_PRODUCT_COUNT: 75
 ```
 
-### 2. Backend
+Se aceptan valores entre 0 y 10,000. Reiniciar el servicio no duplica registros. No se crean proveedores iniciales porque el sistema original no contiene una semilla para ellos.
 
-The default connection string in `appsettings.json` points to `Server=localhost` on port `3306`. If you use the container above (host port `3307`), override the connection string:
+El backend .NET crea estas cuentas de desarrollo:
+
+| Rol | Correo | Contraseña |
+|---|---|---|
+| Admin | `admin@enterprise.com` | `Admin123!` |
+| User | `user@enterprise.com` | `User123!` |
+
+Estas credenciales deben cambiarse fuera de un entorno local académico.
+
+## APIs
+
+### Backend .NET — `http://localhost:5000/api`
+
+| Método | Endpoint | Autorización |
+|---|---|---|
+| POST | `/auth/login` | Anónimo |
+| GET | `/invoices` y `/invoices/{id}` | Admin, Manager, User |
+| POST, PUT | `/invoices` | Admin, Manager |
+| DELETE | `/invoices/{id}` | Admin |
+
+### Catalog Service — `http://localhost:8080/api`
+
+| Método | Endpoint | Descripción |
+|---|---|---|
+| GET | `/categories` | Categorías activas |
+| GET | `/products`, `/products/{id}` | Consulta y paginación |
+| POST, PUT, DELETE | `/products` | Mantenimiento de productos |
+| GET | `/suppliers`, `/suppliers/{id}` | Consulta de proveedores |
+| POST, PUT, DELETE | `/suppliers` | Mantenimiento de proveedores |
+
+`GET /products` admite `search`, `categoryId`, `sortBy`, `sortDirection`, `page` y `pageSize`.
+
+## Desarrollo manual
+
+Requisitos:
+
+- Java 21 y Maven 3.9.
+- .NET 10 SDK.
+- Node.js 20 o superior.
+- MySQL 8 y MongoDB 8 accesibles.
+
+Iniciar solamente las bases de datos:
+
+```bash
+docker compose up -d db mongo
+```
+
+Catalog Service:
+
+```bash
+cd catalog-service
+mvn test
+mvn spring-boot:run
+```
+
+Backend .NET:
 
 ```bash
 cd backend
-export ConnectionStrings__DefaultConnection="Server=localhost;Port=3307;Database=EnterpriseDb;User Id=root;Password=YourSecurePassword123!;"
 dotnet run --project src/Api/Api.csproj
 ```
 
-The API starts, applies migrations, and seeds the default accounts. It listens on `http://localhost:5000` by default when run this way (adjust `ASPNETCORE_URLS` if needed).
-
-### 3. Frontend
+Frontend:
 
 ```bash
 cd frontend
@@ -130,55 +183,44 @@ npm install
 npm start
 ```
 
-The dev server runs on `http://localhost:4200` and calls the API at `http://localhost:5000/api` (from `src/environments/environment.ts`). Production builds use `environment.prod.ts` via the `fileReplacements` configured in `angular.json`.
+Angular se sirve en <http://localhost:4200> durante desarrollo y consume:
 
-## Database Migrations
+- `http://localhost:5000/api` para autenticación y facturas.
+- `http://localhost:8080/api` para el catálogo.
 
-Migrations live in `backend/src/Infrastructure/Data/Migrations`. A design-time factory (`AppDbContextFactory`) lets EF tooling build the context without a live database.
+## Migraciones y pruebas
 
-Create a new migration:
+Las migraciones activas de EF Core están en `backend/src/Api/Migrations` y .NET las aplica al iniciar.
 
-```bash
-cd backend
-dotnet ef migrations add <Name> --project src/Api/Api.csproj --output-dir ../Infrastructure/Data/Migrations
-```
-
-Apply migrations manually (usually not needed — the app does this on startup):
+Ejecutar pruebas y empaquetado del microservicio:
 
 ```bash
-dotnet ef database update --project src/Api/Api.csproj
+cd catalog-service
+mvn test
+mvn clean package
 ```
 
-## API Overview
+Validar Angular:
 
-| Method | Endpoint                | Auth            | Description              |
-|--------|-------------------------|-----------------|--------------------------|
-| POST   | `/api/auth/login`       | Anonymous       | Authenticate, get JWT    |
-| GET    | `/api/products`         | Any role        | List products (paged)    |
-| GET    | `/api/categories`       | Any role        | List active categories   |
-| GET    | `/api/products/{id}`    | Any role        | Get a product            |
-| POST   | `/api/products`         | Admin, Manager  | Create a product         |
-| PUT    | `/api/products/{id}`    | Admin, Manager  | Update a product         |
-| DELETE | `/api/products/{id}`    | Admin           | Delete a product         |
+```bash
+cd frontend
+npm install
+npm run build
+```
 
-`GET /api/products` supports query params: `search`, `sortBy` (`name`, `price`, `stock`, `createdat`), `sortDirection` (`asc`/`desc`), `page`, `pageSize`.
+Validar Compose sin iniciar contenedores:
 
-## Project Structure
+```bash
+docker compose config
+```
+
+## Estructura
 
 ```text
 .
-├── docker-compose.yml
-├── backend/
-│   ├── Dockerfile
-│   ├── global.json                 # pins .NET SDK 10
-│   └── src/
-│       ├── Api/                    # controllers, Program.cs, appsettings
-│       ├── Application/            # DTOs, services (auth, products)
-│       ├── Domain/                 # entities (User, Role, Product)
-│       └── Infrastructure/         # AppDbContext, migrations, seeder
-└── frontend/
-    ├── Dockerfile
-    └── src/
-        ├── app/                    # components, services, guards, interceptors
-        └── environments/           # environment.ts / environment.prod.ts
+├── backend/                 # .NET: autenticación y facturas
+├── catalog-service/         # Spring Boot: catálogo
+├── frontend/                # Angular + Nginx
+├── docs/                    # decisiones de ownership y relaciones
+└── docker-compose.yml
 ```

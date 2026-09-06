@@ -14,9 +14,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // Application services
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<ISupplierService, SupplierService>();
 builder.Services.AddScoped<IInvoiceService, InvoiceService>();
+builder.Services.AddHttpClient<ICatalogClient, CatalogClient>(client =>
+    client.BaseAddress = new Uri(builder.Configuration["CatalogService:BaseUrl"] ?? "http://localhost:8080/"));
 
 // JWT authentication
 var jwtKey = builder.Configuration["Jwt:Key"]!;
@@ -58,8 +58,7 @@ using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     dbContext.Database.Migrate();
-    var productSeedCount = builder.Configuration.GetValue("InventorySeed:ProductCount", 75);
-    await DbSeeder.SeedAsync(dbContext, productSeedCount);
+    await DbSeeder.SeedAsync(dbContext);
 }
 
 if (app.Environment.IsDevelopment())

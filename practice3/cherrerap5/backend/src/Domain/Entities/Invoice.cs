@@ -4,10 +4,10 @@ public class Invoice
 {
     public Guid Id { get; set; } = Guid.NewGuid();
     public string Number { get; set; } = string.Empty;
-    public Guid SupplierId { get; set; }
-    public Supplier Supplier { get; set; } = null!;
-    public Guid ProductId { get; set; }
-    public Product Product { get; set; } = null!;
+    public string SupplierId { get; set; } = string.Empty;
+    public string SupplierName { get; set; } = string.Empty;
+    public string ProductId { get; set; } = string.Empty;
+    public string ProductName { get; set; } = string.Empty;
     public DateTime InvoiceDate { get; set; } = DateTime.UtcNow;
     public DateTime? DueDate { get; set; }
     public int Quantity { get; set; }
