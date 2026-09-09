@@ -36,12 +36,11 @@ export class ProductFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadCategories();
     this.productId = this.route.snapshot.paramMap.get('id');
     if (this.productId) {
       this.isEditMode = true;
-      this.loadProduct(this.productId);
     }
+    this.loadCategories();
   }
 
   loadCategories(): void {
@@ -51,6 +50,14 @@ export class ProductFormComponent implements OnInit {
         if (!this.isEditMode && categories.length > 0) {
           this.formData.categoryId = categories[0].id;
         }
+        if (this.isEditMode && this.productId) {
+          this.loadProduct(this.productId);
+        } else {
+          this.loading = false;
+        }
+      },
+      error: () => {
+        this.loading = false;
       }
     });
   }

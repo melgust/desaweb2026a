@@ -6,7 +6,7 @@ import { Supplier } from '../models/supplier.model';
 
 @Injectable({ providedIn: 'root' })
 export class SupplierService {
-  private readonly apiUrl = `${environment.apiUrl}/suppliers`;
+  private readonly apiUrl = `${environment.catalogApiUrl}/suppliers`;
 
   constructor(private http: HttpClient) {}
 

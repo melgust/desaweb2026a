@@ -9,8 +9,6 @@ public class AppDbContext : DbContext
 
     public DbSet<User> Users => Set<User>();
     public DbSet<Role> Roles => Set<Role>();
-    public DbSet<Category> Categories => Set<Category>();
-    public DbSet<Product> Products => Set<Product>();
     public DbSet<Supplier> Suppliers => Set<Supplier>();
     public DbSet<Invoice> Invoices => Set<Invoice>();
 
@@ -24,16 +22,8 @@ public class AppDbContext : DbContext
             .HasForeignKey(u => u.RoleId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        modelBuilder.Entity<Product>()
-            .HasOne(p => p.Category)
-            .WithMany(c => c.Products)
-            .HasForeignKey(p => p.CategoryId)
-            .OnDelete(DeleteBehavior.SetNull);
-
         modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
         modelBuilder.Entity<Role>().HasIndex(r => r.Name).IsUnique();
-        modelBuilder.Entity<Category>().HasIndex(c => c.Name).IsUnique();
-
         modelBuilder.Entity<Supplier>().HasIndex(s => s.TaxId).IsUnique();
         modelBuilder.Entity<Invoice>().HasIndex(i => i.Number).IsUnique();
 
