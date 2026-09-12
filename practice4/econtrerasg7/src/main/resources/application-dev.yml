@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/catalog}
+    username: ${DATABASE_USERNAME:catalog}
+    password: ${DATABASE_PASSWORD:catalog}
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.springframework.web: DEBUG

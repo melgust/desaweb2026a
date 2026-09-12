@@ -1,0 +1,26 @@
+# syntax=docker/dockerfile:1
+
+# ---------- Build stage ----------
+FROM maven:3.9-eclipse-temurin-21 AS build
+WORKDIR /workspace
+
+COPY pom.xml .
+RUN mvn -B -q dependency:go-offline
+
+COPY src ./src
+RUN mvn -B -q clean package -Dmaven.test.skip=true
+
+# ---------- Runtime stage ----------
+FROM eclipse-temurin:21-jre AS runtime
+WORKDIR /app
+
+RUN groupadd --system spring && useradd --system --gid spring spring
+
+COPY --from=build /workspace/target/*.jar app.jar
+RUN chown spring:spring app.jar
+
+USER spring:spring
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]

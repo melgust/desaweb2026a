@@ -1,0 +1,42 @@
+# Build output (rebuilt inside the image)
+target/
+
+# Version control
+.git/
+.gitignore
+.gitattributes
+
+# IDE / editor
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+nbproject/
+
+# Docs (not needed at build/runtime)
+README.md
+prompt.md
+*.md
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Environment / secrets
+.env
+.env.*
+*.pem
+*.key
+
+# Docker files themselves
+Dockerfile
+.dockerignore
+compose.yml
+compose.yaml
+docker-compose*.yml
