@@ -12,7 +12,7 @@ public interface IInvoiceService
     Task<InvoiceDto> CreateAsync(CreateInvoiceRequest request, CancellationToken ct);
 }
 
-public class InvoiceService(AppDbContext db) : IInvoiceService
+public class InvoiceService(AppDbContext db, IHttpClientFactory httpClientFactory) : IInvoiceService
 {
     public async Task<IEnumerable<InvoiceDto>> GetAllAsync(CancellationToken ct) => await InvoiceQuery().OrderByDescending(i => i.InvoiceDate).Select(ToDtoExpression()).ToListAsync(ct);
     public async Task<InvoiceDto> GetByIdAsync(Guid id, CancellationToken ct) => await InvoiceQuery().Where(i => i.Id == id).Select(ToDtoExpression()).SingleOrDefaultAsync(ct) ?? throw new KeyNotFoundException("Invoice not found.");
@@ -21,10 +21,20 @@ public class InvoiceService(AppDbContext db) : IInvoiceService
     {
         var details = request.Details.ToList();
         if (details.Select(d => d.ProductId).Distinct().Count() != details.Count) throw new InvalidOperationException("A product can appear only once per invoice.");
-        if (!await db.Suppliers.AnyAsync(s => s.Id == request.SupplierId && s.IsActive, ct)) throw new InvalidOperationException("The supplier does not exist or is inactive.");
         if (await db.Invoices.AnyAsync(i => i.InvoiceNumber == request.InvoiceNumber.Trim(), ct)) throw new InvalidOperationException("That invoice number already exists.");
+        // The catalog service is the source of truth for new catalog references.
+        var catalog = httpClientFactory.CreateClient("Catalog");
+        using var supplierResponse = await catalog.GetAsync($"suppliers/{request.SupplierId}", ct);
+        if (!supplierResponse.IsSuccessStatusCode) throw new InvalidOperationException("The supplier does not exist in the catalog service.");
+        foreach (var detail in details)
+        {
+            using var productResponse = await catalog.GetAsync($"products/{detail.ProductId}", ct);
+            if (!productResponse.IsSuccessStatusCode) throw new InvalidOperationException("Every invoice detail must reference a product in the catalog service.");
+        }
+
+        if (!await db.Suppliers.AnyAsync(s => s.Id == request.SupplierId && s.IsActive, ct)) throw new InvalidOperationException("The local invoice schema has no matching supplier snapshot. Run the catalog data migration before registering invoices.");
         var products = await db.Products.Where(p => details.Select(d => d.ProductId).Contains(p.Id) && p.IsActive).ToDictionaryAsync(p => p.Id, ct);
-        if (products.Count != details.Count) throw new InvalidOperationException("Every invoice detail must reference an active product.");
+        if (products.Count != details.Count) throw new InvalidOperationException("The local invoice schema has no matching product snapshot. Run the catalog data migration before registering invoices.");
 
         var invoice = new Invoice { InvoiceNumber = request.InvoiceNumber.Trim(), SupplierId = request.SupplierId, InvoiceDate = request.InvoiceDate == default ? DateTime.UtcNow : request.InvoiceDate };
         foreach (var item in details)

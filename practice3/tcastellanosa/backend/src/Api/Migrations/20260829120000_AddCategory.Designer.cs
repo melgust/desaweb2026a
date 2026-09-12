@@ -78,30 +78,21 @@ namespace Api.Migrations
                 b.ToTable("Users");
             });
 
-            modelBuilder.Entity("Domain.Entities.Category", b =>
-            {
-                b.Navigation("Products");
-            });
-
             modelBuilder.Entity("Domain.Entities.Product", b =>
             {
                 b.HasOne("Domain.Entities.Category", "Category")
-                    .WithMany("Products")
+                    .WithMany()
                     .HasForeignKey("CategoryId")
                     .OnDelete(DeleteBehavior.SetNull);
-                b.Navigation("Category");
             });
-
-            modelBuilder.Entity("Domain.Entities.Role", b => b.Navigation("Users"));
 
             modelBuilder.Entity("Domain.Entities.User", b =>
             {
                 b.HasOne("Domain.Entities.Role", "Role")
-                    .WithMany("Users")
+                    .WithMany()
                     .HasForeignKey("RoleId")
                     .OnDelete(DeleteBehavior.Restrict)
                     .IsRequired();
-                b.Navigation("Role");
             });
 #pragma warning restore 612, 618
         }

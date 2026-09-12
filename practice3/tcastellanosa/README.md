@@ -24,6 +24,8 @@ When running via Docker Compose, the host-side ports are:
 | Frontend  | `http://localhost:81`     | 80             | Angular app served by Nginx              |
 | Backend   | `http://localhost:5000`   | 80             | REST API + Swagger                       |
 | MySQL     | `localhost:3307`          | 3306           | `root` / `YourSecurePassword123!`        |
+| Catalog API | `http://localhost:8080/api` | 8080         | Spring Boot + MongoDB                  |
+| MongoDB   | `localhost:27017`          | 27017         | Catalog database                         |
 
 Useful backend URLs:
 
@@ -34,7 +36,7 @@ Useful backend URLs:
 
 ## Quick Start (Docker)
 
-Run the whole stack (MySQL + Backend + Frontend):
+Run the whole stack (MySQL + MongoDB + Catalog Service + Backend + Frontend):
 
 ```bash
 docker compose up -d --build
@@ -42,8 +44,8 @@ docker compose up -d --build
 
 On startup the backend automatically:
 
-1. Applies EF Core migrations (creates users, products, categories, suppliers, invoices and invoice details).
-2. Seeds default roles and users (see [Seeded Accounts](#seeded-accounts)).
+1. Starts MongoDB and the Java catalog service for products, categories, and suppliers.
+2. Applies EF Core migrations and seeds default roles and users (see [Seeded Accounts](#seeded-accounts)).
 
 Then open <http://localhost:81> and log in.
 
@@ -122,7 +124,7 @@ npm install
 npm start
 ```
 
-The dev server runs on `http://localhost:4200` and calls the API at `http://localhost:5000/api` (from `src/environments/environment.ts`). Production builds use `environment.prod.ts` via the `fileReplacements` configured in `angular.json`.
+The dev server runs on `http://localhost:4200`. Authentication and invoices call `http://localhost:5000/api`; products, categories, and suppliers call `http://localhost:8080/api`.
 
 ## Database Migrations
 

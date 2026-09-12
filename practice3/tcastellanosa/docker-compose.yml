@@ -23,8 +23,31 @@ services:
       - "5000:80"
     environment:
       - ConnectionStrings__DefaultConnection=Server=db;Database=EnterpriseDb;User Id=root;Password=YourSecurePassword123!;
+      - Catalog__BaseUrl=http://catalog-service:8080/api/
     depends_on:
       - db
+
+  catalog-db:
+    image: mongo:7
+    container_name: catalog_db
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - catalog_data:/data/db
+
+  catalog-service:
+    build:
+      context: ./catalog-service
+      dockerfile: Dockerfile
+    container_name: catalog_service
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - MONGODB_URI=mongodb://catalog-db:27017/catalogdb
+    depends_on:
+      - catalog-db
 
   frontend:
     build:
@@ -39,3 +62,4 @@ services:
 
 volumes:
   db_data:
+  catalog_data:

@@ -18,6 +18,10 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ISupplierService, SupplierService>();
 builder.Services.AddScoped<IInvoiceService, InvoiceService>();
+builder.Services.AddHttpClient("Catalog", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["Catalog:BaseUrl"] ?? "http://localhost:8080/api/");
+});
 
 // JWT authentication
 var jwtKey = builder.Configuration["Jwt:Key"]!;
@@ -78,6 +82,7 @@ if (app.Environment.IsDevelopment())
 app.UseCors(CorsPolicy);
 app.UseAuthentication();
 app.UseAuthorization();
+app.MapGet("/", () => Results.Ok(new { service = "enterprise-backend", status = "ok", api = "/api" }));
 app.MapControllers();
 
 app.Run();
