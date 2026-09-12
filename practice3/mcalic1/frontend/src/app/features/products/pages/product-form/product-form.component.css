@@ -1,0 +1,22 @@
+.product-form {
+  display: flex;
+  flex-direction: column;
+  max-width: 640px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.form-row mat-form-field {
+  flex: 1;
+}
+
+.form-actions {
+  margin-top: 12px;
+}
