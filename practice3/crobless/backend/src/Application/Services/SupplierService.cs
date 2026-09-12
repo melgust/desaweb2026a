@@ -15,6 +15,7 @@ public interface ISupplierService
     Task DeleteAsync(Guid id, CancellationToken ct);
 }
 
+[Obsolete("Legacy MySQL implementation. Not registered; replaced by purchasing-service.")]
 public class SupplierService : ISupplierService
 {
     private readonly AppDbContext _db;

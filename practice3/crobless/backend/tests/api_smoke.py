@@ -12,6 +12,7 @@ from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
 BASE = os.environ.get('API_URL', 'http://localhost:5000/api')
+PURCHASING = os.environ.get('PURCHASING_API_URL', 'http://localhost:8081/api')
 TOKEN = None
 checks = 0
 
@@ -21,7 +22,8 @@ def call(method, path, body=None, expected=200, authenticated=True):
     headers = {'Content-Type': 'application/json'}
     if authenticated and TOKEN:
         headers['Authorization'] = 'Bearer ' + TOKEN
-    request = Request(BASE + path, data=json.dumps(body).encode() if body is not None else None,
+    url = PURCHASING if path.startswith(('/suppliers', '/invoices')) else BASE
+    request = Request(url + path, data=json.dumps(body).encode() if body is not None else None,
                       headers=headers, method=method)
     try:
         response = urlopen(request, timeout=20)

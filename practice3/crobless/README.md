@@ -1,8 +1,10 @@
 # Enterprise Management Solution
 
-Implementación de proveedores y facturas: [archivos, endpoints, migración y verificación](IMPLEMENTATION.md).
+Estado actual: [Suppliers e Invoices en Spring Boot y MongoDB](MICROSERVICES.md). Angular llama al microservicio en `http://localhost:8081/api`. Login, Products y Categories siguen en .NET (`http://localhost:5000/api`). Los endpoints antiguos de Suppliers e Invoices responden `410 Gone`.
 
-Full-stack enterprise application built with **.NET 10 Web API**, **Angular 18**, and **MySQL 8**.
+La documentación [IMPLEMENTATION.md](IMPLEMENTATION.md) conserva la implementación anterior en .NET como referencia histórica.
+
+Full-stack enterprise application built with **.NET 10 Web API**, **Spring Boot 3.5 / Java 21**, **Angular 18**, **MySQL 8**, and **MongoDB 8**.
 
 The backend follows a layered (Clean Architecture) structure — Api, Application, Domain, Infrastructure — compiled as a single project. It uses JWT authentication with role-based authorization (Admin, Manager, User), Entity Framework Core with the Pomelo MySQL provider, and BCrypt password hashing.
 

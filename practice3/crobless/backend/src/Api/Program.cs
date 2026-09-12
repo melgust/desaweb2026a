@@ -15,9 +15,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Application services
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<ISupplierService, SupplierService>();
+
 builder.Services.AddScoped<ICategoryService, CategoryService>();
-builder.Services.AddScoped<IInvoiceService, InvoiceService>();
+builder.Services.AddHttpClient<PurchasingClient>(client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["Purchasing:BaseUrl"] ?? "http://localhost:8081/");
+    client.Timeout = TimeSpan.FromSeconds(15);
+    client.DefaultRequestHeaders.Add("X-Internal-Key", builder.Configuration["Purchasing:InternalKey"]);
+});
 
 // JWT authentication
 var jwtKey = builder.Configuration["Jwt:Key"]!;
@@ -73,10 +78,11 @@ app.Use(async (context, next) =>
 {
     try { await next(context); }
     catch (Exception ex) when (ex is KeyNotFoundException or ArgumentException or
-        InvalidOperationException or UnauthorizedAccessException or DbUpdateException)
+        InvalidOperationException or UnauthorizedAccessException or DbUpdateException or PurchasingUnavailableException)
     {
         var (status, message) = ex switch
         {
+            PurchasingUnavailableException => (503, ex.Message),
             KeyNotFoundException => (404, ex.Message),
             UnauthorizedAccessException => (401, ex.Message),
             ArgumentException => (400, ex.Message),

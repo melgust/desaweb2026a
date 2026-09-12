@@ -1,5 +1,7 @@
 # Suppliers e Invoices
 
+> Documento histórico de la implementación inicial en .NET. Estos módulos ahora pertenecen al microservicio Spring Boot y MongoDB; consulta [MICROSERVICES.md](MICROSERVICES.md) para las URLs, migración y pruebas actuales. Los endpoints .NET descritos aquí para Suppliers e Invoices están deprecados y devuelven 410.
+
 Implementación limitada a `practice3/crobless`, rama `crobless`. Se mantiene .NET 10, EF Core 9, MySQL 8, Angular 18 standalone, JWT y los roles existentes.
 
 ## Suppliers

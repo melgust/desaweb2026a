@@ -1,0 +1,25 @@
+server:
+  port: 8081
+spring:
+  data:
+    mongodb:
+      uri: ${MONGODB_URI:mongodb://localhost:27017/purchasing?replicaSet=rs0&directConnection=true}
+  jackson:
+    deserialization:
+      accept-float-as-int: false
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      probes:
+        enabled: true
+app:
+  jwt-key: ${JWT_KEY}
+  jwt-issuer: ${JWT_ISSUER:EnterpriseApi}
+  jwt-audience: ${JWT_AUDIENCE:EnterpriseApp}
+  internal-key: ${INTERNAL_SERVICE_KEY}
+  catalog-url: ${CATALOG_URL:http://localhost:5000}
+  tax-rate: 0

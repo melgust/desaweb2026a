@@ -44,8 +44,8 @@ public class AppDbContext : DbContext
             entity.Property(e => e.Subtotal).HasPrecision(18, 2);
             entity.HasOne(e => e.Invoice).WithMany(e => e.Items).HasForeignKey(e => e.InvoiceId)
                 .OnDelete(DeleteBehavior.Cascade);
-            entity.HasOne(e => e.Product).WithMany().HasForeignKey(e => e.ProductId)
-                .OnDelete(DeleteBehavior.Restrict);
+            // ProductId is now a cross-service reference; the old table is an archive.
+            entity.Ignore(e => e.Product);
         });
 
         // --- Configuración de Roles ---
@@ -81,6 +81,7 @@ public class AppDbContext : DbContext
             entity.Property(e => e.Name).IsRequired().HasMaxLength(150);
             entity.Property(e => e.ContactEmail).HasMaxLength(150);
             entity.Property(e => e.Phone).HasMaxLength(50);
+            entity.Ignore(e => e.Products);
         });
 
         // --- NUEVO: Configuración de Categorías ---
@@ -100,11 +101,8 @@ public class AppDbContext : DbContext
             entity.Property(e => e.Description).HasMaxLength(500);
             entity.Property(e => e.Price).HasPrecision(18, 2);
             
-            // Relación con Supplier (existente)
-            entity.HasOne(e => e.Supplier)
-                  .WithMany(s => s.Products)
-                  .HasForeignKey(e => e.SupplierId)
-                  .OnDelete(DeleteBehavior.SetNull);
+            // SupplierId belongs to MongoDB; validate through PurchasingClient.
+            entity.Ignore(e => e.Supplier);
             
             // NUEVO: Relación con Category
             entity.HasOne(e => e.Category)

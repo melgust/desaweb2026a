@@ -25,9 +25,49 @@ services:
       - "5000:80"
     environment:
       - ConnectionStrings__DefaultConnection=Server=db;Database=EnterpriseDb;User Id=root;Password=YourSecurePassword123!;
+      - Purchasing__BaseUrl=http://purchasing:8081/
+      - Purchasing__InternalKey=${INTERNAL_SERVICE_KEY:-crobless-local-internal-key-change-for-production-2026}
+      - Purchasing__PublicUrl=http://localhost:8081/api
+      - Jwt__Key=${JWT_KEY:-SUPER_SECRET_SECURITY_KEY_ENTERPRISE_APPLICATION_2026_JWT!}
     depends_on:
       db:
         condition: service_healthy
+
+  mongo:
+    image: mongo:8.0
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
+    restart: always
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "try { rs.status(); } catch (e) { rs.initiate({_id:'rs0',members:[{_id:0,host:'mongo:27017'}]}); } if (!db.hello().isWritablePrimary) quit(1);"]
+      interval: 5s
+      timeout: 10s
+      retries: 30
+
+  purchasing:
+    build: ./purchasing-service
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      MONGODB_URI: mongodb://mongo:27017/purchasing?replicaSet=rs0
+      CATALOG_URL: http://backend:80
+      INTERNAL_SERVICE_KEY: ${INTERNAL_SERVICE_KEY:-crobless-local-internal-key-change-for-production-2026}
+      JWT_KEY: ${JWT_KEY:-SUPER_SECRET_SECURITY_KEY_ENTERPRISE_APPLICATION_2026_JWT!}
+      JWT_ISSUER: EnterpriseApi
+      JWT_AUDIENCE: EnterpriseApp
+    depends_on:
+      mongo:
+        condition: service_healthy
+      backend:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8081/actuator/health/readiness"]
+      interval: 5s
+      timeout: 5s
+      start_period: 30s
+      retries: 30
 
   frontend:
     build:
@@ -37,7 +77,9 @@ services:
     ports:
       - "81:80"
     depends_on:
-      - backend
+      purchasing:
+        condition: service_healthy
 
 volumes:
   db_data:
+  mongo_data:

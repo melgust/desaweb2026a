@@ -10,9 +10,11 @@ const assert = require('node:assert/strict');
   page.on('dialog', dialog => dialog.accept());
   const base = process.env.FRONTEND_URL || 'http://localhost:81';
   const api = process.env.API_URL || 'http://localhost:5000/api';
+  const purchasing = process.env.PURCHASING_API_URL || 'http://localhost:8081/api';
+  const serviceUrl = path => path.startsWith('/suppliers') || path.startsWith('/invoices') ? purchasing : api;
   const suffix = Date.now().toString();
   let supplierId, productId, invoiceId, token;
-  const saved = (path, method) => page.waitForResponse(r => r.url() === api + path && r.request().method() === method);
+  const saved = (path, method) => page.waitForResponse(r => r.url() === serviceUrl(path) + path && r.request().method() === method);
   try {
     await page.goto(base + '/invoices');
     await page.waitForURL('**/login');
@@ -104,7 +106,7 @@ const assert = require('node:assert/strict');
     if (token) {
       for (const [resource, id] of [['invoices', invoiceId], ['products', productId], ['suppliers', supplierId]]) {
         if (id) {
-          const response = await page.request.delete(`${api}/${resource}/${id}`, { headers: { Authorization: 'Bearer ' + token } });
+          const response = await page.request.delete(`${serviceUrl("/" + resource)}/${resource}/${id}`, { headers: { Authorization: 'Bearer ' + token } });
           assert.equal(response.status(), 204, `Cleanup ${resource}`);
         }
       }

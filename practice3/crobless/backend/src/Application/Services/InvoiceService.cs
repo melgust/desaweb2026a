@@ -14,6 +14,7 @@ public interface IInvoiceService
     Task DeleteAsync(Guid id, CancellationToken ct);
 }
 
+[Obsolete("Legacy MySQL implementation. Not registered; replaced by purchasing-service.")]
 public class InvoiceService : IInvoiceService
 {
     // Exercise policy: no tax rule has been configured. Exposed to Angular by /settings.
