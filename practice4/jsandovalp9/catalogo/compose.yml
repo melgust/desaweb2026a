@@ -1,0 +1,35 @@
+services:
+  mongo:
+    image: mongo:7.0
+    container_name: catalog-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: catalogo
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD-SHELL", "mongosh --quiet --eval 'db.runCommand({ ping: 1 }).ok' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+
+  catalogo-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: catalogo-service
+    depends_on:
+      mongo:
+        condition: service_healthy
+    environment:
+      MONGO_URI: mongodb://mongo:27017/catalogo
+      SERVER_PORT: 8080
+    ports:
+      - "8081:8080"
+    restart: unless-stopped
+
+volumes:
+  mongo-data:
