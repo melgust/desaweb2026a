@@ -1,0 +1,19 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: catalog
+  data:
+    mongodb:
+      uri: ${MONGODB_URI:mongodb://localhost:27017/catalogdb}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+logging:
+  level:
+    com.enterprise.catalog: INFO
