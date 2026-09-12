@@ -1,0 +1,28 @@
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h3 class="card-title mb-0">Facturas</h3>
+    <a *ngIf="auth.canManageProducts()" routerLink="/invoices/new" class="btn btn-primary btn-sm">Nueva factura</a>
+  </div>
+  <div class="card-body">
+    <div *ngIf="error" class="alert alert-danger" role="alert">{{ error }} <button class="btn btn-sm btn-outline-danger" (click)="load()">Reintentar</button></div>
+    <p *ngIf="loading" role="status">Cargando facturas...</p>
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead><tr><th>Número</th><th>Fecha</th><th>Proveedor</th><th>Subtotal</th><th>Impuesto</th><th>Total</th><th>Acciones</th></tr></thead>
+        <tbody>
+          <tr *ngFor="let invoice of invoices()">
+            <td>{{ invoice.invoiceNumber }}</td><td>{{ invoice.invoiceDate | date:'dd/MM/yyyy' }}</td>
+            <td>{{ invoice.supplierName }}</td><td>{{ invoice.subtotal | number:'1.2-2' }}</td>
+            <td>{{ invoice.tax | number:'1.2-2' }}</td><td>{{ invoice.total | number:'1.2-2' }}</td>
+            <td class="text-nowrap">
+              <a [routerLink]="['/invoices/view', invoice.id]" class="btn btn-secondary btn-sm mr-1">Ver</a>
+              <a *ngIf="auth.canManageProducts()" [routerLink]="['/invoices/edit', invoice.id]" class="btn btn-primary btn-sm mr-1">Editar</a>
+              <button *ngIf="auth.canDeleteProducts()" class="btn btn-danger btn-sm" [disabled]="!!deleting" (click)="delete(invoice)">Eliminar</button>
+            </td>
+          </tr>
+          <tr *ngIf="!loading && !error && !invoices().length"><td colspan="7" class="text-center">No hay facturas.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

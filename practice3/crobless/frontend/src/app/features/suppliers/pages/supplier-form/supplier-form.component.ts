@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
+import { apiError } from '../../../../core/services/api-error';
 import { SupplierService } from '../../../../core/services/supplier.service';
 
 @Component({
@@ -27,6 +28,8 @@ export class SupplierFormComponent implements OnInit {
   isEditMode = false;
   supplierId: string | null = null;
   loading = false;
+  error = '';
+  loadFailed = false;
 
   formData = {
     name: '',
@@ -61,19 +64,23 @@ export class SupplierFormComponent implements OnInit {
         };
         this.loading = false;
       },
-      error: () => this.router.navigate(['/suppliers'])
+      error: err => { this.error = apiError(err); this.loading = false; this.loadFailed = true; }
     });
   }
 
-  onSubmit(): void {
+  onSubmit(form: NgForm): void {
+    if (form.invalid || this.loading || this.loadFailed || !this.formData.name.trim()) return;
+    this.formData.name = this.formData.name.trim();
     this.loading = true;
+    this.error = '';
+    const payload = { ...this.formData, contactEmail: this.formData.contactEmail.trim() || undefined };
     const request$ = this.isEditMode && this.supplierId
-      ? this.supplierService.updateSupplier(this.supplierId, this.formData)
-      : this.supplierService.createSupplier(this.formData);
+      ? this.supplierService.updateSupplier(this.supplierId, payload)
+      : this.supplierService.createSupplier(payload);
 
     request$.subscribe({
       next: () => this.router.navigate(['/suppliers']),
-      error: () => (this.loading = false)
+      error: err => { this.error = apiError(err); this.loading = false; }
     });
   }
 }

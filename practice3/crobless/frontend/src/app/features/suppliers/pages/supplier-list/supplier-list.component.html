@@ -2,11 +2,12 @@
   <div class="card-header d-flex justify-content-between align-items-center">
     <h3 class="card-title mb-0">Suppliers</h3>
     <a *ngIf="auth.canManageProducts()" routerLink="/suppliers/new" class="btn btn-primary btn-sm">
-      + Add Supplier
+      Nuevo proveedor
     </a>
   </div>
 
   <div class="card-body">
+    <div *ngIf="error" class="alert alert-danger" role="alert">{{ error }}</div>
     <mat-form-field appearance="outline" class="search-field">
       <mat-label>Search suppliers</mat-label>
       <input matInput placeholder="Type and press Enter"
@@ -51,7 +52,7 @@
               <mat-icon>edit</mat-icon>
             </a>
             <button *ngIf="auth.canDeleteProducts()" mat-icon-button color="warn"
-                    (click)="deleteSupplier(item.id)" title="Delete">
+                    [disabled]="deleting" (click)="deleteSupplier(item.id)" title="Delete">
               <mat-icon>delete</mat-icon>
             </button>
           </td>

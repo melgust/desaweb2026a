@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { apiError } from '../../../../core/services/api-error';
 import { SupplierService } from '../../../../core/services/supplier.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { Supplier } from '../../../../core/models/supplier.model';
@@ -37,6 +38,8 @@ export class SupplierListComponent implements OnInit {
   suppliers = signal<Supplier[]>([]);
   totalItems = signal(0);
   loading = signal(false);
+  error = '';
+  deleting = false;
 
   pageIndex = 0;
   pageSize = 10;
@@ -59,6 +62,7 @@ export class SupplierListComponent implements OnInit {
 
   loadSuppliers(): void {
     this.loading.set(true);
+    this.error = '';
     this.supplierService
       .getSuppliers(this.searchTerm, this.sortBy, this.sortDirection, this.pageIndex + 1, this.pageSize)
       .subscribe({
@@ -67,7 +71,7 @@ export class SupplierListComponent implements OnInit {
           this.totalItems.set(res.totalItems);
           this.loading.set(false);
         },
-        error: () => this.loading.set(false)
+        error: err => { this.error = apiError(err); this.loading.set(false); }
       });
   }
 
@@ -90,8 +94,13 @@ export class SupplierListComponent implements OnInit {
   }
 
   deleteSupplier(id: string): void {
-    if (confirm('Delete supplier? Products linked to it will be unassigned.')) {
-      this.supplierService.deleteSupplier(id).subscribe(() => this.loadSuppliers());
+    if (this.deleting) return;
+    if (confirm('?Eliminar proveedor? Los productos quedar?n sin proveedor. No se permite si tiene facturas.')) {
+      this.deleting = true;
+      this.supplierService.deleteSupplier(id).subscribe({
+        next: () => { this.deleting = false; if (this.suppliers().length === 1 && this.pageIndex > 0) this.pageIndex--; this.loadSuppliers(); },
+        error: err => { this.deleting = false; this.error = apiError(err); }
+      });
     }
   }
 }

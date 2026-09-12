@@ -1,5 +1,7 @@
 # Enterprise Management Solution
 
+Implementación de proveedores y facturas: [archivos, endpoints, migración y verificación](IMPLEMENTATION.md).
+
 Full-stack enterprise application built with **.NET 10 Web API**, **Angular 18**, and **MySQL 8**.
 
 The backend follows a layered (Clean Architecture) structure — Api, Application, Domain, Infrastructure — compiled as a single project. It uses JWT authentication with role-based authorization (Admin, Manager, User), Entity Framework Core with the Pomelo MySQL provider, and BCrypt password hashing.

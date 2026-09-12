@@ -92,6 +92,11 @@ export const routes: Routes = [
       ),
   },
 
+  { path: 'invoices', canActivate: [authGuard], loadComponent: () => import('./features/invoices/pages/invoice-list/invoice-list.component').then(m => m.InvoiceListComponent) },
+  { path: 'invoices/new', canActivate: [authGuard], loadComponent: () => import('./features/invoices/pages/invoice-form/invoice-form.component').then(m => m.InvoiceFormComponent) },
+  { path: 'invoices/edit/:id', canActivate: [authGuard], loadComponent: () => import('./features/invoices/pages/invoice-form/invoice-form.component').then(m => m.InvoiceFormComponent) },
+  { path: 'invoices/view/:id', canActivate: [authGuard], data: { readonly: true }, loadComponent: () => import('./features/invoices/pages/invoice-form/invoice-form.component').then(m => m.InvoiceFormComponent) },
+
   // Fallback: ruta no encontrada
   { path: '**', redirectTo: '/products' },
 ];

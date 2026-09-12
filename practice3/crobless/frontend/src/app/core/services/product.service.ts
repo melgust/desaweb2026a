@@ -10,6 +10,10 @@ export class ProductService {
 
   constructor(private http: HttpClient) {}
 
+  getAllProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>(`${this.apiUrl}/all`);
+  }
+
   getProducts(
     search?: string,
     sortBy?: string,

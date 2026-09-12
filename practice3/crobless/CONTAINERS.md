@@ -8,9 +8,11 @@ This document explains how the Docker containers in this project fit together an
 
 | Service    | Container name        | Image / Build           | Host port -> Container port |
 |------------|-----------------------|-------------------------|-----------------------------|
-| `db`       | `enterprise_db`       | `mysql:8.0`             | `3307` -> `3306`            |
-| `backend`  | `enterprise_backend`  | built from `./backend`  | `5000` -> `80`              |
-| `frontend` | `enterprise_frontend` | built from `./frontend` | `81` -> `80`                |
+| `db`       | `crobless-db-1`       | `mysql:8.0`             | `3307` -> `3306`            |
+| `backend`  | `crobless-backend-1`  | built from `./backend`  | `5000` -> `80`              |
+| `frontend` | `crobless-frontend-1` | built from `./frontend` | `81` -> `80`                |
+
+Compose generates names from the project name (default: `crobless`), avoiding conflicts with other exercises. The backend waits for the MySQL health check. Nginx serves Angular routes through `index.html`, including direct navigation and reloads.
 
 Startup order is controlled by `depends_on`: `db` starts first, then `backend`, then `frontend`.
 
@@ -109,7 +111,7 @@ docker compose logs -f backend
 mysql -h 127.0.0.1 -P 3307 -u root -p
 
 # Open a shell inside the running backend container
-docker exec -it enterprise_backend sh
+docker compose exec backend sh
 
 # Stop and remove containers (keep data)
 docker compose down

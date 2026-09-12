@@ -18,6 +18,8 @@ import { AuthService } from './core/services/auth.service';
           <li class="nav-item">
             <a class="nav-link" routerLink="/suppliers" routerLinkActive="active">Suppliers</a>
           </li>
+          <li class="nav-item"><a class="nav-link" routerLink="/categories" routerLinkActive="active">Categories</a></li>
+          <li class="nav-item"><a class="nav-link" routerLink="/invoices" routerLinkActive="active">Invoices</a></li>
         </ul>
         <ul class="navbar-nav ml-auto align-items-center pr-3">
           <li class="nav-item text-light mr-3">

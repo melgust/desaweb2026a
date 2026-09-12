@@ -23,6 +23,8 @@ public class SupplierService : ISupplierService
 
     public async Task<SupplierPagedResult> GetSuppliersAsync(string? search, string? sortBy, string? sortDirection, int page, int pageSize, CancellationToken ct)
     {
+        if (page < 1 || pageSize < 1 || pageSize > 500)
+            throw new ArgumentException("Paginación inválida.");
         var query = _db.Suppliers.AsNoTracking();
 
         if (!string.IsNullOrWhiteSpace(search))
@@ -69,7 +71,7 @@ public class SupplierService : ISupplierService
     {
         var s = new Supplier
         {
-            Name = request.Name,
+            Name = request.Name.Trim(),
             ContactEmail = request.ContactEmail,
             Phone = request.Phone,
             IsActive = request.IsActive
@@ -82,7 +84,7 @@ public class SupplierService : ISupplierService
     public async Task<SupplierDto> UpdateAsync(Guid id, UpdateSupplierRequest request, CancellationToken ct)
     {
         var s = await _db.Suppliers.FindAsync(new object[] { id }, ct) ?? throw new KeyNotFoundException("Supplier not found.");
-        s.Name = request.Name;
+        s.Name = request.Name.Trim();
         s.ContactEmail = request.ContactEmail;
         s.Phone = request.Phone;
         s.IsActive = request.IsActive;
@@ -94,6 +96,8 @@ public class SupplierService : ISupplierService
     public async Task DeleteAsync(Guid id, CancellationToken ct)
     {
         var s = await _db.Suppliers.FindAsync(new object[] { id }, ct) ?? throw new KeyNotFoundException("Supplier not found.");
+        if (await _db.Invoices.AnyAsync(i => i.SupplierId == id, ct))
+            throw new InvalidOperationException("No se puede eliminar un proveedor utilizado por facturas.");
         _db.Suppliers.Remove(s);
         await _db.SaveChangesAsync(ct);
     }

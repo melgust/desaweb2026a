@@ -59,3 +59,6 @@ Thumbs.db
 *.nupkg
 *.snupkg
 .nuget/
+backend/.tools/
+frontend/dist/
+frontend/.angular/

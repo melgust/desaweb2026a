@@ -16,6 +16,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ISupplierService, SupplierService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IInvoiceService, InvoiceService>();
 
 // JWT authentication
 var jwtKey = builder.Configuration["Jwt:Key"]!;
@@ -67,6 +69,29 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors(CorsPolicy);
+app.Use(async (context, next) =>
+{
+    try { await next(context); }
+    catch (Exception ex) when (ex is KeyNotFoundException or ArgumentException or
+        InvalidOperationException or UnauthorizedAccessException or DbUpdateException)
+    {
+        var (status, message) = ex switch
+        {
+            KeyNotFoundException => (404, ex.Message),
+            UnauthorizedAccessException => (401, ex.Message),
+            ArgumentException => (400, ex.Message),
+            InvalidOperationException => (400, ex.Message),
+            DbUpdateException db when db.InnerException is MySqlConnector.MySqlException { Number: 1062 }
+                => (400, "Ya existe un registro con ese identificador único."),
+            DbUpdateException db when db.InnerException is MySqlConnector.MySqlException { Number: 1451 or 1452 }
+                => (400, "No se puede guardar o eliminar: el registro está relacionado con otra información."),
+            _ => (500, "No se pudo guardar la información.")
+        };
+        if (status == 500) app.Logger.LogError(ex, "Database operation failed");
+        context.Response.StatusCode = status;
+        await context.Response.WriteAsJsonAsync(new { message });
+    }
+});
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

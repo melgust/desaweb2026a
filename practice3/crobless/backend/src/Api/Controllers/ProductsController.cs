@@ -14,6 +14,11 @@ public class ProductsController : ControllerBase
 
     public ProductsController(IProductService productService) => _productService = productService;
 
+    [HttpGet("all")]
+    [Authorize(Roles = "Admin,Manager,User")]
+    public async Task<ActionResult<IEnumerable<ProductDto>>> GetAll(CancellationToken ct) =>
+        Ok(await _productService.GetAllAsync(ct));
+
     [HttpGet]
     [Authorize(Roles = "Admin,Manager,User")]
     public async Task<ActionResult<ProductPagedResult>> GetProducts([FromQuery] string? search, [FromQuery] string? sortBy, [FromQuery] string? sortDirection, [FromQuery] int page = 1, [FromQuery] int pageSize = 10, CancellationToken ct = default)

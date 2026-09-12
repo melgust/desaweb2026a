@@ -12,6 +12,8 @@ public class AppDbContext : DbContext
     public DbSet<Role> Roles => Set<Role>();
     public DbSet<Product> Products => Set<Product>();
     public DbSet<Supplier> Suppliers => Set<Supplier>();
+    public DbSet<Invoice> Invoices => Set<Invoice>();
+    public DbSet<InvoiceDetail> InvoiceDetails => Set<InvoiceDetail>();
     
     // --- NUEVO: Entidad Category ---
     public DbSet<Category> Categories => Set<Category>();
@@ -19,6 +21,32 @@ public class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<Invoice>(entity =>
+        {
+            entity.ToTable("Invoices");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.InvoiceNumber).IsRequired().HasMaxLength(50);
+            entity.HasIndex(e => e.InvoiceNumber).IsUnique();
+            entity.Property(e => e.InvoiceDate).HasColumnType("date");
+            entity.Property(e => e.Notes).HasMaxLength(2000);
+            entity.Property(e => e.Subtotal).HasPrecision(18, 2);
+            entity.Property(e => e.Tax).HasPrecision(18, 2);
+            entity.Property(e => e.Total).HasPrecision(18, 2);
+            entity.HasOne(e => e.Supplier).WithMany().HasForeignKey(e => e.SupplierId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+        modelBuilder.Entity<InvoiceDetail>(entity =>
+        {
+            entity.ToTable("InvoiceDetails");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.UnitPrice).HasPrecision(18, 2);
+            entity.Property(e => e.Subtotal).HasPrecision(18, 2);
+            entity.HasOne(e => e.Invoice).WithMany(e => e.Items).HasForeignKey(e => e.InvoiceId)
+                .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(e => e.Product).WithMany().HasForeignKey(e => e.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
 
         // --- Configuración de Roles ---
         modelBuilder.Entity<Role>(entity =>

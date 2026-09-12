@@ -7,6 +7,7 @@ namespace Application.Services;
 
 public interface IProductService
 {
+    Task<IEnumerable<ProductDto>> GetAllAsync(CancellationToken ct);
     Task<ProductPagedResult> GetProductsAsync(string? search, string? sortBy, string? sortDirection, int page, int pageSize, CancellationToken ct);
     Task<ProductDto> GetByIdAsync(Guid id, CancellationToken ct);
     Task<ProductDto> CreateAsync(CreateProductRequest request, CancellationToken ct);
@@ -19,6 +20,12 @@ public class ProductService : IProductService
     private readonly AppDbContext _db;
 
     public ProductService(AppDbContext db) => _db = db;
+
+    public async Task<IEnumerable<ProductDto>> GetAllAsync(CancellationToken ct) =>
+        await _db.Products.AsNoTracking().OrderBy(p => p.Name)
+            .Select(p => new ProductDto(p.Id, p.Name, p.Description, p.Price, p.Stock,
+                p.IsActive, p.CreatedAt, p.SupplierId, p.Supplier != null ? p.Supplier.Name : null,
+                p.CategoryId, p.Category != null ? p.Category.Name : null)).ToListAsync(ct);
 
     public async Task<ProductPagedResult> GetProductsAsync(string? search, string? sortBy, string? sortDirection, int page, int pageSize, CancellationToken ct)
     {
@@ -151,6 +158,8 @@ public class ProductService : IProductService
         if (product == null)
             throw new KeyNotFoundException("Producto no encontrado");
 
+        if (await _db.InvoiceDetails.AnyAsync(i => i.ProductId == id, ct))
+            throw new InvalidOperationException("No se puede eliminar un producto utilizado por facturas.");
         _db.Products.Remove(product);
         await _db.SaveChangesAsync(ct);
     }

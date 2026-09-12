@@ -1,0 +1,4 @@
+.product-select { min-width: 220px; }
+.numeric-input { min-width: 110px; }
+.ng-invalid.ng-touched { border-color: #dc3545; }
+fieldset { min-width: 0; }

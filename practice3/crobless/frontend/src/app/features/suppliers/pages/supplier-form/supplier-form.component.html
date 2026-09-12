@@ -5,26 +5,27 @@
   </div>
 
   <div class="card-body">
-    <form (ngSubmit)="onSubmit()" *ngIf="!loading; else loadingTpl" class="supplier-form">
+    <div *ngIf="error" class="alert alert-danger" role="alert">{{ error }}</div>
+    <form #supplierForm="ngForm" (ngSubmit)="onSubmit(supplierForm)" *ngIf="!loading; else loadingTpl" class="supplier-form">
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Supplier Name</mat-label>
-        <input matInput [(ngModel)]="formData.name" name="name" required />
+        <input matInput [(ngModel)]="formData.name" name="name" required maxlength="150" pattern=".*\S.*" />
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Contact Email</mat-label>
-        <input matInput type="email" [(ngModel)]="formData.contactEmail" name="contactEmail" />
+        <input matInput type="email" [(ngModel)]="formData.contactEmail" name="contactEmail" email maxlength="150" />
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Phone</mat-label>
-        <input matInput [(ngModel)]="formData.phone" name="phone" />
+        <input matInput [(ngModel)]="formData.phone" name="phone" maxlength="50" />
       </mat-form-field>
 
       <mat-checkbox [(ngModel)]="formData.isActive" name="isActive">Is Active</mat-checkbox>
 
       <div class="form-actions">
-        <button mat-raised-button color="primary" type="submit">
+        <button mat-raised-button color="primary" type="submit" [disabled]="supplierForm.invalid || loading || loadFailed">
           {{ isEditMode ? 'Update Supplier' : 'Create Supplier' }}
         </button>
       </div>
