@@ -1,0 +1,5 @@
+{
+  "/api/cart": { "target": "http://localhost:3000" },
+  "/api/catalog": { "target": "http://localhost:8080", "pathRewrite": { "^/api/catalog": "/api" } },
+  "/api": { "target": "http://localhost:5000" }
+}

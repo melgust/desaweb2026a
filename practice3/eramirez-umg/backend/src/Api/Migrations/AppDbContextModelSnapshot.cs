@@ -22,30 +22,6 @@ namespace Api.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Entities.Category", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("Categories");
-                });
-
             modelBuilder.Entity("Domain.Entities.Invoice", b =>
                 {
                     b.Property<Guid>("Id")
@@ -73,15 +49,18 @@ namespace Api.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<decimal>("Subtotal")
+                        .HasPrecision(65, 30)
                         .HasColumnType("decimal(65,30)");
 
                     b.Property<Guid>("SupplierId")
                         .HasColumnType("char(36)");
 
                     b.Property<decimal>("Tax")
+                        .HasPrecision(65, 30)
                         .HasColumnType("decimal(65,30)");
 
                     b.Property<decimal>("Total")
+                        .HasPrecision(65, 30)
                         .HasColumnType("decimal(65,30)");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -97,42 +76,49 @@ namespace Api.Migrations
                     b.ToTable("Invoices");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Product", b =>
+            modelBuilder.Entity("Domain.Entities.InvoiceDetail", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid?>("CategoryId")
+                    b.Property<Guid>("InvoiceId")
                         .HasColumnType("char(36)");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("longtext");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("Name")
+                    b.Property<string>("ProductId")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128)");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(65,30)");
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
 
-                    b.Property<int>("Stock")
+                    b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime(6)");
+                    b.Property<decimal>("Subtotal")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("InvoiceId", "ProductId")
+                        .IsUnique();
 
-                    b.ToTable("Products");
+                    b.ToTable("InvoiceDetails", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_InvoiceDetails_Quantity", "`Quantity` > 0");
+
+                            t.HasCheckConstraint("CK_InvoiceDetails_Subtotal", "`Subtotal` >= 0");
+
+                            t.HasCheckConstraint("CK_InvoiceDetails_UnitPrice", "`UnitPrice` >= 0");
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Role", b =>
@@ -251,14 +237,15 @@ namespace Api.Migrations
                     b.Navigation("Supplier");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Product", b =>
+            modelBuilder.Entity("Domain.Entities.InvoiceDetail", b =>
                 {
-                    b.HasOne("Domain.Entities.Category", "Category")
-                        .WithMany("Products")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                    b.HasOne("Domain.Entities.Invoice", "Invoice")
+                        .WithMany("Details")
+                        .HasForeignKey("InvoiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Category");
+                    b.Navigation("Invoice");
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
@@ -272,9 +259,9 @@ namespace Api.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Category", b =>
+            modelBuilder.Entity("Domain.Entities.Invoice", b =>
                 {
-                    b.Navigation("Products");
+                    b.Navigation("Details");
                 });
 
             modelBuilder.Entity("Domain.Entities.Role", b =>

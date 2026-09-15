@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Invoice, InvoicePagedResult } from '../models/invoice.model';
+import { CreateInvoiceRequest, Invoice, InvoicePagedResult } from '../models/invoice.model';
 
 @Injectable({ providedIn: 'root' })
 export class InvoiceService {
@@ -17,7 +17,7 @@ export class InvoiceService {
     return this.http.get<InvoicePagedResult>(this.apiUrl, { params });
   }
   getInvoiceById(id: string): Observable<Invoice> { return this.http.get<Invoice>(`${this.apiUrl}/${id}`); }
-  createInvoice(invoice: Partial<Invoice>): Observable<Invoice> { return this.http.post<Invoice>(this.apiUrl, invoice); }
+  createInvoice(invoice: CreateInvoiceRequest): Observable<Invoice> { return this.http.post<Invoice>(this.apiUrl, invoice); }
   updateInvoice(id: string, invoice: Partial<Invoice>): Observable<Invoice> { return this.http.put<Invoice>(`${this.apiUrl}/${id}`, invoice); }
   deleteInvoice(id: string): Observable<void> { return this.http.delete<void>(`${this.apiUrl}/${id}`); }
 }

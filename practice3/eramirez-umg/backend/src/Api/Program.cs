@@ -16,6 +16,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ISupplierService, SupplierService>();
 builder.Services.AddScoped<IInvoiceService, InvoiceService>();
+builder.Services.AddHttpClient<CatalogClient>(client =>
+{
+    client.BaseAddress = new Uri((builder.Configuration["CatalogService:Url"] ?? "http://localhost:8080").TrimEnd('/') + "/");
+    client.Timeout = TimeSpan.FromSeconds(10);
+});
 
 // JWT authentication
 var jwtKey = builder.Configuration["Jwt:Key"]!;
@@ -66,6 +71,26 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.Use(async (context, next) =>
+{
+    try { await next(context); }
+    catch (Exception ex) when (!context.Response.HasStarted && !context.RequestAborted.IsCancellationRequested)
+    {
+        var (status, message) = ex switch
+        {
+            ArgumentException => (400, ex.Message),
+            KeyNotFoundException => (404, ex.Message),
+            UnauthorizedAccessException => (401, ex.Message),
+            CatalogUnavailableException => (503, ex.Message),
+            InvalidOperationException => (409, "The operation conflicts with the current data."),
+            DbUpdateException { InnerException: MySqlConnector.MySqlException { Number: 1062 } } => (409, "A record with that unique value already exists."),
+            _ => (500, "An unexpected error occurred.")
+        };
+        if (status >= 500) app.Logger.LogError(ex, "Request failed");
+        context.Response.StatusCode = status;
+        await context.Response.WriteAsJsonAsync(new { message });
+    }
+});
 app.UseCors(CorsPolicy);
 app.UseAuthentication();
 app.UseAuthorization();

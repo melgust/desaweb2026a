@@ -4,7 +4,10 @@
     <a *ngIf="auth.canManageProducts()" routerLink="/products/new" class="btn btn-primary">+ Add Product</a>
   </header>
 
-  <input type="text" placeholder="Search products... (press Enter)" [(ngModel)]="searchTerm" (keyup.enter)="onSearchChange()" class="search-bar" />
+  <p *ngIf="cartMessage" class="notice success" role="status">{{ cartMessage }} <a routerLink="/cart">View cart</a></p>
+  <p *ngIf="cartError" class="notice error" role="alert">{{ cartError }}</p>
+  <label for="product-search" class="sr-only">Search products</label>
+  <input id="product-search" type="text" placeholder="Search products... (press Enter)" [(ngModel)]="searchTerm" (keyup.enter)="onSearchChange()" class="search-bar" />
 
   <div class="pagination-mode" role="group" aria-label="Pagination mode">
     <span>View mode</span>
@@ -12,7 +15,7 @@
     <button [class.active]="paginationMode === 'infinite'" (click)="setPaginationMode('infinite')">Infinite scroll</button>
   </div>
 
-  <table class="grid-table" *ngIf="!loading() || products().length > 0; else loadingTpl">
+  <div class="table-scroll"><table class="grid-table" *ngIf="!loading() || products().length > 0; else loadingTpl">
     <thead>
       <tr>
         <th (click)="toggleSort('name')">Nombre</th>
@@ -31,12 +34,13 @@
         <td>\${{ item.price | number:'1.2-2' }}</td>
         <td>{{ item.stock }}</td>
         <td *ngIf="auth.canManageProducts()">
+          <button class="btn btn-primary" type="button" (click)="addToCart(item)" [disabled]="carts.busy() || !item.isActive || item.stock <= 0" [attr.aria-label]="'Add ' + item.name + ' to cart'">{{ addingId === item.id ? 'Adding...' : (!item.isActive || item.stock <= 0 ? 'Unavailable' : 'Add to cart') }}</button>
           <a [routerLink]="['/products/edit', item.id]">Editar</a>
           <button *ngIf="auth.canDeleteProducts()" (click)="deleteProduct(item.id)" class="text-danger">Eliminar</button>
         </td>
       </tr>
     </tbody>
-  </table>
+  </table></div>
 
   <div class="pagination" *ngIf="paginationMode === 'offset' && totalPages() > 0">
     <button [disabled]="page() <= 1" (click)="setPage(page() - 1)">Prev</button>

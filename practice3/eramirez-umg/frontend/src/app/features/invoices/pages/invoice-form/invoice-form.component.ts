@@ -2,21 +2,123 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 import { InvoiceService } from '../../../../core/services/invoice.service';
 import { SupplierService } from '../../../../core/services/supplier.service';
+import { CartService } from '../../../../core/services/cart.service';
 import { Supplier } from '../../../../core/models/supplier.model';
+import { Invoice, InvoiceDetail } from '../../../../core/models/invoice.model';
+import { apiErrorMessage } from '../../../../core/models/api-error';
+import { CartItemsComponent } from '../../../cart/components/cart-items.component';
 
-@Component({ selector: 'app-invoice-form', standalone: true, imports: [CommonModule, FormsModule, RouterModule], template: `
-<div class="container"><header class="header"><h2>{{ isEditMode ? 'Edit Invoice' : 'New Invoice' }}</h2><a routerLink="/invoices" class="btn">Back to List</a></header><form (ngSubmit)="onSubmit()" *ngIf="!loading; else wait">
-<div class="form-row"><div class="form-group col"><label>Supplier</label><select class="form-control" name="supplierId" [(ngModel)]="formData.supplierId" required><option value="">Select supplier</option><option *ngFor="let supplier of suppliers" [value]="supplier.id">{{ supplier.name }} ({{ supplier.taxId }})</option></select></div><div class="form-group col"><label>Invoice number</label><input class="form-control" name="number" [(ngModel)]="formData.number" required /></div></div>
-<div class="form-row"><div class="form-group col"><label>Issue date</label><input type="date" class="form-control" name="issueDate" [(ngModel)]="formData.issueDate" required /></div><div class="form-group col"><label>Due date</label><input type="date" class="form-control" name="dueDate" [(ngModel)]="formData.dueDate" /></div><div class="form-group col"><label>Status</label><select class="form-control" name="status" [(ngModel)]="formData.status"><option>Pending</option><option>Paid</option><option>Cancelled</option></select></div></div>
-<div class="form-row"><div class="form-group col"><label>Subtotal</label><input type="number" step="0.01" min="0" class="form-control" name="subtotal" [(ngModel)]="formData.subtotal" required /></div><div class="form-group col"><label>Tax</label><input type="number" step="0.01" min="0" class="form-control" name="tax" [(ngModel)]="formData.tax" required /></div><div class="form-group col"><label>Total</label><input class="form-control" [value]="total | number:'1.2-2'" readonly /></div></div><div class="form-group"><label>Notes</label><textarea class="form-control" name="notes" rows="3" [(ngModel)]="formData.notes"></textarea></div><button class="btn btn-primary" type="submit">{{ isEditMode ? 'Update Invoice' : 'Create Invoice' }}</button></form><ng-template #wait>Loading invoice data...</ng-template></div>` })
+@Component({
+  selector: 'app-invoice-form', standalone: true,
+  imports: [CommonModule, FormsModule, RouterModule, CartItemsComponent],
+  templateUrl: './invoice-form.component.html'
+})
 export class InvoiceFormComponent implements OnInit {
-  isEditMode = false; loading = true; invoiceId: string | null = null; suppliers: Supplier[] = [];
+  isEditMode = false;
+  loading = true;
+  loadFailed = false;
+  saving = false;
+  clearing = false;
+  invoiceId: string | null = null;
+  suppliers: Supplier[] = [];
+  details: InvoiceDetail[] = [];
+  error = '';
+  cleanupError = '';
+  cartChanged = false;
+  savedInvoice: Invoice | null = null;
+  private savedCartVersion: string | null = null;
   formData = { supplierId: '', number: '', issueDate: new Date().toISOString().slice(0, 10), dueDate: '', subtotal: 0, tax: 0, status: 'Pending', notes: '' };
-  constructor(private invoiceService: InvoiceService, private supplierService: SupplierService, private route: ActivatedRoute, private router: Router) {}
-  get total(): number { return Number(this.formData.subtotal || 0) + Number(this.formData.tax || 0); }
-  ngOnInit(): void { this.supplierService.getSuppliers().subscribe({ next: suppliers => { this.suppliers = suppliers.filter(s => s.isActive); this.loadInvoice(); }, error: () => this.router.navigate(['/invoices']) }); }
-  loadInvoice(): void { this.invoiceId = this.route.snapshot.paramMap.get('id'); if (!this.invoiceId) { this.loading = false; return; } this.isEditMode = true; this.invoiceService.getInvoiceById(this.invoiceId).subscribe({ next: i => { this.formData = { supplierId: i.supplierId, number: i.number, issueDate: i.issueDate.slice(0, 10), dueDate: i.dueDate ? i.dueDate.slice(0, 10) : '', subtotal: i.subtotal, tax: i.tax, status: i.status, notes: i.notes || '' }; this.loading = false; }, error: () => this.router.navigate(['/invoices']) }); }
-  onSubmit(): void { this.loading = true; const request = this.isEditMode && this.invoiceId ? this.invoiceService.updateInvoice(this.invoiceId, this.formData) : this.invoiceService.createInvoice(this.formData); request.subscribe({ next: () => this.router.navigate(['/invoices']), error: () => this.loading = false }); }
+
+  constructor(private invoiceService: InvoiceService, private supplierService: SupplierService,
+    public carts: CartService, private route: ActivatedRoute, private router: Router) {}
+
+  get subtotal(): number {
+    if (!this.isEditMode) return this.carts.cart()?.subtotal || 0;
+    return this.details.length ? this.details.reduce((sum, item) => sum + item.subtotal, 0) : Number(this.formData.subtotal || 0);
+  }
+  get total(): number { return this.subtotal + Number(this.formData.tax || 0); }
+
+  ngOnInit(): void {
+    this.invoiceId = this.route.snapshot.paramMap.get('id');
+    this.isEditMode = !!this.invoiceId;
+    const tax = Number(this.route.snapshot.queryParamMap.get('tax'));
+    if (Number.isFinite(tax) && tax >= 0) this.formData.tax = tax;
+    void this.load();
+  }
+
+  async load(): Promise<void> {
+    this.loading = true; this.loadFailed = false; this.error = '';
+    try {
+      this.suppliers = (await firstValueFrom(this.supplierService.getSuppliers())).filter(s => s.isActive);
+      if (this.invoiceId) {
+        const invoice = await firstValueFrom(this.invoiceService.getInvoiceById(this.invoiceId));
+        this.formData = { supplierId: invoice.supplierId, number: invoice.number, issueDate: invoice.issueDate.slice(0, 10),
+          dueDate: invoice.dueDate?.slice(0, 10) || '', subtotal: invoice.subtotal, tax: invoice.tax, status: invoice.status, notes: invoice.notes || '' };
+        this.details = invoice.details || [];
+        if (!this.suppliers.some(s => s.id === invoice.supplierId))
+          this.suppliers.push({ id: invoice.supplierId, name: invoice.supplierName, taxId: '', isActive: true, createdAt: '' });
+      } else {
+        await firstValueFrom(this.carts.getCart());
+      }
+    } catch (error) { this.loadFailed = true; this.error = apiErrorMessage(error, 'Could not load invoice data. Please retry.'); }
+    finally { this.loading = false; }
+  }
+
+  async refreshCart(): Promise<void> {
+    this.error = '';
+    try { await firstValueFrom(this.carts.getCart()); }
+    catch (error) { this.error = apiErrorMessage(error, 'Could not refresh the cart.'); }
+  }
+
+  async onSubmit(): Promise<void> {
+    if (this.saving || this.savedInvoice || this.carts.busy()) return;
+    this.saving = true; this.error = '';
+    const header = {
+      supplierId: this.formData.supplierId, number: this.formData.number.trim(),
+      issueDate: this.formData.issueDate, dueDate: this.formData.dueDate || undefined,
+      tax: this.formData.tax, status: this.formData.status, notes: this.formData.notes
+    };
+    try {
+      if (this.isEditMode && this.invoiceId) {
+        await firstValueFrom(this.invoiceService.updateInvoice(this.invoiceId, { ...header, subtotal: this.subtotal }));
+        await this.router.navigate(['/invoices', this.invoiceId]);
+        return;
+      }
+      const displayedVersion = this.carts.cart()?.version;
+      const latest = await firstValueFrom(this.carts.getCart());
+      if (!latest.items.length || !latest.version) {
+        this.error = 'Your cart is empty or expired. Add products before creating an invoice.'; return;
+      }
+      if (latest.version !== displayedVersion) {
+        this.error = 'Your cart changed. Review the updated products and submit again.'; return;
+      }
+      this.savedCartVersion = latest.version;
+      this.savedInvoice = await firstValueFrom(this.invoiceService.createInvoice({
+        ...header, items: latest.items.map(item => ({ productId: item.productId, quantity: item.quantity }))
+      }));
+    } catch (error) {
+      this.error = apiErrorMessage(error, 'Could not confirm the invoice. Your cart has been kept. Check the invoice list before retrying if the connection was interrupted.');
+      return;
+    } finally { this.saving = false; }
+    await this.finishCheckout();
+  }
+
+  async finishCheckout(): Promise<void> {
+    if (!this.savedInvoice || !this.savedCartVersion || this.clearing || this.cartChanged) return;
+    this.clearing = true; this.cleanupError = '';
+    try {
+      await firstValueFrom(this.carts.clearCart(this.savedCartVersion));
+      await this.router.navigate(['/invoices', this.savedInvoice.id], { queryParams: { created: '1' } });
+    } catch (error) {
+      this.cartChanged = error instanceof HttpErrorResponse && error.status === 409;
+      this.cleanupError = this.cartChanged
+        ? 'The cart changed while this invoice was being saved. Its current items have been kept. Review them before creating another invoice.'
+        : 'The invoice is saved, but the cart could not be emptied. Retry emptying it here; this will not create another invoice.';
+      if (this.cartChanged) this.carts.getCart().subscribe({ error: () => {} });
+    } finally { this.clearing = false; }
+  }
 }

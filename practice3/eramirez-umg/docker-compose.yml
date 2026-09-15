@@ -1,13 +1,12 @@
 services:
   db:
     image: mysql:8.0
-    container_name: enterprise_db
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: YourSecurePassword123!
       MYSQL_DATABASE: EnterpriseDb
     ports:
-      - "3307:3306"
+      - "${MYSQL_PORT:-3307}:3306"
     volumes:
       - db_data:/var/lib/mysql
     healthcheck:
@@ -22,12 +21,15 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: enterprise_backend
     restart: always
     ports:
-      - "5000:80"
+      - "${BACKEND_PORT:-5000}:80"
     environment:
       - ConnectionStrings__DefaultConnection=Server=db;Database=EnterpriseDb;User Id=root;Password=YourSecurePassword123!;
+      - CatalogService__Url=http://catalog-service:8080
+      - Jwt__Key=${JWT_KEY:?Set JWT_KEY in the project .env file}
+      - Jwt__Issuer=${JWT_ISSUER:-EnterpriseApi}
+      - Jwt__Audience=${JWT_AUDIENCE:-EnterpriseApp}
     depends_on:
       db:
         condition: service_healthy
@@ -36,10 +38,9 @@ services:
 
   mongo:
     image: mongo:8.0
-    container_name: enterprise_mongo
     restart: always
     ports:
-      - "27017:27017"
+      - "${MONGO_PORT:-27017}:27017"
     volumes:
       - mongo_data:/data/db
     healthcheck:
@@ -54,10 +55,9 @@ services:
     build:
       context: ./catalog-service
       dockerfile: Dockerfile
-    container_name: enterprise_catalog_service
     restart: always
     ports:
-      - "8080:8080"
+      - "${CATALOG_PORT:-8080}:8080"
     environment:
       SERVER_PORT: 8080
       SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/catalog_db
@@ -73,18 +73,62 @@ services:
     networks:
       - enterprise_network
 
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - enterprise_network
+
+  cart-service:
+    build:
+      context: ./cart-service
+    restart: unless-stopped
+    ports:
+      - "${CART_PORT:-3000}:3000"
+    environment:
+      PORT: 3000
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      CART_TTL_SECONDS: 86400
+      CATALOG_SERVICE_URL: http://catalog-service:8080
+      FRONTEND_ORIGIN: http://localhost:81,http://localhost:4200
+      JWT_KEY: ${JWT_KEY:?Set JWT_KEY in the project .env file}
+      JWT_ISSUER: ${JWT_ISSUER:-EnterpriseApi}
+      JWT_AUDIENCE: ${JWT_AUDIENCE:-EnterpriseApp}
+    depends_on:
+      redis:
+        condition: service_healthy
+      catalog-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - enterprise_network
+
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: enterprise_frontend
     restart: always
     ports:
-      - "81:80"
+      - "${FRONTEND_PORT:-81}:80"
     depends_on:
       backend:
         condition: service_started
       catalog-service:
+        condition: service_healthy
+      cart-service:
         condition: service_healthy
     networks:
       - enterprise_network
@@ -92,6 +136,7 @@ services:
 volumes:
   db_data:
   mongo_data:
+  redis_data:
 
 networks:
   enterprise_network:

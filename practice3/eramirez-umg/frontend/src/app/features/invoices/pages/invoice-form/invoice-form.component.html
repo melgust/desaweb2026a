@@ -1,0 +1,57 @@
+<div class="container">
+  <header class="header"><h2>{{ isEditMode ? 'Edit Invoice' : 'New Invoice' }}</h2><a routerLink="/invoices" class="btn">Back to List</a></header>
+  <p *ngIf="error" class="notice error" role="alert">{{ error }}</p>
+  <button *ngIf="loadFailed && !loading && !savedInvoice" type="button" class="btn" (click)="load()">Retry loading</button>
+  <p *ngIf="loading" role="status">Loading invoice data...</p>
+  <section *ngIf="savedInvoice" aria-label="Invoice saved">
+    <p class="notice success" role="status">Invoice {{ savedInvoice.number }} was saved. Total: {{ savedInvoice.total | number:'1.2-2' }}.</p>
+    <p *ngIf="clearing" role="status">Emptying the purchased cart...</p>
+    <p *ngIf="cleanupError" class="notice warning" role="alert">{{ cleanupError }}</p>
+    <div class="actions">
+      <button *ngIf="cleanupError && !cartChanged" class="btn btn-primary" (click)="finishCheckout()" [disabled]="clearing">Retry emptying cart</button>
+      <a class="btn" [routerLink]="['/invoices', savedInvoice.id]">View saved invoice</a>
+      <a *ngIf="cartChanged" class="btn" routerLink="/cart">Review current cart</a>
+    </div>
+  </section>
+  <form *ngIf="!loading && !savedInvoice" #invoiceForm="ngForm" (ngSubmit)="onSubmit()">
+    <fieldset [disabled]="saving">
+      <legend>Invoice information</legend>
+      <div class="form-row">
+        <div class="form-group col"><label for="supplier">Supplier</label>
+          <select id="supplier" class="form-control" name="supplierId" [(ngModel)]="formData.supplierId" required>
+            <option value="">Select supplier</option><option *ngFor="let supplier of suppliers" [value]="supplier.id">{{ supplier.name }} ({{ supplier.taxId }})</option>
+          </select>
+        </div>
+        <div class="form-group col"><label for="number">Invoice number</label><input id="number" class="form-control" name="number" [(ngModel)]="formData.number" maxlength="255" required /></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col"><label for="issueDate">Issue date</label><input id="issueDate" type="date" class="form-control" name="issueDate" [(ngModel)]="formData.issueDate" required /></div>
+        <div class="form-group col"><label for="dueDate">Due date</label><input id="dueDate" type="date" class="form-control" name="dueDate" [(ngModel)]="formData.dueDate" [min]="formData.issueDate" /></div>
+        <div class="form-group col"><label for="status">Status</label><select id="status" class="form-control" name="status" [(ngModel)]="formData.status"><option>Pending</option><option>Paid</option><option>Cancelled</option></select></div>
+      </div>
+      <section *ngIf="!isEditMode">
+        <header class="header"><h3>Products from your cart</h3><a *ngIf="!saving" routerLink="/products" class="btn">Add products</a></header>
+        <app-cart-items [disabled]="saving" />
+        <button type="button" class="btn" (click)="refreshCart()" [disabled]="saving || carts.busy() || carts.loading()">Refresh cart</button>
+        <p class="muted">Prices and availability are checked again when saving. The cart is emptied only after the invoice is saved.</p>
+      </section>
+      <section *ngIf="isEditMode">
+        <h3>Saved products</h3>
+        <div class="table-scroll" *ngIf="details.length">
+          <table class="grid-table"><caption class="sr-only">Historical invoice products</caption>
+            <thead><tr><th scope="col">Product</th><th scope="col">Unit price</th><th scope="col">Quantity</th><th scope="col">Subtotal</th></tr></thead>
+            <tbody><tr *ngFor="let item of details"><td>{{ item.productName }}</td><td>{{ item.unitPrice | number:'1.2-2' }}</td><td>{{ item.quantity }}</td><td>{{ item.subtotal | number:'1.2-2' }}</td></tr></tbody>
+          </table>
+        </div>
+        <p class="muted">{{ details.length ? 'Saved product details and prices are preserved when editing this invoice.' : 'Historical invoice without product details.' }}</p>
+      </section>
+      <div class="form-row">
+        <div class="form-group col"><label for="subtotal">Subtotal</label><input id="subtotal" *ngIf="isEditMode && !details.length; else calculatedSubtotal" type="number" step="0.01" min="0" class="form-control" name="subtotal" [(ngModel)]="formData.subtotal" required /><ng-template #calculatedSubtotal><input id="subtotal" class="form-control" [value]="subtotal | number:'1.2-2'" readonly /></ng-template></div>
+        <div class="form-group col"><label for="tax">Tax amount</label><input id="tax" type="number" step="0.01" min="0" class="form-control" name="tax" [(ngModel)]="formData.tax" required /></div>
+        <div class="form-group col"><label for="total">{{ isEditMode ? 'Total' : 'Estimated total' }}</label><input id="total" class="form-control" [value]="total | number:'1.2-2'" readonly /></div>
+      </div>
+      <div class="form-group"><label for="notes">Notes</label><textarea id="notes" class="form-control" name="notes" rows="3" [(ngModel)]="formData.notes"></textarea></div>
+      <button class="btn btn-primary" type="submit" [disabled]="invoiceForm.invalid || saving || carts.busy() || (!isEditMode && (!carts.count() || carts.loading() || !!carts.error()))">{{ saving ? 'Saving...' : (isEditMode ? 'Update Invoice' : 'Create Invoice') }}</button>
+    </fieldset>
+  </form>
+</div>

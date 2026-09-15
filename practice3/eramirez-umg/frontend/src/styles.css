@@ -109,3 +109,50 @@ body {
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* Shared shopping and invoice components */
+.app-nav { background: #1e293b; color: #fff; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; border-radius: 8px; }
+.nav-links, .actions { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.actions { margin: 16px 0; }
+.cart-link { color: #fff; padding: 8px 12px; border: 1px solid #94a3b8; border-radius: 6px; text-decoration: none; }
+.cart-link.active { background: #334155; }
+.header { gap: 16px; flex-wrap: wrap; }
+.form-row { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 16px; }
+.form-row .col { flex: 1 1 200px; min-width: 0; }
+.form-group label, .totals label { display: block; font-weight: 600; margin-bottom: 6px; }
+fieldset { border: 0; min-width: 0; }
+legend { font-weight: 600; margin-bottom: 12px; }
+section { margin: 20px 0; }
+.table-scroll { overflow-x: auto; max-width: 100%; margin: 16px 0; }
+.table-scroll .grid-table { min-width: 600px; }
+.grid-table caption { text-align: left; font-weight: 600; padding: 12px 0; }
+.quantity-control { display: flex; align-items: center; gap: 4px; }
+.quantity-control input { width: 72px; padding: 8px; border: 1px solid #94a3b8; border-radius: 4px; }
+.quantity-control button { min-width: 36px; min-height: 36px; }
+.notice { padding: 12px 16px; margin: 16px 0; border-radius: 6px; overflow-wrap: anywhere; }
+.success { background: #ecfdf5; color: #14532d; }
+.error { background: #fef2f2; color: #991b1b; }
+.warning { background: #fffbeb; color: #854d0e; }
+.muted { color: #526176; font-size: .9rem; margin-top: 8px; }
+.empty-state { padding: 28px 12px; color: #526176; }
+.btn:not(.btn-primary):not(.btn-danger) { background: #e2e8f0; color: #1e293b; }
+.btn-danger { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+button:disabled { opacity: .55; cursor: not-allowed; }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid #2563eb; outline-offset: 3px; }
+.app-nav a:focus-visible { outline-color: #93c5fd; }
+.totals { max-width: 380px; margin-left: auto; padding: 20px; background: #f8fafc; border-radius: 8px; }
+.totals > div { display: flex; justify-content: space-between; gap: 16px; padding: 8px 0; }
+.totals h3, .totals .muted { margin-bottom: 16px; }
+.totals .total { border-top: 1px solid #cbd5e1; font-size: 1.15rem; }
+.invoice-meta { display: flex; gap: 24px; flex-wrap: wrap; }
+.invoice-meta dt { color: #526176; font-size: .9rem; }
+.invoice-meta dd { margin-top: 6px; }
+.invoice-notes { white-space: pre-wrap; overflow-wrap: anywhere; margin: 20px 0; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+@media (max-width: 600px) {
+  body { padding: 8px; }
+  .container { padding: 16px; }
+  .app-nav { padding: 12px; }
+  .totals { max-width: none; }
+  .header h2 { font-size: 1.3rem; }
+}

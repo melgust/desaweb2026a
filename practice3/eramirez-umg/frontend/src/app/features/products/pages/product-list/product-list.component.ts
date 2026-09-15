@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../../../core/services/product.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { Product } from '../../../../core/models/product.model';
+import { CartService } from '../../../../core/services/cart.service';
+import { apiErrorMessage } from '../../../../core/models/api-error';
 
 @Component({
   selector: 'app-product-list',
@@ -30,8 +32,20 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
   searchTerm = '';
   sortBy = 'name';
   sortDirection: 'asc' | 'desc' = 'asc';
+  cartMessage = '';
+  cartError = '';
+  addingId: string | null = null;
 
-  constructor(public auth: AuthService, private productService: ProductService) {}
+  constructor(public auth: AuthService, private productService: ProductService, public carts: CartService) {}
+
+  addToCart(product: Product): void {
+    if (this.carts.busy() || !product.isActive || product.stock <= 0) return;
+    this.cartMessage = ''; this.cartError = ''; this.addingId = product.id;
+    this.carts.addItem(product.id, 1).subscribe({
+      next: () => { this.addingId = null; this.cartMessage = `${product.name} added to your cart.`; },
+      error: error => { this.addingId = null; this.cartError = apiErrorMessage(error, 'Could not add the product.'); }
+    });
+  }
 
   ngOnInit(): void {
     this.loadProducts();

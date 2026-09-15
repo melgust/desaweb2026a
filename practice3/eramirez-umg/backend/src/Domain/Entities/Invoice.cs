@@ -16,4 +16,5 @@ public class Invoice
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
     public Supplier Supplier { get; set; } = null!;
+    public ICollection<InvoiceDetail> Details { get; set; } = new List<InvoiceDetail>();
 }

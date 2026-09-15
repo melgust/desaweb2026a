@@ -50,12 +50,18 @@ export const routes: Routes = [
     ],
   },
   {
+    path: 'cart',
+    canActivate: [authGuard, roleGuard(['Admin', 'Manager'])],
+    loadComponent: () => import('./features/cart/pages/cart.component').then(m => m.CartComponent)
+  },
+  {
     path: 'invoices',
     canActivate: [authGuard],
     children: [
       { path: '', loadComponent: () => import('./features/invoices/pages/invoice-list/invoice-list.component').then((m) => m.InvoiceListComponent) },
       { path: 'new', canActivate: [roleGuard(['Admin', 'Manager'])], loadComponent: () => import('./features/invoices/pages/invoice-form/invoice-form.component').then((m) => m.InvoiceFormComponent) },
       { path: 'edit/:id', canActivate: [roleGuard(['Admin', 'Manager'])], loadComponent: () => import('./features/invoices/pages/invoice-form/invoice-form.component').then((m) => m.InvoiceFormComponent) },
+      { path: ':id', loadComponent: () => import('./features/invoices/pages/invoice-detail/invoice-detail.component').then(m => m.InvoiceDetailComponent) },
     ],
   },
   { path: '**', redirectTo: 'products' },

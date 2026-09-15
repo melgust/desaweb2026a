@@ -1,207 +1,162 @@
 # Enterprise Management Solution
 
-Full-stack enterprise application built with **.NET 10 Web API**, **Angular 18**, **Spring Boot**, **MongoDB**, and **MySQL 8**.
+Aplicación de administración con facturación multiproducto y carrito temporal por usuario.
+Implementación de las fases 1–53 del documento de requisitos en `practice3/eramirez-umg`.
 
-The backend follows a layered (Clean Architecture) structure — Api, Application, Domain, Infrastructure — compiled as a single project. It uses JWT authentication with role-based authorization (Admin, Manager, User), Entity Framework Core with the Pomelo MySQL provider, and BCrypt password hashing.
-
-## Tech Stack
-
-| Layer     | Technology                                             |
-|-----------|--------------------------------------------------------|
-| Frontend  | Angular 18 (standalone components), served via Nginx   |
-| Backend   | ASP.NET Core 10 Web API, EF Core 9 (Pomelo MySQL)      |
-| Catalog   | Spring Boot 3.5, Spring Data MongoDB                   |
-| Databases | MySQL 8.0 for .NET; MongoDB 8.0 for catalog            |
-| Auth      | JWT Bearer tokens, BCrypt password hashing             |
-
-## Ports
-
-When running via Docker Compose, the host-side ports are:
-
-| Service   | Host URL / Port           | Container Port | Notes                                    |
-|-----------|---------------------------|----------------|------------------------------------------|
-| Frontend  | `http://localhost:81`     | 80             | Angular app served by Nginx              |
-| Catalog   | `http://localhost:8080`   | 8080           | Catalog REST API + healthcheck           |
-| Backend   | `http://localhost:5000`   | 80             | REST API + Swagger                       |
-| MongoDB   | `localhost:27017`         | 27017          | `catalog_db`, persistent volume          |
-| MySQL     | `localhost:3307`          | 3306           | `root` / `YourSecurePassword123!`        |
-
-Useful backend URLs:
-
-- **API base**: `http://localhost:5000/api`
-- **Catalog API base**: `http://localhost:8080/api`
-- **Catalog health**: `http://localhost:8080/actuator/health`
-- **Swagger** (Development only): `http://localhost:5000/swagger`
-
-> Note: inside Docker, .NET reaches MySQL at `Server=db` and Spring reaches MongoDB at `mongodb://mongo:27017/catalog_db`. The browser uses the published ports.
-
-## Arquitectura de microservicios
+## Arquitectura
 
 ```mermaid
 flowchart LR
-  FE[Angular Frontend]
-  NET[.NET Backend<br/>Auth, Invoices]
-  SPRING[Spring Boot Catalog Service<br/>Categories, Products, Suppliers]
-  SQL[(MySQL)]
-  MONGO[(MongoDB)]
-
-  FE --> NET
-  FE --> SPRING
-  NET --> SQL
-  SPRING --> MONGO
+  Browser[Angular 18 + Nginx] --> NET[.NET 10 API]
+  Browser --> Catalog[Spring Boot Catalog]
+  Browser --> Cart[Node.js Cart Service]
+  NET --> SQL[(MySQL 8)]
+  NET --> Catalog
+  Catalog --> Mongo[(MongoDB 8)]
+  Cart --> Catalog
+  Cart --> Redis[(Redis 7: TTL 24 horas)]
 ```
 
-## Ownership de dominios
+- **.NET / EF Core 9 / Pomelo:** autenticación, proveedores SQL e Invoice + InvoiceDetails.
+- **Spring Boot 3.5 / Java 21:** productos, categorías y proveedores en MongoDB.
+- **Node.js / Express:** carrito Redis, precios consultados al catálogo y acceso mediante el JWT existente.
+- **Angular:** productos, proveedores, carrito, creación/edición y consulta de facturas.
 
-| Dominio | Backend responsable | Persistencia |
+## Iniciar con Docker
+
+Desde este directorio:
+
+1. Copiar `.env.example` a `.env` si todavía no existe.
+2. Configurar `JWT_KEY` con al menos 32 bytes. Para una instalación existente, reutilizar
+   el `Jwt:Key` del backend para conservar sus tokens.
+3. Ejecutar:
+
+```powershell
+docker compose config --quiet
+docker compose up -d --build
+docker compose ps
+```
+
+Abrir **http://localhost:81**. MySQL aplica automáticamente las migraciones al iniciar .NET.
+Los volúmenes de MySQL, MongoDB y Redis conservan los datos entre reinicios.
+
+Si otra práctica ocupa un puerto, modificar los valores de `.env`. Los contenedores
+usan nombres asignados por Compose, sin nombres globales compartidos. Para una
+instalación adicional se puede usar `docker compose -p otro-nombre ...`; esto crea
+otro conjunto de volúmenes, no reutiliza automáticamente los de la instalación original.
+
+| Servicio | Puerto predeterminado del host | Variable |
 |---|---|---|
-| Authentication | .NET | MySQL |
-| Invoices | .NET | MySQL |
-| Categories | Spring Boot | MongoDB |
-| Products | Spring Boot | MongoDB |
-| Suppliers | Spring Boot para el catálogo | MongoDB |
+| Angular/Nginx | 81 | FRONTEND_PORT |
+| .NET | 5000 | BACKEND_PORT |
+| Catálogo | 8080 | CATALOG_PORT |
+| Carrito | 3000 | CART_PORT |
+| MySQL | 3307 | MYSQL_PORT |
+| MongoDB | 27017 | MONGO_PORT |
+| Redis | Sin publicación al host; 6379 interno | — |
 
-Supplier conserva temporalmente una representación SQL y su endpoint .NET porque Invoices todavía mantiene `SupplierId`, `SupplierName` y una FK SQL. Las nuevas operaciones del catálogo Angular usan Spring.
+## Flujo de compra
 
-## Quick Start (Docker)
+1. Iniciar sesión como Admin o Manager.
+2. En Products, pulsar **Add to cart** en uno o varios productos.
+3. Abrir **Cart** en la navegación. El contador suma unidades.
+4. Modificar cantidades, eliminar líneas o vaciar el carrito con confirmación.
+5. Indicar el impuesto como **monto**, luego pulsar **Create invoice**.
+6. Completar proveedor, número, fechas, estado y notas.
+7. El backend consulta los productos actuales, valida precio/actividad/stock,
+   consolida repetidos y guarda encabezado y líneas en una transacción.
+8. Solo después del éxito se vacía la versión comprada del carrito y se abre el detalle.
 
-Run the whole stack (MySQL + MongoDB + .NET + Spring Boot + Angular):
+Si falla la factura, el carrito se conserva. Si la factura se guarda pero falla el
+vaciado, la pantalla permite **Retry emptying cart** sin reenviar la factura.
+Si otra pestaña cambió el carrito durante el guardado, sus elementos se conservan
+y se muestra un aviso para revisarlos.
 
-```bash
+Los precios de facturas guardadas son snapshots históricos. La edición conserva
+esas líneas y permite cambiar el encabezado. Las facturas antiguas sin líneas
+siguen mostrándose y permiten editar sus montos.
+
+## Autenticación y permisos
+
+Se mantiene el login `/api/auth/login`, con JWT HS256, issuer y audience compartidos.
+Las cuentas iniciales de desarrollo se definen en `backend/src/Infrastructure/Data/DbSeeder.cs`.
+
+| Rol | Permisos de facturación/carrito |
+|---|---|
+| Admin | Crear/editar/consultar/eliminar facturas y modificar su carrito. |
+| Manager | Crear/editar/consultar facturas y modificar su carrito. |
+| User | Consultar facturas; sin operaciones de escritura del carrito. |
+
+El carrito se identifica por el usuario verificado, no por un ID libre proporcionado
+por Angular. El catálogo conserva su autenticación y contratos existentes.
+
+## API y proxy
+
+El navegador usa rutas del mismo origen, centralizadas en los archivos environment:
+
+| Ruta del navegador | Servicio interno |
+|---|---|
+| `/api/cart/*` | cart-service:3000 |
+| `/api/catalog/*` | catalog-service:8080/api/* |
+| Resto de `/api/*` | backend:80 |
+
+| Método | Endpoint del carrito | Body |
+|---|---|---|
+| GET | `/api/cart/me` | — |
+| POST | `/api/cart/me/items` | `{ productId, quantity }` |
+| PUT | `/api/cart/me/items/:productId` | `{ quantity }` |
+| DELETE | `/api/cart/me/items/:productId` | — |
+| DELETE | `/api/cart/me` | —; If-Match opcional con la versión |
+| GET | `http://localhost:3000/health` | — |
+
+Las rutas del carrito requieren Bearer salvo health. Redis renueva el TTL de 86400
+segundos al modificar; las lecturas no prolongan su vida. Utiliza AOF y volumen propio.
+
+## Desarrollo local
+
+Requisitos: .NET SDK indicado por `backend/global.json`, Node.js 22+, Java 21,
+Maven, MySQL, MongoDB y Redis.
+
+- Backend: configurar `ConnectionStrings__DefaultConnection` y `CatalogService__Url`;
+  ejecutar `dotnet restore` y `dotnet run --project src/Api` desde backend, con URL en el puerto 5000.
+- Catálogo: ejecutar `mvn spring-boot:run` desde catalog-service, con MongoDB disponible.
+- Carrito: copiar `cart-service/.env.example` a `cart-service/.env`, configurar el mismo JWT,
+  Redis y catálogo; ejecutar `npm ci` y `npm run dev`.
+- Frontend: `npm ci` y `npm start`. `proxy.conf.json` dirige las rutas API hacia
+  los puertos locales 5000, 8080 y 3000. Ajustar ese archivo si se cambian esos puertos.
+
+No se crean pruebas unitarias para este alcance. Las compilaciones, solicitudes HTTP
+y comprobaciones de navegador se detallan en la documentación técnica.
+
+## Documentación
+
+[CART-INVOICE-IMPLEMENTATION.md](CART-INVOICE-IMPLEMENTATION.md) incluye análisis,
+archivos, migración, seguridad, modelo Redis, consistencia, UX/UI y validaciones.
+
+El stock se valida pero no se reserva ni descuenta: el catálogo actual no ofrece una
+operación transaccional de reserva. El impuesto conserva la regla original como monto.
+
+En redes con inspección TLS, las herramientas y contenedores de construcción deben
+confiar en el certificado de esa red. La validación de este entorno utilizó los
+certificados confiables de Windows en imágenes temporales, sin desactivar TLS.
+
+### Resolver PKIX / certificados en Windows
+
+Si Maven muestra `PKIX path building failed` o npm no puede verificar certificados,
+ejecutar desde este directorio (Docker Compose 2.24.4 o posterior):
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\Enable-DockerBuildTrust.ps1
 docker compose up -d --build
 ```
 
-On startup:
+El script exporta únicamente certificados raíz públicos y vigentes ya confiables
+de Windows. Genera `.docker-local/trust/` y `docker-compose.override.yml`, ambos
+ignorados por Git. Compose carga automáticamente ese override e incorpora la
+confianza en Java, .NET y Node durante la construcción. No desactiva TLS ni cambia
+volúmenes, puertos o servicios. La opción ExecutionPolicy solo afecta ese proceso.
 
-1. MySQL and MongoDB start with healthchecks and persistent volumes.
-2. The .NET backend applies EF Core migrations and seeds Auth roles/users.
-3. Spring Boot exposes `/actuator/health` and seeds catalog data only when collections are empty.
-
-Then open <http://localhost:81> and log in.
-
-To stop and remove the containers:
-
-```bash
-docker compose down
-```
-
-To also wipe the database volume (fresh start):
-
-```bash
-docker compose down -v
-```
-
-Use `down -v` only for a fresh reset. Without `-v`, MongoDB and MySQL data persist.
-
-## Seeded Accounts
-
-The database is seeded on first startup with these accounts (idempotent — safe on every run):
-
-| Role  | Email                   | Password    |
-|-------|-------------------------|-------------|
-| Admin | admin@enterprise.com    | `Admin123!` |
-| User  | user@enterprise.com     | `User123!`  |
-
-Roles seeded: **Admin** (full access), **Manager** (manage products), **User** (read-only).
-
-> These are development defaults. Change them before using anywhere beyond local development.
-
-### Role permissions (catalog)
-
-| Action              | Admin | Manager | User |
-|---------------------|:-----:|:-------:|:----:|
-| View / list         |  ✅   |   ✅    |  ✅  |
-| Create / update     |  ✅   |   ✅    |  ❌  |
-| Delete              |  ✅   |   ❌    |  ❌  |
-
-## Manual Development Setup
-
-Requires the **.NET 10 SDK** (pinned via `backend/global.json`), **Java 21**, **Maven 3.9+**, **Node.js 20+**, **MySQL 8**, and **MongoDB 8**.
-
-### 1. Start a MySQL instance
-
-```bash
-docker run --name enterprise_db \
-  -e MYSQL_ROOT_PASSWORD=YourSecurePassword123! \
-  -e MYSQL_DATABASE=EnterpriseDb \
-  -p 3307:3306 -d mysql:8.0
-```
-
-### 2. Backend
-
-The default connection string in `appsettings.json` points to `Server=localhost` on port `3306`. If you use the container above (host port `3307`), override the connection string:
-
-```bash
-cd backend
-export ConnectionStrings__DefaultConnection="Server=localhost;Port=3307;Database=EnterpriseDb;User Id=root;Password=YourSecurePassword123!;"
-dotnet run --project src/Api/Api.csproj
-```
-
-The API starts, applies migrations, and seeds the default accounts. It listens on `http://localhost:5000` by default when run this way (adjust `ASPNETCORE_URLS` if needed).
-
-### 3. Catalog service
-
-```bash
-cd catalog-service
-set SPRING_DATA_MONGODB_URI=mongodb://localhost:27017/catalog_db
-mvn spring-boot:run
-```
-
-The catalog service listens on `http://localhost:8080`.
-
-### 4. Frontend
-
-```bash
-cd frontend
-npm install
-npm start
-```
-
-The dev server runs on `http://localhost:4200` and uses `apiUrl` for .NET (`http://localhost:5000/api`) plus `catalogApiUrl` for Spring (`http://localhost:8080/api`). Production builds use `environment.prod.ts` via the `fileReplacements` configured in `angular.json`.
-
-## Database Migrations
-
-Migrations live in `backend/src/Infrastructure/Data/Migrations`. A design-time factory (`AppDbContextFactory`) lets EF tooling build the context without a live database.
-
-Create a new migration:
-
-```bash
-cd backend
-dotnet ef migrations add <Name> --project src/Api/Api.csproj --output-dir ../Infrastructure/Data/Migrations
-```
-
-Apply migrations manually (usually not needed — the app does this on startup):
-
-```bash
-dotnet ef database update --project src/Api/Api.csproj
-```
-
-## API Ownership
-
-The .NET API owns `/api/auth` and `/api/invoices`. Spring Boot owns `/api/categories`, `/api/products`, and `/api/suppliers`. Angular selects the backend through `apiUrl` and `catalogApiUrl` in its environment files.
-
-`GET /api/products` supports `search`, `sortBy` (`name`, `price`, `stock`, `category`, `createdat`), `sortDirection` (`asc`/`desc`), `page`, and `pageSize`.
-
-## Project Structure
-
-```text
-.
-├── docker-compose.yml
-├── catalog-service/
-│   ├── Dockerfile
-│   ├── pom.xml
-│   └── src/                    # models, DTOs, repositories, services, REST
-├── backend/
-│   ├── Dockerfile
-│   ├── global.json                 # pins .NET SDK 10
-│   └── src/
-│       ├── Api/                    # controllers, Program.cs, appsettings
-│       ├── Application/            # Auth, Invoices and Supplier compatibility
-│       ├── Domain/                 # entities (User, Role, Supplier, Invoice)
-│       └── Infrastructure/         # AppDbContext, migrations, seeder
-└── frontend/
-    ├── Dockerfile
-    └── src/
-        ├── app/                    # components, services, guards, interceptors
-        └── environments/           # apiUrl and catalogApiUrl
-```
+Repetir el script si cambian los Dockerfiles o los certificados raíz de Windows.
+Para dejar de usar esta configuración, retirar el archivo generado
+`docker-compose.override.yml`; la siguiente construcción usará los Dockerfiles originales.
+Referencia: [certificados CA dentro de contenedores](https://docs.docker.com/engine/network/ca-certs/).

@@ -42,3 +42,10 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Local tools used for migrations
+.local-tools/
+
+# Machine-local Docker certificate configuration
+.docker-local/
+/docker-compose.override.yml
