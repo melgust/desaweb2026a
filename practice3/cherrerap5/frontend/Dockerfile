@@ -2,7 +2,9 @@
 FROM node:20-alpine AS build
 WORKDIR /app
 COPY package*.json ./
-RUN npm install
+RUN --mount=type=secret,id=trusted_ca \
+    if [ -f /run/secrets/trusted_ca ]; then export NODE_EXTRA_CA_CERTS=/run/secrets/trusted_ca; fi; \
+    npm ci
 COPY . .
 RUN npm run build -- --configuration production
 

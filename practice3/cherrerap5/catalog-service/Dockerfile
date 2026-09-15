@@ -3,10 +3,14 @@ FROM maven:3.9-eclipse-temurin-21 AS build
 WORKDIR /app
 
 COPY pom.xml ./
-RUN mvn -B dependency:go-offline
+RUN --mount=type=secret,id=java_cacerts \
+    if [ -f /run/secrets/java_cacerts ]; then export MAVEN_OPTS="-Djavax.net.ssl.trustStore=/run/secrets/java_cacerts -Djavax.net.ssl.trustStorePassword=changeit"; fi; \
+    mvn -B dependency:go-offline
 
 COPY src ./src
-RUN mvn -B clean package -DskipTests
+RUN --mount=type=secret,id=java_cacerts \
+    if [ -f /run/secrets/java_cacerts ]; then export MAVEN_OPTS="-Djavax.net.ssl.trustStore=/run/secrets/java_cacerts -Djavax.net.ssl.trustStorePassword=changeit"; fi; \
+    mvn -B clean package
 
 FROM eclipse-temurin:21-jre
 

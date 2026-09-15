@@ -19,7 +19,7 @@ Cuando se implementen las escrituras del servicio, crear y actualizar Product de
 
 El modelo actual no relaciona Product directamente con Supplier. No se agrega `supplierId` a Product porque hacerlo cambiaría el contrato y añadiría una regla de negocio inexistente.
 
-Product y Supplier participan por separado en Invoice. Invoice continúa bajo ownership del backend .NET y no forma parte de los documentos del catálogo.
+Product y Supplier participan por separado en cada línea InvoiceItem. Una factura puede contener varias líneas y proveedores. Invoice continúa bajo ownership del backend .NET y no forma parte de los documentos del catálogo. El carrito temporal utiliza la misma selección por línea, pero vive exclusivamente en Redis.
 
 ## Eliminación de Category
 

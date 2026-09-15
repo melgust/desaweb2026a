@@ -12,8 +12,21 @@ body {
   padding: 20px;
 }
 
+html, body { min-width: 320px; }
+body { padding: 24px; color: #334155; }
+button, input, select, textarea { font: inherit; }
+button:disabled, .btn:disabled { opacity: .5; cursor: not-allowed; }
+:focus-visible { outline: 3px solid #60a5fa; outline-offset: 3px; }
+.btn { min-height: 40px; line-height: 1.5; text-align: center; }
+.btn-secondary { background: #fff; color: #334155; border: 1px solid #cbd5e1 !important; }
+.btn-quiet { color: #1d4ed8; background: transparent; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+.table-scroll { max-width: 100%; overflow-x: auto; }
+
 /* UI Layout Components */
 .container {
+  min-width: 0;
+  width: 100%;
   max-width: 1100px;
   margin: 0 auto;
   background: #fff;
@@ -23,6 +36,8 @@ body {
 }
 
 .header {
+  gap: 16px;
+  flex-wrap: wrap;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -51,6 +66,7 @@ body {
 }
 
 .grid-table th, .grid-table td {
+  overflow-wrap: anywhere;
   padding: 12px 16px;
   text-align: left;
   border-bottom: 1px solid #e5e7eb;
@@ -113,7 +129,8 @@ body {
 .form-row { display: flex; gap: 16px; }
 .form-group { margin-bottom: 16px; }
 .form-group label { display: block; margin-bottom: 6px; font-weight: 500; }
-.form-group.col { flex: 1; }
+.form-group.col { flex: 1; min-width: 0; }
+.container h3 { overflow-wrap: anywhere; }
 .checkbox-group { display: block; margin-bottom: 18px; }
 .error-message { color: #b91c1c; background: #fee2e2; padding: 10px; border-radius: 6px; margin-bottom: 16px; }
 .status { padding: 4px 8px; border-radius: 999px; background: #fef3c7; }
@@ -121,6 +138,10 @@ body {
 .status[data-status="Cancelled"] { background: #fee2e2; color: #991b1b; }
 
 @media (max-width: 700px) {
+  body { padding: 12px; }
+  .container { padding: 18px; }
+  .header { align-items: flex-start; }
+  .header h2 { font-size: 22px; }
   .form-row { display: block; }
-  .grid-table { display: block; overflow-x: auto; }
+  .grid-table { display: block; max-width: 100%; overflow-x: auto; }
 }

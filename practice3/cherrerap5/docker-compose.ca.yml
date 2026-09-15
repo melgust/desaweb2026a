@@ -1,0 +1,21 @@
+# Optional build trust for networks with a locally trusted TLS proxy.
+# Generate .local/trusted-ca.pem and .local/java-cacerts first (see README).
+services:
+  backend:
+    build:
+      secrets: [trusted_ca]
+  frontend:
+    build:
+      secrets: [trusted_ca]
+  order-service:
+    build:
+      context: ./order-service
+      secrets: [trusted_ca]
+  catalog-service:
+    build:
+      secrets: [java_cacerts]
+secrets:
+  trusted_ca:
+    file: ./.local/trusted-ca.pem
+  java_cacerts:
+    file: ./.local/java-cacerts

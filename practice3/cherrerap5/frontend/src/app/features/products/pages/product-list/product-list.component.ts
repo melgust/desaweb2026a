@@ -7,6 +7,9 @@ import { AuthService } from '../../../../core/services/auth.service';
 import { Product } from '../../../../core/models/product.model';
 import { Category } from '../../../../core/models/category.model';
 import { CategoryService } from '../../../../core/services/category.service';
+import { OrderService } from '../../../../core/services/order.service';
+import { SupplierService } from '../../../../core/services/supplier.service';
+import { Supplier } from '../../../../core/models/supplier.model';
 
 @Component({
   selector: 'app-product-list',
@@ -30,16 +33,38 @@ export class ProductListComponent implements OnInit {
   categoryId = '';
   sortBy = 'name';
   sortDirection: 'asc' | 'desc' = 'asc';
+  selectedProduct: Product | null = null;
+  suppliers: Supplier[] = [];
+  supplierId = ''; orderQuantity = 1; orderBusy = false; orderError = ''; orderSuccess = '';
 
   constructor(
     public auth: AuthService,
     private productService: ProductService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    public orders: OrderService,
+    private supplierService: SupplierService
   ) {}
 
   ngOnInit(): void {
     this.categoryService.getCategories().subscribe(categories => this.categories.set(categories));
     this.loadProducts();
+  }
+
+  prepareOrder(product: Product): void {
+    this.selectedProduct = product; this.orderQuantity = 1; this.orderError = ''; this.orderSuccess = '';
+    this.supplierId = this.orders.currentOrder()?.items.find(i => i.productId === product.id)?.supplierId ?? '';
+    this.supplierService.getAll().subscribe({ next: suppliers => this.suppliers = suppliers.filter(s => s.isActive), error: () => this.orderError = 'No se pudieron cargar los proveedores.' });
+  }
+
+  addToOrder(): void {
+    if (!this.selectedProduct || !this.supplierId || !Number.isInteger(this.orderQuantity) || this.orderQuantity < 1 || this.orderQuantity > 100000) {
+      this.orderError = 'Selecciona proveedor y una cantidad entera entre 1 y 100000.'; return;
+    }
+    this.orderBusy = true; this.orderError = '';
+    this.orders.addItem(this.selectedProduct.id, this.supplierId, this.orderQuantity).subscribe({
+      next: () => { this.orderBusy = false; this.orderSuccess = 'Producto agregado al pedido.'; this.selectedProduct = null; },
+      error: error => { this.orderBusy = false; this.orderError = error.error?.message ?? 'No se pudo agregar el producto.'; }
+    });
   }
 
   loadProducts(): void {

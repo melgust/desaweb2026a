@@ -4,6 +4,16 @@
     <a *ngIf="auth.canManageProducts()" routerLink="/products/new" class="btn btn-primary">+ Add Product</a>
   </header>
 
+  <p *ngIf="orderSuccess" role="status">{{ orderSuccess }} <a routerLink="/orders">Ver pedido</a></p>
+  <p *ngIf="orderError" class="error-message" role="alert">{{ orderError }}</p>
+  <form *ngIf="selectedProduct" (ngSubmit)="addToOrder()" #orderForm="ngForm" class="form-row">
+    <strong>Agregar {{ selectedProduct.name }}</strong>
+    <label>Proveedor <select name="supplier" [(ngModel)]="supplierId" required><option value="">Seleccionar</option><option *ngFor="let supplier of suppliers" [value]="supplier.id">{{ supplier.name }}</option></select></label>
+    <label>Cantidad <input type="number" name="orderQuantity" [(ngModel)]="orderQuantity" min="1" max="100000" step="1" required></label>
+    <button class="btn btn-primary" [disabled]="orderBusy || orderForm.invalid">Agregar al pedido</button>
+    <button type="button" class="btn" (click)="selectedProduct = null" [disabled]="orderBusy">Cancelar</button>
+  </form>
+
   <div class="filters">
     <input type="text" placeholder="Search products... (press Enter)" [(ngModel)]="searchTerm" (keyup.enter)="onSearchChange()" class="search-bar" />
     <select [(ngModel)]="categoryId" (ngModelChange)="onCategoryChange()" aria-label="Filter by category">
@@ -30,6 +40,7 @@
         <th (click)="toggleSort('category')">Category</th>
         <th (click)="toggleSort('price')">Price</th>
         <th (click)="toggleSort('stock')">Stock</th>
+        <th>Pedido</th>
         <th *ngIf="auth.canManageProducts()">Actions</th>
       </tr>
     </thead>
@@ -40,6 +51,7 @@
         <td><span class="category-badge">{{ item.categoryName || 'General' }}</span></td>
         <td>\${{ item.price | number:'1.2-2' }}</td>
         <td>{{ item.stock }}</td>
+        <td><button class="btn" (click)="prepareOrder(item)" [disabled]="!item.isActive || orderBusy || orders.currentOrder()?.status === 'CONFIRMING'">Agregar al pedido</button></td>
         <td *ngIf="auth.canManageProducts()">
           <a [routerLink]="['/products/edit', item.id]">Edit</a>
           <button *ngIf="auth.canDeleteProducts()" (click)="deleteProduct(item.id)" class="text-danger">Delete</button>

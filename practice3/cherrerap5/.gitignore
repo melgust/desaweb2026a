@@ -66,3 +66,14 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Local service configuration and nested Node build output
+.env
+**/node_modules/
+**/dist/
+**/.angular/
+**/.tools/
+**/test-results/
+**/playwright-report/
+.local/
+docker-compose.override.yml

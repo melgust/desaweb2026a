@@ -10,6 +10,7 @@ public class AppDbContext : DbContext
     public DbSet<User> Users => Set<User>();
     public DbSet<Role> Roles => Set<Role>();
     public DbSet<Invoice> Invoices => Set<Invoice>();
+    public DbSet<InvoiceItem> InvoiceItems => Set<InvoiceItem>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -25,11 +26,17 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Role>().HasIndex(r => r.Name).IsUnique();
         modelBuilder.Entity<Invoice>().HasIndex(i => i.Number).IsUnique();
 
-        modelBuilder.Entity<Invoice>().Property(i => i.UnitPrice).HasPrecision(18, 2);
         modelBuilder.Entity<Invoice>().Property(i => i.Total).HasPrecision(18, 2);
-        modelBuilder.Entity<Invoice>().Property(i => i.SupplierId).HasMaxLength(64);
-        modelBuilder.Entity<Invoice>().Property(i => i.ProductId).HasMaxLength(64);
-        modelBuilder.Entity<Invoice>().Property(i => i.SupplierName).HasMaxLength(255);
-        modelBuilder.Entity<Invoice>().Property(i => i.ProductName).HasMaxLength(255);
+        modelBuilder.Entity<Invoice>().Property(i => i.SourceOrderKey).HasMaxLength(64);
+        modelBuilder.Entity<Invoice>().Property(i => i.SourceOrderFingerprint).HasMaxLength(64);
+        modelBuilder.Entity<Invoice>().HasIndex(i => i.SourceOrderKey).IsUnique();
+        modelBuilder.Entity<InvoiceItem>().HasOne(i => i.Invoice).WithMany(i => i.Items)
+            .HasForeignKey(i => i.InvoiceId).OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<InvoiceItem>().Property(i => i.UnitPrice).HasPrecision(18, 2);
+        modelBuilder.Entity<InvoiceItem>().Property(i => i.Subtotal).HasPrecision(18, 2);
+        modelBuilder.Entity<InvoiceItem>().Property(i => i.SupplierId).HasMaxLength(64);
+        modelBuilder.Entity<InvoiceItem>().Property(i => i.ProductId).HasMaxLength(64);
+        modelBuilder.Entity<InvoiceItem>().Property(i => i.SupplierName).HasMaxLength(255);
+        modelBuilder.Entity<InvoiceItem>().Property(i => i.ProductName).HasMaxLength(255);
     }
 }

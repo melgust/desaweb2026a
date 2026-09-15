@@ -3,6 +3,7 @@ import { authGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
 
 export const routes: Routes = [
+  { path: 'orders', canActivate: [authGuard], loadComponent: () => import('./features/orders/order.component').then(m => m.OrderComponent) },
   { path: '', redirectTo: 'products', pathMatch: 'full' },
   {
     path: 'login',
@@ -51,7 +52,8 @@ export const routes: Routes = [
     path: 'invoices', canActivate: [authGuard], children: [
       { path: '', loadComponent: () => import('./features/invoices/invoice-list.component').then(m => m.InvoiceListComponent) },
       { path: 'new', canActivate: [roleGuard(['Admin', 'Manager'])], loadComponent: () => import('./features/invoices/invoice-form.component').then(m => m.InvoiceFormComponent) },
-      { path: 'edit/:id', canActivate: [roleGuard(['Admin', 'Manager'])], loadComponent: () => import('./features/invoices/invoice-form.component').then(m => m.InvoiceFormComponent) }
+      { path: 'edit/:id', canActivate: [roleGuard(['Admin', 'Manager'])], loadComponent: () => import('./features/invoices/invoice-form.component').then(m => m.InvoiceFormComponent) },
+      { path: ':id', loadComponent: () => import('./features/invoices/invoice-detail.component').then(m => m.InvoiceDetailComponent) }
     ]
   },
   { path: '**', redirectTo: 'products' },

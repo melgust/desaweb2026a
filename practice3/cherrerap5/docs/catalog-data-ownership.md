@@ -14,15 +14,17 @@ Decisión aprobada para la migración parcial del catálogo. Este documento defi
 | Categories | Catalog Service | MongoDB | Catalog Service |
 | Products | Catalog Service | MongoDB | Catalog Service |
 | Suppliers | Catalog Service | MongoDB | Catalog Service |
+| Temporary orders | Order Service (Node.js) | Redis con TTL 24 h | Order Service |
 
 Cuando la migración entre en operación, MongoDB será la única fuente de verdad para categorías, productos y proveedores. El backend .NET no expondrá operaciones CRUD ni escribirá copias de esas entidades en MySQL.
 
 ## Límite de las APIs
 
-El frontend utilizará dos URLs configurables:
+El frontend utiliza tres URLs configurables:
 
 - `apiUrl`: autenticación y facturas en el backend .NET.
 - `catalogApiUrl`: categorías, productos y proveedores en Catalog Service.
+- `orderApiUrl`: pedidos temporales en Order Service.
 
 Las rutas públicas del catálogo conservarán los contratos actuales bajo:
 
@@ -60,7 +62,7 @@ No se habilitará el paso 5 mientras Invoice dependa de claves foráneas o valid
 
 Invoice continúa siendo propiedad de .NET y MySQL. Una factura representa un registro histórico y no debe depender de que un producto o proveedor mutable siga existiendo en MongoDB.
 
-El modelo objetivo mínimo de Invoice conservará:
+Cada línea `InvoiceItem` de una factura con varios productos conserva:
 
 - `productId`: identificador externo del producto del catálogo;
 - `productName`: nombre del producto al registrar la factura;

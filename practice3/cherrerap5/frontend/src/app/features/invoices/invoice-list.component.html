@@ -1,0 +1,29 @@
+<section class="container invoices-page" [attr.aria-busy]="loading()">
+  <header class="header">
+    <div><p class="eyebrow">COMPRAS</p><h1>Facturas</h1><p class="muted">Consulta y administra tus compras en un solo lugar.</p></div>
+    <a *ngIf="auth.canManageProducts()" routerLink="/invoices/new" class="btn btn-primary">+ Nueva factura</a>
+  </header>
+  <div class="invoice-filters">
+    <div class="search-field"><label for="invoice-search">Buscar factura</label><input id="invoice-search" type="search" placeholder="Número, producto o proveedor" [ngModel]="search()" (ngModelChange)="search.set($event)"></div>
+    <div><label for="invoice-status">Estado</label><select id="invoice-status" [ngModel]="status()" (ngModelChange)="status.set($event)"><option value="">Todos los estados</option><option value="Pending">Pendiente</option><option value="Paid">Pagada</option><option value="Cancelled">Cancelada</option></select></div>
+  </div>
+  <div *ngIf="error()" class="error-message" role="alert">{{ error() }} <button class="btn btn-quiet" (click)="load()">Reintentar</button></div>
+  <p *ngIf="loading()" class="empty-message" role="status">Cargando facturas…</p>
+  <ng-container *ngIf="!loading() && !error()">
+    <div class="table-heading"><span>{{ filteredInvoices().length }} {{ filteredInvoices().length === 1 ? 'factura' : 'facturas' }}</span><span class="scroll-hint">Desliza la tabla para ver todas las columnas →</span></div>
+    <div *ngIf="filteredInvoices().length" class="table-scroll" tabindex="0" role="region" aria-label="Listado de facturas; desplazamiento horizontal disponible">
+      <table class="grid-table invoice-table">
+        <caption class="sr-only">Listado de facturas</caption>
+        <colgroup><col class="number-col"><col class="date-col"><col class="products-col"><col class="quantity-col"><col class="total-col"><col class="status-col"><col *ngIf="auth.canManageProducts()" class="actions-col"></colgroup>
+        <thead><tr><th scope="col">Número de factura</th><th scope="col">Fecha</th><th scope="col">Productos</th><th scope="col">Unidades</th><th scope="col" class="numeric">Total</th><th scope="col">Estado</th><th scope="col" *ngIf="auth.canManageProducts()">Acciones</th></tr></thead>
+        <tbody><tr *ngFor="let invoice of filteredInvoices()">
+          <td><a class="invoice-number" [routerLink]="['/invoices', invoice.id]">{{ invoice.number }}</a></td>
+          <td class="date-cell">{{ invoice.invoiceDate | date:'dd/MM/yyyy' }}</td><td>{{ invoice.items.length }}</td><td>{{ quantity(invoice) }}</td>
+          <td class="numeric total-cell">{{ invoice.total | currency }}</td><td><span class="status" [attr.data-status]="invoice.status">{{ statusLabel(invoice.status) }}</span></td>
+          <td *ngIf="auth.canManageProducts()"><div class="row-actions"><a [routerLink]="['/invoices/edit', invoice.id]" [attr.aria-label]="'Editar factura ' + invoice.number">Editar</a><button *ngIf="auth.canDeleteProducts()" (click)="remove(invoice.id)" [attr.aria-label]="'Eliminar factura ' + invoice.number">Eliminar</button></div></td>
+        </tr></tbody>
+      </table>
+    </div>
+    <div *ngIf="!filteredInvoices().length" class="empty-message"><h2>{{ invoices().length ? 'No hay coincidencias' : 'Todavía no tienes facturas' }}</h2><p>{{ invoices().length ? 'Prueba con otro número, producto o estado.' : 'Confirma un pedido o crea tu primera factura para verla aquí.' }}</p><button *ngIf="search() || status()" class="btn btn-secondary" (click)="search.set(''); status.set('')">Limpiar filtros</button></div>
+  </ng-container>
+</section>

@@ -4,6 +4,9 @@
   gap: .5rem;
   margin: 1rem 0;
 }
+.inventory-scroll { max-width:100%; overflow-x:auto; }
+.inventory-scroll .grid-table { min-width:900px; display:table; }
+.inventory-scroll .grid-table th { white-space:nowrap; }
 
 .pagination-mode button.active {
   background: #2563eb;

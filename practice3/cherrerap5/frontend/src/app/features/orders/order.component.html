@@ -1,0 +1,59 @@
+<section class="cart-page" [attr.aria-busy]="busy">
+  <header class="header cart-header">
+    <div><p class="eyebrow">COMPRAS</p><h1>Tu pedido</h1><p class="muted">Revisa los productos antes de generar tu factura.</p></div>
+    <a class="btn btn-secondary" routerLink="/products">+ Agregar productos</a>
+  </header>
+
+  <div class="expiry-banner">
+    <span class="clock-icon" aria-hidden="true">◷</span>
+    <div><strong>Tu carrito se guarda durante 24 horas</strong><p>El plazo se renueva con cada cambio guardado.<span *ngIf="order"> Vence el {{ order.expiresAt | date:'dd/MM/yyyy, HH:mm' }}.</span></p></div>
+    <button class="btn btn-quiet" (click)="load()" [disabled]="busy">{{ busy ? 'Actualizando…' : 'Actualizar' }}</button>
+  </div>
+  <p *ngIf="error" class="error-message" role="alert">{{ error }}</p>
+  <p *ngIf="notice && !error" class="feedback success" role="status">{{ notice }}</p>
+  <p *ngIf="orders.message() && !order" class="feedback" role="status">{{ orders.message() }}</p>
+  <p *ngIf="frozen" class="feedback warning" role="status">Tu confirmación está pendiente. Reintenta para recuperar la factura; los productos se conservarán mientras el pedido siga vigente.</p>
+
+  <div *ngIf="order?.items?.length; else empty" class="cart-layout">
+    <section class="items-panel" aria-labelledby="items-title">
+      <div class="panel-heading"><h2 id="items-title">Productos <span class="count-badge">{{ order!.items.length }}</span></h2><span class="muted">{{ orders.itemCount() }} unidades</span></div>
+      <table class="cart-table">
+        <caption class="sr-only">Productos del pedido y cantidades</caption>
+        <thead><tr><th scope="col">Producto</th><th scope="col">Precio unitario</th><th scope="col">Cantidad</th><th scope="col">Subtotal</th></tr></thead>
+        <tbody><tr *ngFor="let item of order!.items">
+          <td class="product-cell"><span class="product-mark" aria-hidden="true">▣</span><div><strong>{{ item.productName }}</strong><span class="supplier">{{ item.supplierName }}</span><button class="remove-button" (click)="change(orders.removeItem(item.productId), 'Producto eliminado del pedido.', item.productId)" [disabled]="busy || frozen" [attr.aria-label]="'Eliminar ' + item.productName">Eliminar</button></div></td>
+          <td class="unit-price"><span class="mobile-label">Precio unitario</span>{{ item.unitPrice | number:'1.2-2' }}</td>
+          <td class="quantity-cell"><span class="mobile-label">Cantidad</span>
+            <div class="stepper">
+              <button (click)="adjust(item.productId, item.quantity, -1)" [disabled]="busy || frozen || (quantities[item.productId] ?? item.quantity) <= 1" [attr.aria-label]="'Reducir cantidad de ' + item.productName">−</button>
+              <input type="number" min="1" max="100000" step="1" [ngModel]="quantities[item.productId] ?? item.quantity" (ngModelChange)="quantities[item.productId] = $event" [attr.aria-label]="'Cantidad de ' + item.productName" [attr.aria-invalid]="!validQuantity(quantities[item.productId] ?? item.quantity)" [disabled]="busy || frozen">
+              <button (click)="adjust(item.productId, item.quantity, 1)" [disabled]="busy || frozen || (quantities[item.productId] ?? item.quantity) >= 100000" [attr.aria-label]="'Aumentar cantidad de ' + item.productName">+</button>
+            </div>
+            <button class="save-quantity" (click)="update(item.productId, quantities[item.productId] ?? item.quantity)" [disabled]="busy || frozen || !validQuantity(quantities[item.productId] ?? item.quantity) || (quantities[item.productId] ?? item.quantity) === item.quantity">Guardar</button>
+            <small *ngIf="!validQuantity(quantities[item.productId] ?? item.quantity)" class="field-error">Usa un entero de 1 a 100000.</small>
+          </td>
+          <td class="line-total"><span class="mobile-label">Subtotal</span><strong>{{ item.subtotal | number:'1.2-2' }}</strong></td>
+        </tr></tbody>
+      </table>
+      <footer class="items-footer"><a routerLink="/products">← Seguir comprando</a><button class="remove-button" (click)="clear()" [disabled]="busy || frozen">Vaciar pedido</button></footer>
+    </section>
+
+    <aside class="summary-panel" aria-labelledby="summary-title">
+      <h2 id="summary-title">Resumen del pedido</h2>
+      <dl><div><dt>Productos distintos</dt><dd>{{ order!.items.length }}</dd></div><div><dt>Unidades</dt><dd>{{ orders.itemCount() }}</dd></div><div><dt>Subtotal</dt><dd>{{ order!.subtotal | number:'1.2-2' }}</dd></div><div class="grand-total"><dt>Total</dt><dd>{{ order!.total | number:'1.2-2' }}</dd></div></dl>
+      <p *ngIf="hasChanges" class="pending-note" role="status">Tienes cantidades sin guardar. Guarda cada cambio para actualizar el total y continuar.</p>
+      <button *ngIf="canConfirm" class="btn btn-primary checkout-button" (click)="confirm()" [disabled]="busy || hasChanges">{{ frozen ? 'Reintentar confirmación' : 'Confirmar y generar factura' }}</button>
+      <p *ngIf="!canConfirm" class="pending-note">Un administrador o manager debe generar la factura.</p>
+      <p class="summary-note">Todos los productos se incluirán en una sola factura. Los precios se validan con el catálogo al confirmar.</p>
+    </aside>
+  </div>
+
+  <ng-template #empty>
+    <section class="empty-cart">
+      <span class="empty-icon" aria-hidden="true">▣</span>
+      <h2>{{ busy ? 'Cargando tu pedido…' : error ? 'No pudimos cargar tu pedido' : 'Tu carrito está vacío' }}</h2>
+      <p>{{ error ? 'Puedes volver a intentarlo con el botón Actualizar.' : 'Explora los productos y agrega lo que necesitas. Aquí podrás revisar tu compra.' }}</p>
+      <a *ngIf="!busy && !error" class="btn btn-primary" routerLink="/products">Explorar productos</a>
+    </section>
+  </ng-template>
+</section>

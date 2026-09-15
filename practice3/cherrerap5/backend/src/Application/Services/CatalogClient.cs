@@ -9,7 +9,7 @@ public interface ICatalogClient
     Task<CatalogReference> GetActiveSupplierAsync(string id, CancellationToken ct);
 }
 
-public record CatalogReference(string Id, string Name);
+public record CatalogReference(string Id, string Name, decimal? Price = null);
 
 public class CatalogClient : ICatalogClient
 {
@@ -30,16 +30,16 @@ public class CatalogClient : ICatalogClient
 
         using var response = await _httpClient.GetAsync($"{resource}/{Uri.EscapeDataString(id)}", ct);
         if (response.StatusCode == HttpStatusCode.NotFound)
-            throw new ArgumentException($"{label} not found or inactive.");
+            throw new ArgumentException($"{label} {id} not found or inactive.");
 
         response.EnsureSuccessStatusCode();
         var item = await response.Content.ReadFromJsonAsync<CatalogItem>(cancellationToken: ct)
             ?? throw new HttpRequestException($"Catalog returned an invalid {label.ToLowerInvariant()} response.");
         if (!item.IsActive)
-            throw new ArgumentException($"{label} not found or inactive.");
+            throw new ArgumentException($"{label} {id} not found or inactive.");
 
-        return new CatalogReference(item.Id, item.Name);
+        return new CatalogReference(item.Id, item.Name, item.Price);
     }
 
-    private sealed record CatalogItem(string Id, string Name, bool IsActive);
+    private sealed record CatalogItem(string Id, string Name, bool IsActive, decimal? Price);
 }
