@@ -1,0 +1,16 @@
+services:
+
+  users:
+    build: ./users
+    ports:
+      - "3001:3001"
+
+  products:
+    build: ./products
+    ports:
+      - "3002:3002"
+
+  orders:
+    build: ./orders
+    ports:
+      - "3003:3003"
